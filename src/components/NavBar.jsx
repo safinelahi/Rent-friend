@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { FiMenu, FiUser, FiX } from "react-icons/fi";
 import { Link, NavLink } from 'react-router-dom';
-import logo from '../assets/logo 2.svg'; 
-import { FiUser, FiMenu, FiX } from "react-icons/fi"; 
+import logo from '../assets/logo 2.svg';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
