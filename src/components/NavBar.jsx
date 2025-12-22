@@ -1,21 +1,118 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import logo from '../assets/logo 2.svg'; 
+import { FiUser, FiMenu, FiX } from "react-icons/fi"; 
 
-const NavBar = () => {
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Navigation Links Data
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Browse", path: "/browse" },
+    { name: "How it Works", path: "/how-it-works" },
+    { name: "List an Item", path: "/list-item" },
+    { name: "FAQs", path: "/faqs" },
+  ];
+
   return (
-    <nav className="bg-primary py-4 px-8 border-b border-gray-100 flex justify-between items-center">
-      {/* Logo */}
-      <Link to="/" className="font-epilogue font-bold text-xl text-txt">
-        rent<span className="font-normal">friend</span>
-      </Link>
-      
-      {/* Links */}
-      <div className="flex gap-6">
-          <Link to="/" className="type-small font-medium text-txt hover:text-accent">Home</Link>
-          <Link to="/signup" className="type-small font-medium text-txt hover:text-accent">Sign Up</Link>
+    <nav className="bg-primary w-full border-b border-gray-100 sticky top-0 z-50">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
+        
+        {/* 1. Logo Section */}
+        <Link to="/" className="flex-shrink-0">
+          <img 
+            src={logo} 
+            alt="Rent Friend Logo" 
+            className="h-8 md:h-10 w-auto object-contain" 
+          />
+        </Link>
+
+        {/* 2. Desktop Navigation (Hidden on Tablet/Mobile) */}
+        <ul className="hidden lg:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <li key={link.name}>
+              <NavLink
+                to={link.path}
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-accent font-medium text-base transition-colors"
+                    : "text-paragraph text-base hover:text-accent transition-colors"
+                }
+              >
+                {link.name}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+
+        {/* 3. Right Action Buttons & Menu Toggle */}
+        <div className="flex items-center gap-3 md:gap-4">
+          
+          {/* Sign In Button (Visible on Desktop & Tablet, Hidden on Mobile) */}
+          <Link 
+            to="/login"
+            className="hidden md:flex items-center gap-2 border border-accent/50 hover:border-accent text-txt font-medium px-4 py-2.5 rounded-lg transition-all hover:bg-secondary whitespace-nowrap"
+          >
+            <FiUser size={18} />
+            <span>Sign In</span>
+          </Link>
+
+          {/* Get Started Button (Always Visible) */}
+          <Link 
+            to="/signup"
+            className="bg-accent hover:bg-accent/90 text-txt font-semibold px-4 py-2.5 rounded-lg shadow-sm transition-opacity whitespace-nowrap"
+          >
+            Get Started
+          </Link>
+
+          {/* Hamburger Menu Icon (Visible on Tablet & Mobile) */}
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden text-txt hover:text-accent transition-colors p-1"
+          >
+            {isMenuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
+          </button>
+        </div>
       </div>
+
+      {/* --- Mobile/Tablet Dropdown Menu --- */}
+      {isMenuOpen && (
+        <div className="lg:hidden absolute top-20 left-0 w-full bg-primary border-b border-gray-100 shadow-lg py-4 px-4 flex flex-col gap-4">
+          {/* Mobile Nav Links */}
+          <ul className="flex flex-col gap-3">
+            {navLinks.map((link) => (
+              <li key={link.name}>
+                <NavLink
+                  to={link.path}
+                  onClick={() => setIsMenuOpen(false)} // Close menu on click
+                  className={({ isActive }) =>
+                    isActive
+                      ? "block text-accent font-medium text-lg"
+                      : "block text-paragraph text-lg hover:text-accent"
+                  }
+                >
+                  {link.name}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+
+          {/* Mobile Sign In (Since it's hidden in the top bar on mobile) */}
+          <div className="md:hidden border-t border-gray-100 pt-4 mt-2">
+             <Link 
+              to="/login"
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center gap-2 text-paragraph hover:text-accent font-medium"
+            >
+              <FiUser size={20} />
+              <span>Sign In</span>
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
 
-export default NavBar;
+export default Navbar;
