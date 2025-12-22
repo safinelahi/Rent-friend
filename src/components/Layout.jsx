@@ -1,6 +1,6 @@
 import React from 'react';
-// FIX: Changed './Navbar' to './NavBar' to match your file name (Capital B)
-import Navbar from './NavBar'; 
+// FIX: Changed to './Navbar' (lowercase 'b') to match your file structure in Screenshot 4
+import Navbar from './Navbar'; 
 import Footer from './Footer';
 
 const Layout = ({ children }) => {
