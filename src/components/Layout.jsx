@@ -1,20 +1,17 @@
 import React from 'react';
-// IMPORTANT: Make sure this import matches your actual file name (NavBar vs Navbar)
-import Navbar from './Navbar'; 
-import Footer from './Footer'; // Import the new Footer component
+// FIX: Changed './Navbar' to './NavBar' to match your file name (Capital B)
+import Navbar from './NavBar'; 
+import Footer from './Footer';
 
 const Layout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Navigation */}
       <Navbar />
-
-      {/* Main Content Area - grows to fill available space */}
+      
       <main className="flex-grow">
         {children}
       </main>
-
-      {/* Footer at the bottom */}
+      
       <Footer />
     </div>
   );
