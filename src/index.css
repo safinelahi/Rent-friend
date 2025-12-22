@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/* 1. DEFINE YOUR THEME */
+@theme {
+  --color-primary: #ffffff;
+  --color-secondary: #faf9f4;
+  --color-txt: #333333;
+  --color-paragraph: #525252;
+  --color-accent: #ffc300;
+  --font-epilogue: "Epilogue", sans-serif;
+}
+
+/* 2. REUSABLE TYPOGRAPHY CLASSES */
+@layer components {
+
+  /* Headline 1 (All 600) */
+  .type-h1 {
+    @apply font-epilogue font-semibold; /* 600 */
+    /* Mobile */
+    @apply text-[38px] leading-[120%] tracking-[-1.52px];
+    /* Tablet */
+    @apply md:text-[48px] md:leading-[130%] md:tracking-[-1.92px];
+    /* Desktop */
+    @apply lg:text-[65px] lg:leading-[110%] lg:tracking-[-2.6px];
+  }
+
+  /* Headline 2 (All 600) */
+  .type-h2 {
+    @apply font-epilogue font-semibold; /* 600 */
+    /* Mobile */
+    @apply text-[27px] leading-[120%] tracking-[-0.54px];
+    /* Tablet */
+    @apply md:text-[38px] md:leading-[120%] md:tracking-[-1.52px];
+    /* Desktop */
+    @apply lg:text-[48px] lg:leading-[130%] lg:tracking-[-1.92px];
+  }
+
+  /* Headline 3 (All 600) */
+  .type-h3 {
+    @apply font-epilogue font-semibold; /* 600 */
+    /* Mobile */
+    @apply text-[22px] leading-[120%] tracking-[-0.44px];
+    /* Tablet */
+    @apply md:text-[27px] md:leading-[120%] md:tracking-[-0.54px];
+    /* Desktop */
+    @apply lg:text-[38px] lg:leading-[120%] lg:tracking-[-1.52px];
+  }
+
+  /* Headline 4 (Mobile: 500, Tablet/Desktop: 600) */
+  .type-h4 {
+    @apply font-epilogue;
+    /* Mobile - Weight 500 */
+    @apply font-medium text-[20px] leading-[108%] tracking-[-0.4px];
+    /* Tablet - Weight 600 */
+    @apply md:font-semibold md:text-[22px] md:leading-[120%] md:tracking-[-0.44px];
+    /* Desktop - Weight 600 */
+    @apply lg:font-semibold lg:text-[27px] lg:leading-[120%] lg:tracking-[-0.54px];
+  }
+
+  /* Headline 5 (Mobile/Tablet: 500, Desktop: 600) */
+  .type-h5 {
+    @apply font-epilogue;
+    /* Mobile - Weight 500 */
+    @apply font-medium text-[18px] leading-[120%] tracking-[-0.36px];
+    /* Tablet - Weight 500 */
+    @apply md:font-medium md:text-[20px] md:leading-[108%] md:tracking-[-0.4px];
+    /* Desktop - Weight 600 */
+    @apply lg:font-semibold lg:text-[22px] lg:leading-[120%] lg:tracking-[-0.44px];
+  }
+
+  /* Headline 6 (All 500) */
+  .type-h6 {
+    @apply font-epilogue font-medium; /* 500 */
+    /* Mobile */
+    @apply text-[16px] leading-[135%] tracking-[-0.32px];
+    /* Tablet */
+    @apply md:text-[18px] md:leading-[120%] md:tracking-[-0.36px];
+    /* Desktop */
+    @apply lg:text-[18px] lg:leading-[120%] lg:tracking-[-0.36px];
+  }
+
+  /* Paragraph (All 400) */
+  .type-p {
+    @apply font-epilogue font-normal; /* 400 */
+    @apply text-[16px] leading-[135%] tracking-[-0.32px];
+  }
+
+  /* Small Paragraph (All 400) */
+  .type-small {
+    @apply font-epilogue font-normal; /* 400 */
+    @apply text-[15px] leading-[113.333%] tracking-[-0.6px];
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-primary text-txt font-epilogue;
+  }
+}
