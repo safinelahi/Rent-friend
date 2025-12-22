@@ -82,7 +82,7 @@ const SignUp = () => {
             </div>
           </div>
 
-          {/* --- CUSTOM CIRCLE CHECKBOX START --- */}
+          {/*CIRCLE CHECKBOX START*/}
           <div className="flex items-center gap-3">
             <div className="relative flex items-center justify-center">
               <input
@@ -90,7 +90,7 @@ const SignUp = () => {
                 id="terms"
                 className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-gray-300 transition-all checked:border-accent checked:bg-accent hover:border-accent"
               />
-              {/* Checkmark Icon (Hidden until checked) */}
+              {/* Checkmark Icon  */}
               <svg
                 className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary opacity-0 transition-opacity peer-checked:opacity-100"
                 xmlns="http://www.w3.org/2000/svg"

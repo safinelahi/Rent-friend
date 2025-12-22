@@ -53,8 +53,8 @@ const Login = () => {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="..........."
-                className="w-full bg-secondary text-txt type-small px-4 py-3 rounded-lg border-none focus:ring-2 focus:ring-accent outline-none tracking-widest placeholder:tracking-widest"
+                placeholder="password"
+                className="w-full bg-secondary text-txt type-small px-4 py-3 rounded-lg border-none focus:ring-2 focus:ring-accent outline-none"
               />
               <button
                 type="button"
