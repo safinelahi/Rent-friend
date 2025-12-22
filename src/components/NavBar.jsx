@@ -24,7 +24,7 @@ const Navbar = () => {
           <img 
             src={logo} 
             alt="Rent Friend Logo" 
-            className="h-4 lg:h-9 md:h-6  w-auto object-contain" 
+            className="h-6 md:h-8  lg:h-10  w-auto object-contain" 
           />
         </Link>
 
