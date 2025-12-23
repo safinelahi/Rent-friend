@@ -33,8 +33,8 @@ import sharingImage from "../../assets/Sharing-Revolution.svg";
 
 // Testimonial Person Images
 import personSarah from "../../assets/presons/image.svg";
-import personKarim from "../../assets/presons/image (2).svg";
-import personNusrat from "../../assets/presons/image (1).svg";
+import personKarim from "../../assets/presons/image (1).svg";
+import personNusrat from "../../assets/presons/image (2).svg";
 
 // --- ANIMATED COUNTER COMPONENT ---
 const Counter = ({ value, decimals = 0 }) => {
