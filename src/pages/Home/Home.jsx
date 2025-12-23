@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiSearch, FiMapPin } from 'react-icons/fi';
+import { FaStar } from 'react-icons/fa'; 
 import { motion, useInView, useSpring, useTransform } from 'framer-motion';
 
 // --- IMAGE IMPORTS ---
@@ -21,12 +22,20 @@ import workStep3 from '../../assets/How-It’s-Works-3.png';
 import arrowIcon from '../../assets/How-It’s-Works-arrow.svg'; 
 import downArrowIcon from '../../assets/How-It’s-Work-downArrow.svg'; 
 
+// Sharing Revolution Asset
+import sharingImage from '../../assets/Sharing-Revolution.svg';
+
+// Testimonial Person Images
+import personSarah from '../../assets/presons/image.svg';
+import personKarim from '../../assets/presons/image (2).svg';
+import personNusrat from '../../assets/presons/image (1).svg';
+
 // --- ANIMATED COUNTER COMPONENT ---
-const Counter = ({ value }) => {
+const Counter = ({ value, decimals = 0 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   const spring = useSpring(0, { mass: 1, stiffness: 50, damping: 20, duration: 2 });
-  const displayValue = useTransform(spring, (current) => Math.round(current));
+  const displayValue = useTransform(spring, (current) => current.toFixed(decimals));
 
   useEffect(() => {
     if (isInView) {
@@ -69,6 +78,37 @@ const Home = () => {
     { id: 8, name: "Creative & Art", count: 278, icon: frameIcon },
   ];
 
+  // --- REVIEWS DATA ---
+  const reviews = [
+    {
+      id: 1,
+      name: "Sarah Ahmed",
+      location: "Dhaka",
+      image: personSarah,
+      rating: 5,
+      text: "Rented a DSLR camera for my cousin's wedding. The owner was super helpful and the camera was in perfect condition. Saved me thousands of taka!",
+      time: "2 weeks ago"
+    },
+    {
+      id: 2,
+      name: "Karim Hassan",
+      location: "Chittagong",
+      image: personKarim,
+      rating: 5,
+      text: "I've been listing my power tools on RentFriend for 3 months now. Great extra income and the platform makes everything so easy and secure.",
+      time: "1 month ago"
+    },
+    {
+      id: 3,
+      name: "Nusrat Rahman",
+      location: "Sylhet",
+      image: personNusrat,
+      rating: 5,
+      text: "Needed camping gear for a weekend trip. Found everything I needed nearby at a fraction of the buying cost. The verification system made me feel safe.",
+      time: "3 weeks ago"
+    }
+  ];
+
   // --- RESPONSIVE VISIBILITY LOGIC ---
   const [visibleCount, setVisibleCount] = useState(8); 
 
@@ -105,11 +145,11 @@ const Home = () => {
   };
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto bg-primary overflow-hidden">
+    <div className="w-full bg-primary overflow-x-hidden">
       
       {/* ================= HERO SECTION ================= */}
       <section 
-        className="relative w-full min-h-[686px] md:min-h-[748px] lg:min-h-[887px] bg-no-repeat bg-bottom bg-[length:100%_auto] flex pt-[20px] md:pt-[55px]"
+        className="relative w-full max-w-[1440px] mx-auto min-h-[686px] md:min-h-[748px] lg:min-h-[887px] bg-no-repeat bg-bottom bg-[length:100%_auto] flex pt-[20px] md:pt-[55px]"
         style={{ backgroundImage: `url('${heroImage}')` }} 
       >
         <div className="container mx-auto px-4 flex flex-col items-center text-center relative z-10 pt-10 md:pt-0">
@@ -144,7 +184,7 @@ const Home = () => {
       </section>
 
       {/* ================= BROWSE BY CATEGORY ================= */}
-      <section className="py-16 md:py-24 bg-primary">
+      <section className="py-16 md:py-24 bg-primary max-w-[1440px] mx-auto">
         <div className="container mx-auto px-4 md:px-8">
           <div className="mb-12 text-center md:text-left">
             <h2 className="type-h2 text-txt mb-3">Browse by Category</h2>
@@ -178,18 +218,14 @@ const Home = () => {
       </section>
 
       {/* ================= HOW IT WORKS SECTION ================= */}
-      <section className="py-16 md:py-24 bg-[#FDFDFC]">
+      <section className="py-16 md:py-24 bg-[#FDFDFC] max-w-[1440px] mx-auto">
         <div className="container mx-auto px-4 md:px-8">
-          
-          {/* Header */}
           <div className="text-center mb-16 md:mb-20">
-            <h2 className="type-h2 text-txt mb-4">How It’s Works</h2>
+            <h2 className="type-h2 text-txt mb-4">How It Works</h2>
             <p className="type-p text-paragraph max-w-2xl mx-auto">
               Renting is simple, safe, and sustainable. Get started in minutes.
             </p>
           </div>
-
-          {/* Steps Container */}
           <motion.div 
             variants={containerVariants}
             initial="hidden"
@@ -197,73 +233,144 @@ const Home = () => {
             viewport={{ once: true, margin: "-100px" }}
             className="flex flex-col lg:flex-row items-center justify-center gap-0 relative"
           >
-            
-            {/* Step 1: Browse & Search */}
+            {/* Steps & Arrows (Same as previous) */}
             <motion.div variants={itemVariants} className="flex-1 flex flex-col items-center text-center px-4 max-w-[350px] mx-auto z-10">
-              <div className="h-48 w-full flex items-center justify-center mb-6">
-                <img src={workStep1} alt="Browse and Search" className="h-full object-contain" />
-              </div>
+              <div className="h-48 w-full flex items-center justify-center mb-6"><img src={workStep1} alt="Browse" className="h-full object-contain" /></div>
               <h3 className="type-h4 text-txt mb-3">Browse & Search</h3>
-              <p className="type-small text-paragraph leading-relaxed">
-                Find exactly what you need from thousands of verified listings in your area.
-              </p>
+              <p className="type-small text-paragraph leading-relaxed">Find exactly what you need from thousands of verified listings in your area.</p>
             </motion.div>
+            <motion.div variants={itemVariants} className="lg:hidden py-8"><img src={downArrowIcon} alt="Next" className="w-12 h-12 opacity-80" /></motion.div>
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }} className="hidden lg:block w-32 mt-12 -mx-8 self-start z-0"><img src={arrowIcon} alt="arrow" className="w-full" /></motion.div>
 
-            {/* Down Arrow (Mobile/Tablet Only) */}
-            <motion.div variants={itemVariants} className="lg:hidden py-8">
-              <img src={downArrowIcon} alt="Next step" className="w-12 h-12 object-contain opacity-80" />
-            </motion.div>
-
-            {/* Horizontal Arrow (Desktop Only) */}
-            {/* CHANGED: Adjusted margin and padding to lift the arrow up */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="hidden lg:block w-32 mt-12 -mx-8 self-start z-0"
-            >
-              <img src={arrowIcon} alt="arrow" className="w-full" />
-            </motion.div>
-
-            {/* Step 2: Book Instantly */}
             <motion.div variants={itemVariants} className="flex-1 flex flex-col items-center text-center px-4 max-w-[350px] mx-auto z-10">
-              <div className="h-48 w-full flex items-center justify-center mb-6">
-                <img src={workStep2} alt="Book Instantly" className="h-full object-contain scale-110" />
-              </div>
+              <div className="h-48 w-full flex items-center justify-center mb-6"><img src={workStep2} alt="Book" className="h-full object-contain scale-110" /></div>
               <h3 className="type-h4 text-txt mb-3">Book Instantly</h3>
-              <p className="type-small text-paragraph leading-relaxed">
-                Select your dates, confirm the booking, and communicate directly with the owner.
-              </p>
+              <p className="type-small text-paragraph leading-relaxed">Select your dates, confirm the booking, and communicate directly with the owner.</p>
             </motion.div>
+            <motion.div variants={itemVariants} className="lg:hidden py-8"><img src={downArrowIcon} alt="Next" className="w-12 h-12 opacity-80" /></motion.div>
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: 0.7 }} className="hidden lg:block w-32 mt-12 -mx-8 self-start z-0"><img src={arrowIcon} alt="arrow" className="w-full" /></motion.div>
 
-            {/* Down Arrow (Mobile/Tablet Only) */}
-            <motion.div variants={itemVariants} className="lg:hidden py-8">
-              <img src={downArrowIcon} alt="Next step" className="w-12 h-12 object-contain opacity-80" />
-            </motion.div>
-
-            {/* Horizontal Arrow (Desktop Only) */}
-            {/* CHANGED: Adjusted margin and padding to lift the arrow up */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-              className="hidden lg:block w-32 mt-12 -mx-8 self-start z-0"
-            >
-              <img src={arrowIcon} alt="arrow" className="w-full" />
-            </motion.div>
-
-            {/* Step 3: Pick Up & Return */}
             <motion.div variants={itemVariants} className="flex-1 flex flex-col items-center text-center px-4 max-w-[350px] mx-auto z-10">
-              <div className="h-48 w-full flex items-center justify-center mb-6">
-                <img src={workStep3} alt="Pick Up and Return" className="h-full object-contain" />
-              </div>
+              <div className="h-48 w-full flex items-center justify-center mb-6"><img src={workStep3} alt="Pickup" className="h-full object-contain" /></div>
               <h3 className="type-h4 text-txt mb-3">Pick Up & Return</h3>
-              <p className="type-small text-paragraph leading-relaxed">
-                Meet the owner, enjoy your rental, and return it on time. Leave a review!
-              </p>
+              <p className="type-small text-paragraph leading-relaxed">Meet the owner, enjoy your rental, and return it on time. Leave a review!</p>
             </motion.div>
-
           </motion.div>
+        </div>
+      </section>
+
+      {/* ================= SHARING REVOLUTION SECTION ================= */}
+      <section className="py-16 md:py-24 bg-[#333] text-white w-full">
+        <div className="container mx-auto px-4 md:px-8 max-w-[1440px]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24">
+            <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex-1 text-center md:text-left">
+              <h2 className="type-h2 mb-6 md:mb-8 leading-tight">Join the Sharing <br className="hidden md:block"/> Revolution</h2>
+              <div className="space-y-6 text-gray-300 type-p leading-relaxed">
+                <p>Every time you rent through RentFriend, you’re making a small choice with a big impact. By sharing instead of buying, you help reduce waste.</p>
+                <p>Together, we’re building a smarter, more sustainable world – one that values access over ownership.</p>
+                <p>When you rent, everyone benefits – you save money, others earn, and the planet gets a little cleaner.</p>
+              </div>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="flex-1 w-full">
+              <img src={sharingImage} alt="People sharing items" className="w-full h-auto object-contain rounded-2xl" />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= TESTIMONIALS SECTION (UPDATED) ================= */}
+      <section className="py-16 md:py-24 bg-secondary w-full overflow-hidden">
+        {/* Container for Header only */}
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+          <div className="text-center mb-16">
+            <h2 className="type-h2 text-txt mb-3">What Our Community Says</h2>
+            <p className="type-p text-paragraph">Join thousands of happy renters and lenders sharing their experiences</p>
+          </div>
+        </div>
+
+        {/* INFINITE LOOP SCROLLER */}
+        <div className="relative w-full overflow-hidden">
+          {/* Edge Gradients for smooth fade */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-secondary to-transparent pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-secondary to-transparent pointer-events-none" />
+
+          {/* Scrolling Track */}
+          <motion.div 
+            className="flex gap-6 w-max"
+            animate={{ x: "-50%" }} // Move halfway (since we duplicated the list)
+            transition={{
+              duration: 100, // Adjust for speed (higher = slower)
+              ease: "linear",
+              repeat: Infinity,
+            }}
+          >
+            {/* We map the reviews array 4 times to ensure seamless looping 
+              even on very wide screens (4k monitors).
+            */}
+            {[...reviews, ...reviews, ...reviews, ...reviews].map((review, index) => (
+              <div 
+                key={index}
+                className="w-[320px] md:w-[400px] flex-shrink-0 bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
+              >
+                {/* Profile Info */}
+                <div className="flex items-center gap-4 mb-4">
+                  <img src={review.image} alt={review.name} className="w-12 h-12 rounded-full object-cover" />
+                  <div>
+                    <h4 className="type-h6 font-bold text-txt">{review.name}</h4>
+                    <p className="text-sm text-gray-400">{review.location}</p>
+                  </div>
+                </div>
+
+                {/* Rating Stars */}
+                <div className="flex gap-1 mb-4">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <FaStar key={i} className="text-[#FFB800] text-sm" />
+                  ))}
+                </div>
+
+                {/* Review Text */}
+                <p className="type-p text-paragraph text-sm md:text-[15px] leading-relaxed mb-6">
+                  "{review.text}"
+                </p>
+
+                {/* Time */}
+                <span className="text-xs font-semibold text-[#FFB800] bg-[#FFB800]/10 px-2 py-1 rounded">
+                  {review.time}
+                </span>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Bottom Stats Counters - Wrapped in container to stay centered */}
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8 mt-20">
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 text-center">
+            
+            {/* Stat 1 */}
+            <div>
+              <div className="text-4xl md:text-5xl font-bold text-[#FFB800] mb-2 flex justify-center items-center gap-1">
+                <Counter value={4.9} decimals={1} />/5
+              </div>
+              <p className="text-gray-500 font-medium">Average Rating</p>
+            </div>
+
+            {/* Stat 2 */}
+            <div>
+              <div className="text-4xl md:text-5xl font-bold text-[#FFB800] mb-2 flex justify-center items-center">
+                <Counter value={90} />+
+              </div>
+              <p className="text-gray-500 font-medium">Reviews</p>
+            </div>
+
+            {/* Stat 3 */}
+            <div>
+              <div className="text-4xl md:text-5xl font-bold text-[#FFB800] mb-2 flex justify-center items-center">
+                <Counter value={98} />%
+              </div>
+              <p className="text-gray-500 font-medium">Satisfaction</p>
+            </div>
+
+          </div>
         </div>
       </section>
 
