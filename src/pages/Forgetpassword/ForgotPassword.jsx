@@ -5,7 +5,7 @@ import logo from "../../assets/logo 2.svg";
 
 const ForgotPassword = () => {
   return (
-    <div className="min-h-screen bg-[#FDFDFC] flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-secondary flex flex-col items-center justify-center px-4">
       {/*Container */}
       <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-gray-100 w-full max-w-md text-center">
         {/* Logo */}
