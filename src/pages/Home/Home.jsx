@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FiSearch, FiMapPin, FiPlus, FiMinus } from "react-icons/fi"; // Added Plus/Minus
+import {
+  FiSearch,
+  FiMapPin,
+  FiPlus,
+  FiMinus,
+  FiChevronLeft,
+  FiChevronRight,
+} from "react-icons/fi";
 import { FaStar } from "react-icons/fa";
 import {
   motion,
@@ -7,7 +14,10 @@ import {
   useSpring,
   useTransform,
   AnimatePresence,
-} from "framer-motion"; // Added AnimatePresence
+} from "framer-motion";
+
+// --- COMPONENT IMPORTS ---
+import RentalCard from "../../components/RentalCard";
 
 // --- IMAGE IMPORTS ---
 import heroImage from "../../assets/Section -Hero.png";
@@ -33,8 +43,13 @@ import sharingImage from "../../assets/Sharing-Revolution.svg";
 
 // Testimonial Person Images
 import personSarah from "../../assets/presons/image.svg";
-import personKarim from "../../assets/presons/image (1).svg";
-import personNusrat from "../../assets/presons/image (2).svg";
+import personKarim from "../../assets/presons/image (2).svg";
+import personNusrat from "../../assets/presons/image (1).svg";
+
+// --- PRODUCT ITEMS ---
+import itemImage1 from "../../assets/ProductItems/Item-01.svg";
+import itemImage2 from "../../assets/ProductItems/Item-02.svg";
+import itemImage3 from "../../assets/ProductItems/Item-03.svg";
 
 // --- ANIMATED COUNTER COMPONENT ---
 const Counter = ({ value, decimals = 0 }) => {
@@ -94,7 +109,11 @@ const Home = () => {
   // --- HERO STATE ---
   const [cityInput, setCityInput] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [openFAQ, setOpenFAQ] = useState(0); // State for FAQ
+  const [openFAQ, setOpenFAQ] = useState(0);
+
+  // --- CAROUSEL STATE ---
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
 
   const bangladeshCities = [
     "Dhaka",
@@ -104,16 +123,9 @@ const Home = () => {
     "Sylhet",
     "Barisal",
     "Rangpur",
-    "Mymensingh",
     "Comilla",
-    "Gazipur",
-    "Narayanganj",
-    "Savar",
-    "Jessore",
-    "Bogra",
     "Cox's Bazar",
   ];
-
   const filteredCities = bangladeshCities.filter((city) =>
     city.toLowerCase().includes(cityInput.toLowerCase())
   );
@@ -123,7 +135,7 @@ const Home = () => {
     setShowSuggestions(false);
   };
 
-  // --- DATA ARRAYS ---
+  // --- DATA ---
   const categories = [
     { id: 1, name: "Photography", count: 1240, icon: cameraIcon },
     { id: 2, name: "Tools & DIY", count: 825, icon: wrenchIcon },
@@ -135,6 +147,75 @@ const Home = () => {
     { id: 8, name: "Creative & Art", count: 278, icon: frameIcon },
   ];
 
+  const featuredItems = [
+    {
+      id: 1,
+      image: itemImage1,
+      title: "Canon EOS R5 Camera + Lenses",
+      rating: 4.9,
+      reviews: 128,
+      location: "Rajshahi, Bangladesh",
+      price: 45,
+      category: "Photography",
+      verified: true,
+    },
+    {
+      id: 2,
+      image: itemImage2,
+      title: "Professional Power Tools Set",
+      rating: 4.7,
+      reviews: 24,
+      location: "Dhaka, Bangladesh",
+      price: 30,
+      category: "Tools",
+      verified: true,
+    },
+    {
+      id: 3,
+      image: itemImage3,
+      title: "4-Person Camping Tent",
+      rating: 4.5,
+      reviews: 76,
+      location: "Sylhet, Bangladesh",
+      price: 17,
+      category: "Outdoor",
+      verified: true,
+    },
+    {
+      id: 4,
+      image: itemImage1,
+      title: "Canon EOS R5 Camera + Lenses",
+      rating: 4.9,
+      reviews: 128,
+      location: "Rajshahi, Bangladesh",
+      price: 45,
+      category: "Photography",
+      verified: true,
+    },
+    {
+      id: 5,
+      image: itemImage2,
+      title: "Professional Power Tools Set",
+      rating: 4.7,
+      reviews: 24,
+      location: "Dhaka, Bangladesh",
+      price: 30,
+      category: "Tools",
+      verified: true,
+    },
+    {
+      id: 6,
+      image: itemImage3,
+      title: "4-Person Camping Tent",
+      rating: 4.5,
+      reviews: 76,
+      location: "Sylhet, Bangladesh",
+      price: 17,
+      category: "Outdoor",
+      verified: true,
+    },
+  ];
+
   const reviews = [
     {
       id: 1,
@@ -142,7 +223,7 @@ const Home = () => {
       location: "Dhaka",
       image: personSarah,
       rating: 5,
-      text: "Rented a DSLR camera for my cousin's wedding. The owner was super helpful and the camera was in perfect condition. Saved me thousands of taka!",
+      text: "Rented a DSLR camera for my cousin's wedding. The owner was super helpful and the camera was in perfect condition.",
       time: "2 weeks ago",
     },
     {
@@ -160,7 +241,7 @@ const Home = () => {
       location: "Sylhet",
       image: personNusrat,
       rating: 5,
-      text: "Needed camping gear for a weekend trip. Found everything I needed nearby at a fraction of the buying cost. The verification system made me feel safe.",
+      text: "Needed camping gear for a weekend trip. Found everything I needed nearby at a fraction of the buying cost.",
       time: "3 weeks ago",
     },
   ];
@@ -198,18 +279,29 @@ const Home = () => {
     },
   ];
 
-  // --- RESPONSIVE VISIBILITY LOGIC ---
+  // --- RESPONSIVE LOGIC ---
   const [visibleCount, setVisibleCount] = useState(8);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
+
+      // Category Grid Logic
       if (width >= 1024) {
         setVisibleCount(8);
       } else if (width >= 768) {
         setVisibleCount(6);
       } else {
         setVisibleCount(4);
+      }
+
+      // Featured Carousel Logic
+      if (width >= 1024) {
+        setItemsPerPage(3);
+      } else if (width >= 768) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(1);
       }
     };
     handleResize();
@@ -219,6 +311,19 @@ const Home = () => {
 
   const handleSeeAll = () => {
     setVisibleCount(categories.length);
+  };
+
+  // --- CAROUSEL HANDLERS ---
+  const handleNext = () => {
+    if (currentIndex < featuredItems.length - itemsPerPage) {
+      setCurrentIndex((prev) => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+    }
   };
 
   // --- ANIMATION VARIANTS ---
@@ -242,7 +347,7 @@ const Home = () => {
         className="relative w-full max-w-[1440px] mx-auto min-h-[686px] md:min-h-[748px] lg:min-h-[887px] bg-no-repeat bg-bottom bg-[length:100%_auto] flex pt-[20px] md:pt-[55px]"
         style={{ backgroundImage: `url('${heroImage}')` }}
       >
-        <div className="container mx-auto px-4 flex flex-col items-center text-center relative z-10 pt-10 md:pt-0">
+        <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 flex flex-col items-center text-center relative z-10 pt-10 md:pt-0">
           <h1 className="type-h1 text-txt mb-6 max-w-4xl">
             Rent Anything. Anytime. <br className="hidden md:block" />
             From Trusted Locals.
@@ -307,8 +412,8 @@ const Home = () => {
       </section>
 
       {/* ================= BROWSE BY CATEGORY ================= */}
-      <section className="py-16 md:py-24 bg-primary max-w-[1440px] mx-auto">
-        <div className="container mx-auto px-4 md:px-8">
+      <section className="pt-16 md:pt-24 pb-8 bg-primary w-full">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="mb-12 text-center md:text-left">
             <h2 className="type-h2 text-txt mb-3">Browse by Category</h2>
             <p className="type-p text-paragraph">
@@ -358,9 +463,90 @@ const Home = () => {
         </div>
       </section>
 
+      {/* ================= FEATURED RENTALS SECTION (ANIMATED) ================= */}
+      <section className="py-16 md:py-24 bg-secondary w-full overflow-hidden">
+        {/* ADDED: motion.div wrapper with containerVariants to trigger stagger entrance */}
+        <motion.div
+          className="max-w-[1440px] mx-auto px-4 md:px-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+            {/* Header Text Animation */}
+            <motion.div variants={itemVariants}>
+              <h2 className="type-h2 text-txt mb-3">Featured Rentals</h2>
+              <p className="type-p text-paragraph">
+                Top-rated items from verified owners
+              </p>
+            </motion.div>
+
+            {/* Buttons Animation */}
+            <motion.div variants={itemVariants} className="flex gap-4">
+              <button
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-200
+                  ${
+                    currentIndex === 0
+                      ? "bg-white/50 text-[#FFB800]/50 cursor-not-allowed"
+                      : "bg-white text-[#FFB800] hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
+                  }
+                `}
+              >
+                <FiChevronLeft size={28} strokeWidth={2.5} />
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={currentIndex >= featuredItems.length - itemsPerPage}
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-200
+                  ${
+                    currentIndex >= featuredItems.length - itemsPerPage
+                      ? "bg-white/50 text-[#FFB800]/50 cursor-not-allowed"
+                      : "bg-white text-[#FFB800] hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
+                  }
+                `}
+              >
+                <FiChevronRight size={28} strokeWidth={2.5} />
+              </button>
+            </motion.div>
+          </div>
+
+          {/* Slider Container Animation */}
+          <motion.div
+            variants={itemVariants}
+            className="relative overflow-hidden w-full"
+          >
+            <motion.div
+              className="flex gap-6"
+              initial={false}
+              animate={{
+                x: `calc(-${currentIndex} * ((100% + 24px) / ${itemsPerPage}))`,
+              }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
+              {featuredItems.map((item) => (
+                <div
+                  key={item.id}
+                  style={{
+                    minWidth: `calc((100% - ${
+                      (itemsPerPage - 1) * 24
+                    }px) / ${itemsPerPage})`,
+                  }}
+                  className="h-full"
+                >
+                  <RentalCard item={item} />
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </section>
+
       {/* ================= HOW IT WORKS SECTION ================= */}
-      <section className="py-16 md:py-24 bg-[#FDFDFC] max-w-[1440px] mx-auto">
-        <div className="container mx-auto px-4 md:px-8">
+      <section className="py-16 md:py-24 bg-[#FDFDFC] w-full">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="text-center mb-16 md:mb-20">
             <h2 className="type-h2 text-txt mb-4">How It Works</h2>
             <p className="type-p text-paragraph max-w-2xl mx-auto">
@@ -461,7 +647,7 @@ const Home = () => {
 
       {/* ================= SHARING REVOLUTION SECTION ================= */}
       <section className="py-16 md:py-24 bg-[#333] text-white w-full">
-        <div className="container mx-auto px-4 md:px-8 max-w-[1440px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -506,7 +692,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= TESTIMONIALS SECTION ================= */}
+      {/* ================= Review SECTION ================= */}
       <section className="py-16 md:py-24 bg-secondary w-full overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="text-center mb-16">
@@ -589,11 +775,9 @@ const Home = () => {
       </section>
 
       {/* ================= FAQ SECTION ================= */}
-      <section className="py-16 md:py-24 bg-primary max-w-[1440px] mx-auto">
-        <div className="container mx-auto px-4 md:px-8">
+      <section className="py-16 md:py-24 bg-primary w-full">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
-            {/* Left Side: Header */}
-            {/* CHANGE: Added 'text-center' (for mobile) and 'lg:text-left' (for desktop) */}
             <div className="w-full lg:w-1/3 text-center lg:text-left">
               <h2 className="type-h2 text-txt mb-4">
                 Frequently Asked Questions
@@ -604,8 +788,6 @@ const Home = () => {
                 we're happy to help!
               </p>
             </div>
-
-            {/* Right Side: Accordion */}
             <div className="w-full lg:w-2/3">
               {faqs.map((faq, index) => (
                 <FAQItem
