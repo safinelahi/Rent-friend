@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    // Added w-full to ensure the footer background spans the full width
     <footer className="bg-[#333] text-white py-16 w-full">
       
       {/* ALIGNMENT FIX:
@@ -63,8 +62,8 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">For Renters</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Browse Items</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">How It Works</a></li>
+              <li><Link to="/browse" className="text-gray-400 hover:text-white transition-colors">Browse Items</Link></li>
+              <li><Link to="/how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</Link></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Safety & Trust</a></li>
             </ul>
@@ -74,7 +73,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">For Lenders</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">List an Item</a></li>
+              <li><Link to="/list-item" className="text-gray-400 hover:text-white transition-colors">List an Item</Link></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Earnings Calculator</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Insurance</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Listing Tips</a></li>
@@ -87,7 +86,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">FAQs</a></li>
+              <li><Link to="/faqs" className="text-gray-400 hover:text-white transition-colors">FAQs</Link></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
             </ul>
           </div>
@@ -96,11 +95,22 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t border-[#ffffff40] pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2025 RentFriend. All rights reserved.
+            © 2026 RentFriend. All rights reserved.
           </p>
           <div className="flex space-x-6">
-            <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
-            <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
+            {/* UPDATED: Links to the Policy and Terms pages */}
+            <Link 
+              to="/privacy-policy" 
+              className="text-gray-400 hover:text-white text-sm transition-colors"
+            >
+              Privacy Policy
+            </Link>
+            <Link 
+              to="/terms-of-service" 
+              className="text-gray-400 hover:text-white text-sm transition-colors"
+            >
+              Terms of Service
+            </Link>
           </div>
         </div>
       </div>
