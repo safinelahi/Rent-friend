@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-// Make sure you have installed react-icons: npm install react-icons
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiUser, FiTag } from "react-icons/fi";
 import logo from '../../assets/logo 2.svg';
 
 const SignUp = () => {
-  // State to handle password visibility
   const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState("renter"); // 'renter' or 'lender'
 
   return (
     <div className="min-h-screen bg-secondary flex items-center justify-center p-4">
@@ -25,7 +24,33 @@ const SignUp = () => {
             </Link>
           </div>
           <h1 className="type-h2 text-txt mb-2">Create Account</h1>
-          <p className="type-p text-paragraph">Join the sharing economy today</p>
+          <p className="type-p text-paragraph">
+            {role === "renter" ? "Find what you need, when you need it" : "Turn your items into extra income"}
+          </p>
+        </div>
+
+        {/* ROLE SELECTION TOGGLE */}
+        <div className="flex bg-secondary p-1 rounded-xl mb-8 border border-gray-100">
+          <button
+            type="button"
+            onClick={() => setRole("renter")}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg transition-all font-medium ${
+              role === "renter" ? "bg-accent text-txt shadow-sm" : "text-paragraph hover:text-txt"
+            }`}
+          >
+            <FiUser size={18} />
+            <span>Join as Renter</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setRole("lender")}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg transition-all font-medium ${
+              role === "lender" ? "bg-accent text-txt shadow-sm" : "text-paragraph hover:text-txt"
+            }`}
+          >
+            <FiTag size={18} />
+            <span>Join as Lender</span>
+          </button>
         </div>
 
         {/* Form Section */}
@@ -62,10 +87,7 @@ const SignUp = () => {
 
           {/* Password Section */}
           <div className="space-y-1.5">
-            <div className="flex justify-between items-center">
-              <label className="type-small font-medium text-txt">Password</label>
-            </div>
-            
+            <label className="type-small font-medium text-txt">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -82,24 +104,21 @@ const SignUp = () => {
             </div>
           </div>
 
-          {/*CIRCLE CHECKBOX START*/}
-          <div className="flex items-center gap-3">
-            <div className="relative flex items-center justify-center">
+          {/* CIRCLE CHECKBOX */}
+          <div className="flex items-start gap-3">
+            <div className="relative flex items-center justify-center ">
               <input
                 type="checkbox"
                 id="terms"
                 className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-gray-300 transition-all checked:border-accent checked:bg-accent hover:border-accent"
               />
-              {/* Checkmark Icon  */}
               <svg
-                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary opacity-0 transition-opacity peer-checked:opacity-100"
+                className="pointer-events-none absolute text-primary opacity-0 transition-opacity peer-checked:opacity-100"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
                 width="12"
                 height="12"
               >
@@ -107,16 +126,18 @@ const SignUp = () => {
               </svg>
             </div>
             
-            <label htmlFor="terms" className="type-small text-paragraph select-none pt-0.5">
-              I agree to the <span className="text-accent cursor-pointer hover:underline mx-1">Terms of Service</span> 
+            <label htmlFor="terms" className="type-small text-paragraph select-none">
+              I agree to the 
+              {/* Corrected Links for the Privacy/Terms Pages */}
+              <Link to="/terms-of-service" className="text-accent font-semibold hover:underline mx-1">Terms of Service</Link> 
               and 
-              <span className="text-accent cursor-pointer hover:underline mx-1">Privacy Policy</span>
+              <Link to="/privacy-policy" className="text-accent font-semibold hover:underline mx-1">Privacy Policy</Link>
             </label>
           </div>
 
           {/* Submit Button */}
           <button className="w-full bg-accent hover:opacity-90 transition-opacity text-txt type-p font-semibold py-4 rounded-lg shadow-sm">
-            Create Account
+            Create {role.charAt(0).toUpperCase() + role.slice(1)} Account
           </button>
         </form>
 
@@ -127,7 +148,7 @@ const SignUp = () => {
           <div className="flex-grow border-t border-gray-200"></div>
         </div>
 
-        {/* Social Buttons */}
+        {/* SOCIAL BUTTONS */}
         <div className="grid grid-cols-2 gap-4">
           <button className="flex items-center justify-center gap-2 border border-gray-200 hover:bg-secondary transition-colors py-3 rounded-lg">
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
