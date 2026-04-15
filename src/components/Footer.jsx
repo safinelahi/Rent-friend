@@ -12,10 +12,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="bg-[#333] text-white py-16 w-full">
-      {/* ALIGNMENT FIX:
-        Using the exact same container class as Home.jsx and Navbar.jsx:
-        max-w-[1440px] mx-auto px-4 md:px-8
-      */}
+
       <div className="max-w-[1440px] mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-16">
           {/* Logo, Slogan & Contact */}

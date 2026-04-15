@@ -10,7 +10,7 @@ const LenderVerification = () => {
   const nextStep = () => setStep((s) => Math.min(s + 1, totalSteps + 1));
   const prevStep = () => setStep((s) => Math.max(s - 1, 1));
 
-  // --- SUB-COMPONENTS FOR STEPS ---
+  // STEPS
   
   const Step1 = () => (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: -20 }} className="space-y-6">

@@ -5,7 +5,6 @@ const Terms = () => {
   return (
     <div className="w-full bg-primary min-h-screen overflow-hidden">
       
-      {/* Page Container - Matches standard alignment */}
       <div className="max-w-[1440px] mx-auto px-4 md:px-8 py-16 md:py-24">
         
         {/* Animated Content Card */}

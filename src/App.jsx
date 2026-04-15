@@ -22,10 +22,7 @@ function App() {
       <ScrollToTop /> 
 
       <Routes>
-        {/* ============================================================
-            GROUP A: Pages WITH Navbar & Footer 
-            (Wrapped in <Layout> so they look like the rest of the site)
-            ============================================================ */}
+        {/* Pages WITH Navbar & Footer */}
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/browse" element={<Layout><Browse /></Layout>} />
         <Route path="/how-it-works" element={<Layout><HowItWorks /></Layout>} />
@@ -39,10 +36,7 @@ function App() {
         <Route path="/lender-verification" element={<Layout><LenderVerification /></Layout>} />
 
 
-        {/* ============================================================
-            GROUP B: Pages WITHOUT Navbar & Footer
-            (Standalone pages like Login/Signup/Forms)
-            ============================================================ */}
+        {/* Pages WITHOUT Navbar & Footer*/}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

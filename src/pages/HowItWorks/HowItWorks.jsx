@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom'; // Added Link import
+import { Link } from 'react-router-dom'; 
 import { 
   FiSearch, FiCalendar, FiShield, FiMapPin, FiStar, 
   FiPlusCircle, FiUserCheck, FiMessageSquare, FiPackage, FiZap 
@@ -117,7 +117,7 @@ const HowItWorks = () => {
         </div>
       </section>
 
-      {/* Final CTA Section */}
+      {/*CTA Section */}
       <section className="py-20">
         <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="bg-accent rounded-[40px] p-12 md:p-20 text-center relative overflow-hidden">
@@ -126,15 +126,12 @@ const HowItWorks = () => {
               <p className="type-h6 text-txt/70 mb-10 max-w-xl mx-auto font-medium">Join thousands of people in Bangladesh sharing and earning every day.</p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                {/* START RENTING BUTTON -> Browse.jsx */}
                 <Link 
                   to="/browse" 
                   className="bg-txt text-white px-10 py-4 rounded-xl font-bold hover:bg-txt/90 transition-all text-center"
                 >
                   Start Renting
                 </Link>
-
-                {/* LIST AN ITEM BUTTON -> ListAnItem.jsx */}
                 <Link 
                   to="/list-item" 
                   className="bg-white text-txt px-10 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all text-center"
