@@ -398,10 +398,10 @@ const Home = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+          <div className="flex flex-col md:flex-row justify-between md:items-end items-center mb-10 gap-4">
             <motion.div variants={itemVariants}>
-              <h2 className="type-h2 text-txt mb-3">Featured Rentals</h2>
-              <p className="type-p text-paragraph">
+              <h2 className="type-h2 text-txt mb-3 text-center">Featured Rentals</h2>
+              <p className="type-p text-paragraph ">
                 Top-rated items from verified owners
               </p>
             </motion.div>

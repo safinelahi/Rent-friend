@@ -1,4 +1,4 @@
-// Importing assets - keeping these standard
+// Importing assets
 import itemImage1 from "../assets/ProductItems/Item-01.svg";
 import itemImage2 from "../assets/ProductItems/Item-02.svg";
 import itemImage3 from "../assets/ProductItems/Item-03.svg";
@@ -11,7 +11,8 @@ export const products = [
     title: "Canon EOS R5 Camera + Lenses",
     rating: 4.9,
     reviews: 128,
-    location: "Rajshahi New Market",
+    location: "New Market, Rajshahi", 
+    city: "Rajshahi",                
     price: 45,
     category: "Photography",
     verified: true,
@@ -32,6 +33,7 @@ export const products = [
     rating: 4.7,
     reviews: 24,
     location: "Dhaka",
+    city: "Dhaka",                   
     price: 30,
     category: "Tools & DIY",
     verified: true,
@@ -52,6 +54,7 @@ export const products = [
     rating: 4.5,
     reviews: 76,
     location: "Sylhet",
+    city: "Sylhet",                  
     price: 17,
     category: "Camping & Outdoor",
     verified: true,
@@ -72,6 +75,7 @@ export const products = [
     rating: 4.8,
     reviews: 92,
     location: "Chittagong",
+    city: "Chittagong",             
     price: 40,
     category: "Photography",
     verified: true,
@@ -92,6 +96,7 @@ export const products = [
     rating: 4.6,
     reviews: 45,
     location: "Khulna",
+    city: "Khulna",                  
     price: 15,
     category: "Tools & DIY",
     verified: false,
@@ -112,6 +117,7 @@ export const products = [
     rating: 4.9,
     reviews: 31,
     location: "Dhaka",
+    city: "Dhaka",                   
     price: 12,
     category: "Party & Events",
     verified: true,

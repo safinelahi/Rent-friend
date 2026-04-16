@@ -9,20 +9,42 @@ const Browse = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState("All");
   const [priceRange, setPriceRange] = useState(1000);
-  
+
   // Mobile filter state
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  const categories = ["All", "Photography", "Tools & DIY", "Camping & Outdoor", "Music Equipment", "Sports & Bikes", "Party & Events", "Electronics"];
-  const locations = ["All", "Dhaka", "Rajshahi", "Sylhet", "Chittagong", "Khulna"];
+  const categories = [
+    "All",
+    "Photography",
+    "Tools & DIY",
+    "Camping & Outdoor",
+    "Music Equipment",
+    "Sports & Bikes",
+    "Party & Events",
+    "Electronics",
+  ];
+  const locations = [
+    "All",
+    "Dhaka",
+    "Rajshahi",
+    "Sylhet",
+    "Chittagong",
+    "Khulna",
+  ];
 
   const filteredProducts = useMemo(() => {
     return products.filter((item) => {
-      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
-      const matchesLocation = selectedLocation === "All" || item.location === selectedLocation;
+      const matchesSearch = item.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All" || item.category === selectedCategory;
+      const matchesLocation =
+        selectedLocation === "All" || item.city === selectedLocation;
       const matchesPrice = item.price <= priceRange;
-      return matchesSearch && matchesCategory && matchesLocation && matchesPrice;
+      return (
+        matchesSearch && matchesCategory && matchesLocation && matchesPrice
+      );
     });
   }, [searchQuery, selectedCategory, selectedLocation, priceRange]);
 
@@ -34,22 +56,44 @@ const Browse = () => {
           <FiFilter className="text-[#ffc300]" />
           <span>Filters</span>
         </div>
-        <button onClick={() => setShowMobileFilters(false)} className="lg:hidden p-2 bg-[#faf9f4] rounded-full">
+        <button
+          onClick={() => setShowMobileFilters(false)}
+          className="lg:hidden p-2 bg-[#faf9f4] rounded-full"
+        >
           <FiX size={18} />
         </button>
       </div>
 
       {/* Category Filter */}
       <div>
-        <h4 className="text-[10px] font-bold text-[#525252] uppercase tracking-wider mb-4">Category</h4>
+        <h4 className="text-[10px] font-bold text-[#525252] uppercase tracking-wider mb-4">
+          Category
+        </h4>
         <div className="space-y-2.5">
           {categories.map((cat) => (
-            <label key={cat} className="flex items-center gap-3 cursor-pointer group">
-              <input type="radio" name="category" checked={selectedCategory === cat} onChange={() => setSelectedCategory(cat)} className="hidden" />
-              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedCategory === cat ? "border-[#ffc300]" : "border-gray-200"}`}>
-                {selectedCategory === cat && <div className="w-2.5 h-2.5 bg-[#ffc300] rounded-full" />}
+            <label
+              key={cat}
+              className="flex items-center gap-3 cursor-pointer group"
+            >
+              <input
+                type="radio"
+                name="category"
+                checked={selectedCategory === cat}
+                onChange={() => setSelectedCategory(cat)}
+                className="hidden"
+              />
+              <div
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedCategory === cat ? "border-[#ffc300]" : "border-gray-200"}`}
+              >
+                {selectedCategory === cat && (
+                  <div className="w-2.5 h-2.5 bg-[#ffc300] rounded-full" />
+                )}
               </div>
-              <span className={`text-sm font-semibold transition-colors ${selectedCategory === cat ? "text-[#333333]" : "text-[#525252] group-hover:text-[#333333]"}`}>{cat}</span>
+              <span
+                className={`text-sm font-semibold transition-colors ${selectedCategory === cat ? "text-[#333333]" : "text-[#525252] group-hover:text-[#333333]"}`}
+              >
+                {cat}
+              </span>
             </label>
           ))}
         </div>
@@ -57,14 +101,18 @@ const Browse = () => {
 
       {/* Location Filter */}
       <div>
-        <h4 className="text-[10px] font-bold text-[#525252] uppercase tracking-wider mb-4">Location</h4>
+        <h4 className="text-[10px] font-bold text-[#525252] uppercase tracking-wider mb-4">
+          Location
+        </h4>
         <div className="grid grid-cols-2 lg:grid-cols-1 gap-2">
           {locations.map((loc) => (
             <button
               key={loc}
               onClick={() => setSelectedLocation(loc)}
               className={`text-left px-4 py-3 rounded-xl text-xs font-bold transition-all border ${
-                selectedLocation === loc ? "bg-[#ffc300] border-[#ffc300] text-[#333333] shadow-sm" : "bg-[#faf9f4] border-transparent text-[#525252] hover:border-gray-200"
+                selectedLocation === loc
+                  ? "bg-[#ffc300] border-[#ffc300] text-[#333333] shadow-sm"
+                  : "bg-[#faf9f4] border-transparent text-[#525252] hover:border-gray-200"
               }`}
             >
               {loc}
@@ -76,10 +124,21 @@ const Browse = () => {
       {/* Price Filter */}
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h4 className="text-[10px] font-bold text-[#525252] uppercase tracking-wider">Max Price</h4>
-          <span className="text-[#ffc300] font-bold text-sm">৳{priceRange}</span>
+          <h4 className="text-[10px] font-bold text-[#525252] uppercase tracking-wider">
+            Max Price
+          </h4>
+          <span className="text-[#ffc300] font-bold text-sm">
+            ৳{priceRange}
+          </span>
         </div>
-        <input type="range" min="0" max="1000" value={priceRange} onChange={(e) => setPriceRange(e.target.value)} className="w-full accent-[#ffc300] cursor-pointer" />
+        <input
+          type="range"
+          min="0"
+          max="1000"
+          value={priceRange}
+          onChange={(e) => setPriceRange(e.target.value)}
+          className="w-full accent-[#ffc300] cursor-pointer"
+        />
         <div className="flex justify-between text-[9px] text-[#525252] mt-2 font-bold uppercase tracking-wider">
           <span>৳0</span>
           <span>৳1000+</span>
@@ -104,10 +163,11 @@ const Browse = () => {
   return (
     <div className="min-h-screen bg-[#FDFDFC] pt-24 pb-20">
       <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-        
         {/* HEADER SECTION */}
         <div className="mb-10">
-          <h1 className="text-3xl md:text-5xl font-bold text-[#333333] mb-6 tracking-tight">Find What You Need</h1>
+          <h1 className="text-3xl md:text-5xl font-bold text-[#333333] mb-6 tracking-tight">
+            Find What You Need
+          </h1>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-[#525252] text-xl" />
@@ -119,7 +179,7 @@ const Browse = () => {
                 className="w-full h-16 bg-white border border-gray-100 rounded-2xl pl-14 pr-6 outline-none focus:ring-2 focus:ring-[#ffc300] shadow-sm transition-all font-medium"
               />
             </div>
-            <button 
+            <button
               onClick={() => setShowMobileFilters(true)}
               className="lg:hidden flex items-center justify-center gap-3 bg-[#333333] text-white h-16 px-8 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all"
             >
@@ -129,7 +189,6 @@ const Browse = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12">
-          
           {/* DESKTOP SIDEBAR */}
           <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-28 h-fit bg-white border border-gray-100 p-8 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
             <FilterContent />
@@ -139,13 +198,17 @@ const Browse = () => {
           <AnimatePresence>
             {showMobileFilters && (
               <>
-                <motion.div 
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   onClick={() => setShowMobileFilters(false)}
                   className="fixed inset-0 bg-[#333333]/40 backdrop-blur-sm z-[60] lg:hidden"
                 />
-                <motion.div 
-                  initial={{ x: "-100%" }} animate={{ x: 0 }} exit={{ x: "-100%" }}
+                <motion.div
+                  initial={{ x: "-100%" }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "-100%" }}
                   transition={{ type: "spring", damping: 25, stiffness: 200 }}
                   className="fixed top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white z-[70] p-8 lg:hidden overflow-y-auto"
                 >
@@ -159,23 +222,38 @@ const Browse = () => {
           <main className="flex-1">
             <div className="mb-8">
               <p className="text-[#525252] text-[11px] font-bold uppercase tracking-widest">
-                Showing <span className="text-[#ffc300]">{filteredProducts.length}</span> results
+                Showing{" "}
+                <span className="text-[#ffc300]">
+                  {filteredProducts.length}
+                </span>{" "}
+                results
               </p>
             </div>
 
             {filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 {filteredProducts.map((item) => (
-                  <motion.div key={item.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <motion.div
+                    key={item.id}
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
                     <RentalCard item={item} />
                   </motion.div>
                 ))}
               </div>
             ) : (
               <div className="text-center py-32 bg-white rounded-[40px] border border-dashed border-gray-200">
-                <p className="text-[#525252] font-semibold">No items match your criteria.</p>
-                <button 
-                  onClick={() => {setSearchQuery(""); setSelectedCategory("All"); setSelectedLocation("All");}} 
+                <p className="text-[#525252] font-semibold">
+                  No items match your criteria.
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedCategory("All");
+                    setSelectedLocation("All");
+                  }}
                   className="text-[#ffc300] underline font-bold text-xs mt-2"
                 >
                   Clear filters
