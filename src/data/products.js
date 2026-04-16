@@ -11,7 +11,7 @@ export const products = [
     title: "Canon EOS R5 Camera + Lenses",
     rating: 4.9,
     reviews: 128,
-    location: "Rajshahi",
+    location: "Rajshahi New Market",
     price: 45,
     category: "Photography",
     verified: true,

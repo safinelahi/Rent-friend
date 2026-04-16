@@ -1,199 +1,213 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { products } from '../../data/products';
-import { FiMapPin, FiCalendar, FiShield, FiInfo, FiCheckCircle, FiClock } from 'react-icons/fi';
+import { FiMapPin, FiCalendar, FiShield, FiInfo, FiCheckCircle, FiClock, FiChevronRight } from 'react-icons/fi';
 import { FaStar } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
 const ProductDetails = () => {
-  // Pulling the ID from the URL bar
   const { id } = useParams();
   const navigate = useNavigate();
   
-  // We convert to String here just to be safe, in case the data ID is a number.
-  // This stops the page from crashing if there's a type mismatch.
   const product = products.find(p => String(p.id) === String(id));
-
-  // --- PRICING INTERACTION STATE ---
-  // We'll track which day-tier (1, 2, or 7) the user has clicked.
   const [selectedTier, setSelectedTier] = useState("1");
 
-  // If the URL has a weird ID that doesn't exist, we show a clean error state.
   if (!product) return (
     <div className="pt-40 text-center h-screen bg-[#FDFDFC]">
-      <h2 className="type-h2 mb-4">Oops! This item isn't here.</h2>
+      <h2 className="type-h2 mb-4 font-black">Oops! This item isn't here.</h2>
       <Link to="/browse" className="text-accent font-bold underline">Back to Browse</Link>
     </div>
   );
 
-  // This helper calculates the total price based on the selected tier cards.
   const getDisplayPrice = () => {
     if (selectedTier === "2") return Math.round(product.price * 1.8);
     if (selectedTier === "7") return Math.round(product.price * 5);
-    return product.price; // Default 1 day
+    return product.price; 
   };
 
-  // When they click confirm, we jump to the checkout page for this specific item.
   const handleBookingClick = () => {
     navigate(`/checkout/${product.id}`);
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFC] pt-28 pb-20">
+    <div className="min-h-screen bg-[#FDFDFC] pt-24 md:pt-32 pb-20">
       <div className="max-w-[1440px] mx-auto px-4 md:px-8">
         
-        {/* Navigation Breadcrumbs - Good for SEO and UX */}
-        <div className="mb-8 flex gap-2 text-sm text-paragraph font-medium">
-          <Link to="/" className="hover:text-accent transition-colors">Home</Link> / 
-          <Link to="/browse" className="hover:text-accent transition-colors">Browse</Link> / 
-          <span className="text-txt font-bold">{product.title}</span>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-12 items-start">
+        {/* FIXED BREADCRUMBS: Now with visible arrows */}
+        <nav className="mb-8 flex items-center flex-wrap gap-2 text-[10px] uppercase tracking-widest font-bold">
+          <Link to="/" className="text-paragraph hover:text-accent transition-colors">Home</Link> 
+          <FiChevronRight size={14} className="text-accent/60" /> {/* Arrow is now accent color for visibility */}
           
-          {/* ================= LEFT SIDE: ITEM INFO ================= */}
-          <div className="lg:col-span-2 space-y-12">
+          <Link to="/browse" className="text-paragraph hover:text-accent transition-colors">Browse</Link> 
+          <FiChevronRight size={14} className="text-accent/60" />
+          
+          <span className="text-txt truncate max-w-[150px] md:max-w-none">{product.title}</span>
+        </nav>
+
+        <div className="grid lg:grid-cols-3 gap-8 md:gap-12 items-start">
+          
+          {/* ================= LEFT COLUMN ================= */}
+          <div className="lg:col-span-2 space-y-10 md:space-y-12">
             
-            {/* The main hero image with a nice entrance slide */}
+            {/* Title & Info Section */}
+            <div className="px-2 md:px-0">
+              <h1 className="text-3xl md:text-5xl font-black text-txt mb-4 tracking-tight leading-tight">
+                {product.title}
+              </h1>
+              
+              <div className="flex flex-wrap items-center gap-4 md:gap-6">
+                <div className="flex items-center gap-1.5 bg-secondary px-3 py-1.5 rounded-full border border-gray-100/50">
+                  <FaStar className="text-accent" size={14} />
+                  <span className="text-sm font-black text-txt">{product.rating}</span>
+                  <span className="text-xs font-bold text-paragraph">({product.reviews} reviews)</span>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-sm font-bold text-paragraph">
+                  <FiMapPin className="text-accent" />
+                  <span>{product.location}, Bangladesh</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Main Image */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }} 
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-[40px] overflow-hidden border border-gray-100 shadow-sm aspect-video"
+              initial={{ opacity: 0, scale: 0.98 }} 
+              animate={{ opacity: 1, scale: 1 }}
+              className="rounded-[32px] md:rounded-[48px] overflow-hidden border border-gray-100 shadow-sm aspect-video relative group"
             >
-              <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+              <img src={product.image} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute top-6 left-6">
+                 <span className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest text-txt shadow-sm border border-white">
+                   Verified Gear
+                 </span>
+              </div>
             </motion.div>
 
-            {/* Main Description Section */}
-            <section>
-              <h2 className="type-h3 text-txt mb-4">About this product</h2>
-              <p className="type-p text-paragraph leading-relaxed">{product.description}</p>
+            {/* About Section */}
+            <section className="px-2 md:px-0">
+              <h2 className="text-xl md:text-2xl font-black text-txt mb-4 tracking-tight">About this product</h2>
+              <p className="text-sm md:text-base text-paragraph leading-relaxed font-medium">{product.description}</p>
             </section>
 
-            {/* Safety Manual - Crucial for preventing damage! */}
-            <section className="bg-secondary/30 p-8 rounded-[32px] border border-gray-100">
+            {/* Manual Section */}
+            <section className="bg-secondary/30 p-6 md:p-10 rounded-[32px] border border-gray-100">
               <div className="flex items-center gap-3 mb-4">
-                <FiInfo className="text-accent" size={24} />
-                <h3 className="type-h4 text-txt font-bold">Lender Manual & Rules</h3>
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                   <FiInfo className="text-accent" size={20} />
+                </div>
+                <h3 className="text-lg font-black text-txt">Lender Manual & Rules</h3>
               </div>
-              <p className="text-paragraph leading-relaxed italic">"{product.manual}"</p>
+              <p className="text-sm text-paragraph leading-relaxed italic font-medium">"{product.manual}"</p>
             </section>
 
-            {/* WORKING GOOGLE MAP: Centers automatically on the product's location city */}
+            {/* MAP SECTION */}
             <section>
-              <h2 className="type-h3 text-txt mb-6">Item Location</h2>
-              <div className="w-full h-96 bg-gray-100 rounded-[32px] overflow-hidden border border-gray-100">
+              <h2 className="text-xl font-black text-txt mb-6 px-2 md:px-0">Live Item Location</h2>
+              <div className="w-full h-80 md:h-96 bg-gray-100 rounded-[32px] overflow-hidden border border-gray-100 shadow-inner">
                 <iframe
                   title="product-location"
-                  width="100%"
-                  height="100%"
-                  frameBorder="0"
-                  style={{ border: 0 }}
-                  src={`https://maps.google.com/maps?q=${product.location}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+                  width="100%" height="100%" frameBorder="0" style={{ border: 0 }}
+                  src={`https://maps.google.com/maps?q=$${product.location}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
                   allowFullScreen
                 ></iframe>
               </div>
             </section>
           </div>
 
-          {/* ================= RIGHT SIDE: BOOKING BAR (STICKY) ================= */}
-          <div className="space-y-6 lg:sticky lg:top-28">
-            
-            {/* MAIN BOOKING CARD */}
-            <div className="bg-white border border-gray-100 rounded-[40px] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.04)]">
-              
-              {/* Dynamic Price Display */}
-              <div className="mb-6">
-                <span className="text-3xl font-black text-txt">৳{getDisplayPrice()}</span>
-                <span className="text-paragraph text-sm ml-2 font-medium">
-                   {selectedTier === "1" ? "average daily rental" : `total for ${selectedTier} days`}
-                </span>
-              </div>
-
-              {/* Day Selection Boxes */}
-              <div className="grid grid-cols-3 gap-2 mb-8">
-                <button 
-                  onClick={() => setSelectedTier("1")}
-                  className={`p-3 rounded-2xl text-center border transition-all duration-300 ${selectedTier === "1" ? "bg-secondary border-accent" : "bg-secondary/30 border-transparent"}`}
-                >
-                  <p className={`text-xs font-bold ${selectedTier === "1" ? "text-accent" : "text-txt"}`}>৳{product.price}</p>
-                  <p className="text-[10px] text-paragraph uppercase font-bold mt-1">Per day</p>
-                </button>
-
-                <button 
-                  onClick={() => setSelectedTier("2")}
-                  className={`p-3 rounded-2xl text-center border transition-all duration-300 ${selectedTier === "2" ? "bg-secondary border-accent" : "bg-secondary/30 border-transparent"}`}
-                >
-                  <p className={`text-xs font-bold ${selectedTier === "2" ? "text-accent" : "text-txt"}`}>৳{Math.round(product.price * 1.8)}</p>
-                  <p className="text-[10px] text-paragraph uppercase font-bold mt-1">2 days</p>
-                </button>
-
-                <button 
-                  onClick={() => setSelectedTier("7")}
-                  className={`p-3 rounded-2xl text-center border transition-all duration-300 ${selectedTier === "7" ? "bg-secondary border-accent" : "bg-secondary/30 border-transparent"}`}
-                >
-                  <p className={`text-xs font-bold ${selectedTier === "7" ? "text-accent" : "text-txt"}`}>৳{Math.round(product.price * 5)}</p>
-                  <p className="text-[10px] text-paragraph uppercase font-bold mt-1">7 days</p>
-                </button>
-              </div>
-
-              {/* Date Input Selectors */}
-              <div className="space-y-4 mb-8">
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold uppercase text-paragraph ml-1">Start Date</label>
-                  <div className="relative">
-                    <FiCalendar className="absolute left-4 top-1/2 -translate-y-1/2 text-accent" />
-                    <input type="date" className="w-full bg-secondary py-3.5 pl-12 pr-4 rounded-xl border-none text-sm outline-none focus:ring-1 focus:ring-accent" />
-                  </div>
+          {/* ================= RIGHT COLUMN: BOOKING ================= */}
+          <div className="space-y-6 lg:sticky lg:top-32 px-1 md:px-0">
+            <div className="bg-white border border-gray-100 rounded-[40px] p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.04)]">
+              <div className="mb-8">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-black text-txt">৳{getDisplayPrice()}</span>
+                  <span className="text-xs font-bold text-paragraph uppercase tracking-widest">
+                     {selectedTier === "1" ? "/ day" : `Total`}
+                  </span>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold uppercase text-paragraph ml-1">Return Date</label>
-                  <div className="relative">
-                    <FiCalendar className="absolute left-4 top-1/2 -translate-y-1/2 text-accent" />
-                    <input type="date" className="w-full bg-secondary py-3.5 pl-12 pr-4 rounded-xl border-none text-sm outline-none focus:ring-1 focus:ring-accent" />
+                <p className="text-[10px] font-bold text-accent uppercase mt-1 tracking-wider flex items-center gap-1">
+                  <FiShield size={12} /> Secure Transaction
+                </p>
+              </div>
+
+              {/* TIER SELECTION */}
+              <div className="grid grid-cols-3 gap-2 mb-8 bg-secondary/30 p-1 rounded-2xl border border-gray-50">
+                {["1", "2", "7"].map((tier) => (
+                  <button 
+                    key={tier}
+                    onClick={() => setSelectedTier(tier)}
+                    className={`py-3 rounded-xl text-center transition-all duration-300 ${
+                      selectedTier === tier 
+                      ? "bg-white text-txt shadow-md" 
+                      : "text-paragraph hover:text-txt"
+                    }`}
+                  >
+                    <p className="text-[11px] font-black">
+                      {tier === "1" ? "1 Day" : tier === "2" ? "2 Days" : "7 Days"}
+                    </p>
+                    <p className="text-[9px] font-bold opacity-60">
+                      ৳{tier === "1" ? product.price : tier === "2" ? Math.round(product.price * 1.8) : Math.round(product.price * 5)}
+                    </p>
+                  </button>
+                ))}
+              </div>
+
+              {/* DATE SELECTION CARD */}
+              <div className="bg-secondary/40 rounded-2xl border border-gray-100 overflow-hidden mb-8">
+                <div className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+                  <div className="flex-1 p-4 group cursor-pointer hover:bg-white transition-colors duration-300">
+                    <label className="text-[9px] font-black uppercase text-paragraph tracking-widest flex items-center gap-1.5 mb-1 group-hover:text-accent">
+                      <FiCalendar size={12} /> Pickup Date
+                    </label>
+                    <input type="date" className="bg-transparent border-none p-0 text-sm font-black text-txt outline-none w-full cursor-pointer" />
+                  </div>
+                  <div className="flex-1 p-4 group cursor-pointer hover:bg-white transition-colors duration-300">
+                    <label className="text-[9px] font-black uppercase text-paragraph tracking-widest flex items-center gap-1.5 mb-1 group-hover:text-accent">
+                      <FiClock size={12} /> Return Date
+                    </label>
+                    <input type="date" className="bg-transparent border-none p-0 text-sm font-black text-txt outline-none w-full cursor-pointer" />
                   </div>
                 </div>
               </div>
 
-              {/* THE BUTTON: Links directly to the checkout journey */}
               <button 
                 onClick={handleBookingClick}
-                className="w-full bg-accent text-txt font-bold py-5 rounded-2xl shadow-md hover:bg-accent/90 hover:scale-[1.01] active:scale-[0.99] transition-all mb-4"
+                className="w-full bg-accent text-txt font-black py-5 rounded-2xl shadow-[0_10px_20px_rgba(255,184,0,0.2)] hover:bg-accent hover:shadow-[0_15px_30px_rgba(255,184,0,0.3)] transition-all mb-6 active:scale-[0.98]"
               >
                 Confirm Booking
               </button>
 
-              {/* Safety & Trust Footer */}
-              <div className="space-y-3 pt-4 border-t border-gray-100">
-                <div className="flex items-center gap-2 text-xs text-paragraph font-semibold">
-                  <FiClock className="text-orange-500" /> Full refund with 72+ hours notice
+              <div className="space-y-3 pt-6 border-t border-gray-100">
+                <div className="flex items-center gap-3 text-[10px] text-paragraph font-bold uppercase tracking-wider">
+                  <FiClock className="text-orange-500" size={14} /> Full refund 72h notice
                 </div>
-                <div className="flex items-center gap-2 text-xs text-paragraph font-semibold">
-                  <FiShield className="text-green-500" /> Verified Identity Lender
+                <div className="flex items-center gap-3 text-[10px] text-paragraph font-bold uppercase tracking-wider">
+                  <FiShield className="text-green-500" size={14} /> Verified Identity Lender
                 </div>
               </div>
             </div>
 
-            {/* OWNER PROFILE CARD */}
+            {/* OWNER CARD */}
             <div className="bg-white border border-gray-100 rounded-[32px] p-6 shadow-sm">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-paragraph mb-5">The Owner</h4>
+              <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-paragraph mb-5 px-1">Professional Owner</h4>
               <div className="flex items-center gap-4 mb-5">
-                <img src={product.owner.image} alt={product.owner.name} className="w-14 h-14 rounded-full border-2 border-accent object-cover" />
+                <div className="relative">
+                   <img src={product.owner.image} alt={product.owner.name} className="w-12 h-12 rounded-full border-2 border-accent object-cover" />
+                   <div className="absolute -bottom-1 -right-1 bg-green-500 p-0.5 rounded-full border-2 border-white">
+                      <FiCheckCircle className="text-white" size={10} />
+                   </div>
+                </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <p className="font-bold text-txt">{product.owner.name}</p>
-                    <FiCheckCircle className="text-green-500" />
-                  </div>
-                  <div className="flex items-center gap-3 text-xs font-medium">
-                    <div className="flex items-center gap-1 text-accent"><FaStar /> {product.owner.rating}</div>
-                    <div className="text-paragraph underline decoration-accent/30 cursor-pointer">{product.owner.reviews} reviews</div>
+                  <p className="font-black text-txt text-sm leading-tight">{product.owner.name}</p>
+                  <div className="flex items-center gap-3 text-[10px] mt-1 font-bold">
+                    <div className="flex items-center gap-1 text-accent"><FaStar size={10} /> {product.owner.rating}</div>
+                    <div className="text-paragraph underline decoration-accent/20">{product.owner.reviews} reviews</div>
                   </div>
                 </div>
               </div>
-              <div className="bg-secondary/50 py-3.5 px-4 rounded-2xl text-center border border-gray-50/50">
-                <p className="text-sm font-bold text-txt">{product.owner.listings} Active Listings</p>
+              <div className="bg-secondary/50 py-3 rounded-xl text-center">
+                <p className="text-[10px] font-black text-txt uppercase tracking-wider">{product.owner.listings} Active Listings</p>
               </div>
             </div>
-
           </div>
         </div>
       </div>
