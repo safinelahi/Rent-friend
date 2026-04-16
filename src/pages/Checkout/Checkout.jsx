@@ -176,7 +176,7 @@ const Checkout = () => {
               </div>
 
               <button 
-                onClick={() => navigate('/success')}
+                onClick={() => navigate('/booking-success')}
                 className="w-full bg-accent text-txt font-bold py-5 rounded-2xl shadow-md hover:opacity-90 transition-all active:scale-[0.98]"
               >
                 Confirm and Pay

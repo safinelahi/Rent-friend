@@ -16,19 +16,21 @@ import Policy from "./pages/Policy/Policy";
 import Contact from "./pages/Contact/Contact";
 import LenderVerification from "./pages/Verification/LenderVerification";
 
-// --- NEW PAGE IMPORT ---
+// --- NEW PAGE IMPORTS ---
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Checkout from "./pages/Checkout/Checkout";
+import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
+import RenterDashboard from "./pages/Dashboard/RenterDashboard"; // The new Dashboard!
 
 function App() {
   return (
     <>
-      {/* Making sure users always land at the top of the page on route changes */}
+      {/* ScrollToTop ensures the user doesn't stay at the bottom when switching pages */}
       <ScrollToTop /> 
 
       <Routes>
         {/* ==========================================
-            Pages WITH Navbar & Footer 
+            PUBLIC PAGES (With Navbar & Footer) 
             ========================================== */}
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/browse" element={<Layout><Browse /></Layout>} />
@@ -36,20 +38,27 @@ function App() {
         <Route path="/list-item" element={<Layout><ListAnItem /></Layout>} />
         <Route path="/faqs" element={<Layout><FAQs /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
+        <Route path="/booking-success" element={<Layout><BookingSuccess /></Layout>} />
         
-        {/* DYNAMIC PRODUCT PAGE:  */}
+        {/* Dynamic Product & Checkout Routes */}
         <Route path="/product/:id" element={<Layout><ProductDetails /></Layout>} />
         <Route path="/checkout/:id" element={<Layout><Checkout /></Layout>} />
         
-        {/* Security & Legal Stuff */}
+        {/* Legal & Verification */}
         <Route path="/terms-of-service" element={<Layout><Terms /></Layout>} />
         <Route path="/privacy-policy" element={<Layout><Policy /></Layout>} />
         <Route path="/lender-verification" element={<Layout><LenderVerification /></Layout>} />
 
 
         {/* ==========================================
-            Pages WITHOUT Navbar & Footer
-            (Clean, distraction-free forms)
+            DASHBOARD PAGES 
+            (No standard Layout - uses its own Sidebar)
+            ========================================== */}
+        <Route path="/dashboard/rentals" element={<RenterDashboard />} />
+
+
+        {/* ==========================================
+            AUTH PAGES (Clean, no Navbar/Footer)
             ========================================== */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
