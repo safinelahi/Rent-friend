@@ -1,63 +1,70 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
-import { FiMapPin } from 'react-icons/fi';
+import { FiMapPin, FiArrowRight } from 'react-icons/fi'; 
 
 const RentalCard = ({ item }) => {
   return (
-    <Link to="/browse" className="block group h-full">
-      {/* CARD CONTAINER: Added p-4 (16px) to create the white frame around the image */}
-      <div className="bg-white border border-gray-100 rounded-[24px] p-4 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 h-full flex flex-col">
+    <Link to={`/product/${item.id}`} className="block group h-full">
+      <div className="bg-white border border-gray-100 rounded-[32px] p-4 hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all duration-500 h-full flex flex-col">
         
         {/* IMAGE CONTAINER */}
-        <div className="relative h-[240px] w-full overflow-hidden rounded-[20px] bg-gray-100">
+        <div className="relative h-[220px] w-full overflow-hidden rounded-[24px] bg-gray-100">
           <img 
             src={item.image} 
             alt={item.title} 
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
           />
           
-          {/* BADGES: Positioned Top-Left inside the image */}
+          {/* BADGES */}
           <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
             {item.verified && (
-              <span className="bg-[#FFB800] text-[#1A1A1A] text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm">
+              <span className="bg-accent text-txt text-[10px] font-bold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wider">
                 Verified
               </span>
             )}
-            <span className="bg-white text-[#1A1A1A] text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm">
+            <span className="bg-white/90 backdrop-blur-sm text-txt text-[10px] font-bold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wider">
               {item.category}
             </span>
           </div>
         </div>
 
         {/* CONTENT */}
-        <div className="flex flex-col flex-grow pt-5 px-1">
-          <h3 className="text-[20px] font-bold text-[#1A1A1A] mb-2 leading-tight group-hover:text-[#FFB800] transition-colors line-clamp-1">
-            {item.title}
-          </h3>
+        <div className="flex flex-col flex-grow pt-6 px-2">
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="text-xl font-bold text-txt leading-tight group-hover:text-accent transition-colors line-clamp-1">
+              {item.title}
+            </h3>
+          </div>
 
-          <div className="flex items-center gap-4 text-[15px] text-gray-500 mb-5">
+          <div className="flex items-center gap-4 text-sm text-paragraph mb-6">
             <div className="flex items-center gap-1.5">
-              <FaStar className="text-[#FFB800] text-sm" />
-              <span className="font-bold text-[#1A1A1A]">{item.rating}</span>
-              <span className="text-gray-400 font-normal">({item.reviews})</span>
+              <FaStar className="text-accent" />
+              <span className="font-bold text-txt">{item.rating}</span>
+              <span className="text-paragraph/60 font-medium">({item.reviews})</span>
             </div>
-            <div className="flex items-center gap-1.5 truncate max-w-[140px]">
-              <FiMapPin className="text-gray-400" size={16} />
-              <span className="truncate font-normal">{item.location}</span>
+            <div className="flex items-center gap-1.5 truncate">
+              <FiMapPin className="text-paragraph/40" size={16} />
+              <span className="truncate">{item.location}</span>
             </div>
           </div>
 
-          {/* DIVIDER */}
-          <div className="border-t border-gray-100 mb-4 mt-auto"></div>
+          {/* PRICE & BUTTON SECTION */}
+          <div className="mt-auto">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black text-txt">৳{item.price}</span>
+                <span className="text-paragraph/60 text-xs font-bold uppercase tracking-tighter">/ day</span>
+              </div>
+            </div>
 
-          {/* PRICE */}
-          <div className="flex items-baseline gap-1">
-            <span className="text-[26px] font-bold text-[#1A1A1A]">৳{item.price}</span>
-            <span className="text-gray-400 text-sm font-medium">/day</span>
+            {/* THE "BOOK NOW" BUTTON (Styled Div) */}
+            <div className="w-full bg-secondary group-hover:bg-accent py-4 rounded-2xl flex items-center justify-center gap-2 transition-all duration-300">
+              <span className="text-txt font-bold text-sm uppercase tracking-widest">Rent Now</span>
+              <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </div>
           </div>
         </div>
-
       </div>
     </Link>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom"; // Added for navigation
 import {
   FiSearch,
   FiMapPin,
@@ -16,13 +17,16 @@ import {
   AnimatePresence,
 } from "framer-motion";
 
-// --- COMPONENT IMPORTS ---
+// data import(product)
+import { products } from "../../data/products";
+
+// card for product import 
 import RentalCard from "../../components/RentalCard";
 
-// --- IMAGE IMPORTS ---
+// hero image 
 import heroImage from "../../assets/Section -Hero.png";
 
-// Category Icons
+// category icons
 import cameraIcon from "../../assets/Camera.svg";
 import wrenchIcon from "../../assets/Wrench.svg";
 import musicIcon from "../../assets/MusicNote.svg";
@@ -31,27 +35,22 @@ import houseIcon from "../../assets/House.svg";
 import laptopIcon from "../../assets/Laptop.svg";
 import frameIcon from "../../assets/Frame.svg";
 
-// How It Works Assets
+// How It Works section images
 import workStep1 from "../../assets/How-It’s-Works-1.svg";
 import workStep2 from "../../assets/How-It’s-Works-2.png";
 import workStep3 from "../../assets/How-It’s-Works-3.png";
 import arrowIcon from "../../assets/How-It’s-Works-arrow.svg";
 import downArrowIcon from "../../assets/How-It’s-Work-downArrow.svg";
 
-// Sharing Revolution Asset
+
 import sharingImage from "../../assets/Sharing-Revolution.svg";
 
-// Testimonial Person Images
+// review section persion images 
 import personSarah from "../../assets/presons/image.svg";
 import personKarim from "../../assets/presons/image (1).svg";
 import personNusrat from "../../assets/presons/image (2).svg";
 
-// --- PRODUCT ITEMS ---
-import itemImage1 from "../../assets/ProductItems/Item-01.svg";
-import itemImage2 from "../../assets/ProductItems/Item-02.svg";
-import itemImage3 from "../../assets/ProductItems/Item-03.svg";
-
-// --- ANIMATED COUNTER COMPONENT ---
+// animated component 
 const Counter = ({ value, decimals = 0 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -62,7 +61,7 @@ const Counter = ({ value, decimals = 0 }) => {
     duration: 2,
   });
   const displayValue = useTransform(spring, (current) =>
-    current.toFixed(decimals)
+    current.toFixed(decimals),
   );
 
   useEffect(() => {
@@ -74,7 +73,7 @@ const Counter = ({ value, decimals = 0 }) => {
   return <motion.span ref={ref}>{displayValue}</motion.span>;
 };
 
-// --- FAQ ITEM COMPONENT ---
+// FAQ component
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
   return (
     <div className="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4 transition-all hover:shadow-sm">
@@ -115,6 +114,9 @@ const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
 
+  // --- DERIVED DATA (HOME PAGE SHOWS TOP 6) ---
+  const featuredItems = products.slice(0, 6);
+
   const bangladeshCities = [
     "Dhaka",
     "Chittagong",
@@ -127,7 +129,7 @@ const Home = () => {
     "Cox's Bazar",
   ];
   const filteredCities = bangladeshCities.filter((city) =>
-    city.toLowerCase().includes(cityInput.toLowerCase())
+    city.toLowerCase().includes(cityInput.toLowerCase()),
   );
 
   const handleCitySelect = (city) => {
@@ -145,75 +147,6 @@ const Home = () => {
     { id: 6, name: "Party & Events", count: 432, icon: houseIcon },
     { id: 7, name: "Electronics", count: 965, icon: laptopIcon },
     { id: 8, name: "Creative & Art", count: 278, icon: frameIcon },
-  ];
-
-  const featuredItems = [
-    {
-      id: 1,
-      image: itemImage1,
-      title: "Canon EOS R5 Camera + Lenses",
-      rating: 4.9,
-      reviews: 128,
-      location: "Rajshahi, Bangladesh",
-      price: 45,
-      category: "Photography",
-      verified: true,
-    },
-    {
-      id: 2,
-      image: itemImage2,
-      title: "Professional Power Tools Set",
-      rating: 4.7,
-      reviews: 24,
-      location: "Dhaka, Bangladesh",
-      price: 30,
-      category: "Tools",
-      verified: true,
-    },
-    {
-      id: 3,
-      image: itemImage3,
-      title: "4-Person Camping Tent",
-      rating: 4.5,
-      reviews: 76,
-      location: "Sylhet, Bangladesh",
-      price: 17,
-      category: "Outdoor",
-      verified: true,
-    },
-    {
-      id: 4,
-      image: itemImage1,
-      title: "Canon EOS R5 Camera + Lenses",
-      rating: 4.9,
-      reviews: 128,
-      location: "Rajshahi, Bangladesh",
-      price: 45,
-      category: "Photography",
-      verified: true,
-    },
-    {
-      id: 5,
-      image: itemImage2,
-      title: "Professional Power Tools Set",
-      rating: 4.7,
-      reviews: 24,
-      location: "Dhaka, Bangladesh",
-      price: 30,
-      category: "Tools",
-      verified: true,
-    },
-    {
-      id: 6,
-      image: itemImage3,
-      title: "4-Person Camping Tent",
-      rating: 4.5,
-      reviews: 76,
-      location: "Sylhet, Bangladesh",
-      price: 17,
-      category: "Outdoor",
-      verified: true,
-    },
   ];
 
   const reviews = [
@@ -285,22 +218,14 @@ const Home = () => {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-
-      // Category Grid Logic
       if (width >= 1024) {
         setVisibleCount(8);
-      } else if (width >= 768) {
-        setVisibleCount(6);
-      } else {
-        setVisibleCount(4);
-      }
-
-      // Featured Carousel Logic
-      if (width >= 1024) {
         setItemsPerPage(3);
       } else if (width >= 768) {
+        setVisibleCount(6);
         setItemsPerPage(2);
       } else {
+        setVisibleCount(4);
         setItemsPerPage(1);
       }
     };
@@ -319,7 +244,6 @@ const Home = () => {
       setCurrentIndex((prev) => prev + 1);
     }
   };
-
   const handlePrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
@@ -392,8 +316,7 @@ const Home = () => {
                         onClick={() => handleCitySelect(city)}
                         className="px-4 py-3 hover:bg-secondary cursor-pointer text-left text-txt type-small flex items-center gap-2"
                       >
-                        {" "}
-                        <FiMapPin size={14} className="text-paragraph" /> {city}{" "}
+                        <FiMapPin size={14} className="text-paragraph" /> {city}
                       </div>
                     ))
                   ) : (
@@ -404,9 +327,12 @@ const Home = () => {
                 </div>
               )}
             </div>
-            <button className="w-full md:w-auto bg-accent hover:opacity-90 text-txt type-h6 font-semibold h-14 px-10 rounded-xl transition-all shadow-md hover:shadow-lg whitespace-nowrap">
+            <Link
+              to="/browse"
+              className="w-full md:w-auto bg-accent hover:opacity-90 text-txt type-h6 font-semibold h-14 px-10 rounded-xl transition-all shadow-md hover:shadow-lg whitespace-nowrap flex items-center justify-center"
+            >
               Browse Rentals
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -463,9 +389,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= FEATURED RENTALS SECTION (ANIMATED) ================= */}
+      {/* ================= FEATURED RENTALS SECTION ================= */}
       <section className="py-16 md:py-24 bg-secondary w-full overflow-hidden">
-        {/* ADDED: motion.div wrapper with containerVariants to trigger stagger entrance */}
         <motion.div
           className="max-w-[1440px] mx-auto px-4 md:px-8"
           variants={containerVariants}
@@ -474,46 +399,29 @@ const Home = () => {
           viewport={{ once: true, margin: "-100px" }}
         >
           <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
-            {/* Header Text Animation */}
             <motion.div variants={itemVariants}>
               <h2 className="type-h2 text-txt mb-3">Featured Rentals</h2>
               <p className="type-p text-paragraph">
                 Top-rated items from verified owners
               </p>
             </motion.div>
-
-            {/* Buttons Animation */}
             <motion.div variants={itemVariants} className="flex gap-4">
               <button
                 onClick={handlePrev}
                 disabled={currentIndex === 0}
-                className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-200
-                  ${
-                    currentIndex === 0
-                      ? "bg-white/50 text-[#FFB800]/50 cursor-not-allowed"
-                      : "bg-white text-[#FFB800] hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
-                  }
-                `}
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${currentIndex === 0 ? "bg-white/50 text-[#FFB800]/50" : "bg-white text-[#FFB800] hover:shadow-md hover:-translate-y-0.5"}`}
               >
                 <FiChevronLeft size={28} strokeWidth={2.5} />
               </button>
               <button
                 onClick={handleNext}
                 disabled={currentIndex >= featuredItems.length - itemsPerPage}
-                className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-200
-                  ${
-                    currentIndex >= featuredItems.length - itemsPerPage
-                      ? "bg-white/50 text-[#FFB800]/50 cursor-not-allowed"
-                      : "bg-white text-[#FFB800] hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
-                  }
-                `}
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${currentIndex >= featuredItems.length - itemsPerPage ? "bg-white/50 text-[#FFB800]/50" : "bg-white text-[#FFB800] hover:shadow-md hover:-translate-y-0.5"}`}
               >
                 <FiChevronRight size={28} strokeWidth={2.5} />
               </button>
             </motion.div>
           </div>
-
-          {/* Slider Container Animation */}
           <motion.div
             variants={itemVariants}
             className="relative overflow-hidden w-full"
@@ -530,11 +438,8 @@ const Home = () => {
                 <div
                   key={item.id}
                   style={{
-                    minWidth: `calc((100% - ${
-                      (itemsPerPage - 1) * 24
-                    }px) / ${itemsPerPage})`,
+                    minWidth: `calc((100% - ${(itemsPerPage - 1) * 24}px) / ${itemsPerPage})`,
                   }}
-                  className="h-full"
                 >
                   <RentalCard item={item} />
                 </div>
@@ -546,25 +451,22 @@ const Home = () => {
 
       {/* ================= HOW IT WORKS SECTION ================= */}
       <section className="py-16 md:py-24 bg-[#FDFDFC] w-full">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-          <div className="text-center mb-16 md:mb-20">
-            <h2 className="type-h2 text-txt mb-4">How It Works</h2>
-            <p className="type-p text-paragraph max-w-2xl mx-auto">
-              Renting is simple, safe, and sustainable. Get started in minutes.
-            </p>
-          </div>
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8 text-center">
+          <h2 className="type-h2 text-txt mb-4">How It Works</h2>
+          <p className="type-p text-paragraph max-w-2xl mx-auto mb-16">
+            Renting is simple, safe, and sustainable. Get started in minutes.
+          </p>
           <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            className="flex flex-col lg:flex-row items-center justify-center gap-0 relative"
+            className="flex flex-col lg:flex-row items-center justify-center gap-0"
           >
             <motion.div
               variants={itemVariants}
-              className="flex-1 flex flex-col items-center text-center px-4 max-w-[350px] mx-auto z-10"
+              className="flex-1 px-4 max-w-[350px]"
             >
-              <div className="h-48 w-full flex items-center justify-center mb-6">
+              <div className="h-48 flex items-center justify-center mb-6">
                 <img
                   src={workStep1}
                   alt="Browse"
@@ -573,30 +475,20 @@ const Home = () => {
               </div>
               <h3 className="type-h4 text-txt mb-3">Browse & Search</h3>
               <p className="type-small text-paragraph leading-relaxed">
-                Find exactly what you need from thousands of verified listings
-                in your area.
+                Find exactly what you need from thousands of verified listings.
               </p>
             </motion.div>
             <motion.div variants={itemVariants} className="lg:hidden py-8">
-              <img
-                src={downArrowIcon}
-                alt="Next"
-                className="w-12 h-12 opacity-80"
-              />
+              <img src={downArrowIcon} alt="Next" className="w-12 opacity-80" />
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
-              className="hidden lg:block w-32 mt-12 -mx-8 self-start z-0"
-            >
+            <div className="hidden lg:block w-32 mt-12 -mx-8 self-start">
               <img src={arrowIcon} alt="arrow" className="w-full" />
-            </motion.div>
+            </div>
             <motion.div
               variants={itemVariants}
-              className="flex-1 flex flex-col items-center text-center px-4 max-w-[350px] mx-auto z-10"
+              className="flex-1 px-4 max-w-[350px]"
             >
-              <div className="h-48 w-full flex items-center justify-center mb-6">
+              <div className="h-48 flex items-center justify-center mb-6">
                 <img
                   src={workStep2}
                   alt="Book"
@@ -605,30 +497,20 @@ const Home = () => {
               </div>
               <h3 className="type-h4 text-txt mb-3">Book Instantly</h3>
               <p className="type-small text-paragraph leading-relaxed">
-                Select your dates, confirm the booking, and communicate directly
-                with the owner.
+                Select dates, confirm booking, and chat with the owner.
               </p>
             </motion.div>
             <motion.div variants={itemVariants} className="lg:hidden py-8">
-              <img
-                src={downArrowIcon}
-                alt="Next"
-                className="w-12 h-12 opacity-80"
-              />
+              <img src={downArrowIcon} alt="Next" className="w-12 opacity-80" />
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.7 }}
-              className="hidden lg:block w-32 mt-12 -mx-8 self-start z-0"
-            >
+            <div className="hidden lg:block w-32 mt-12 -mx-8 self-start">
               <img src={arrowIcon} alt="arrow" className="w-full" />
-            </motion.div>
+            </div>
             <motion.div
               variants={itemVariants}
-              className="flex-1 flex flex-col items-center text-center px-4 max-w-[350px] mx-auto z-10"
+              className="flex-1 px-4 max-w-[350px]"
             >
-              <div className="h-48 w-full flex items-center justify-center mb-6">
+              <div className="h-48 flex items-center justify-center mb-6">
                 <img
                   src={workStep3}
                   alt="Pickup"
@@ -637,8 +519,7 @@ const Home = () => {
               </div>
               <h3 className="type-h4 text-txt mb-3">Pick Up & Return</h3>
               <p className="type-small text-paragraph leading-relaxed">
-                Meet the owner, enjoy your rental, and return it on time. Leave
-                a review!
+                Meet the owner, enjoy your rental, and return it on time.
               </p>
             </motion.div>
           </motion.div>
@@ -647,67 +528,63 @@ const Home = () => {
 
       {/* ================= SHARING REVOLUTION SECTION ================= */}
       <section className="py-16 md:py-24 bg-[#333] text-white w-full">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex-1 text-center md:text-left"
-            >
-              <h2 className="type-h2 mb-6 md:mb-8 leading-tight">
-                Join the Sharing <br className="hidden md:block" /> Revolution
-              </h2>
-              <div className="space-y-6 text-gray-300 type-p leading-relaxed">
-                <p>
-                  Every time you rent through RentFriend, you’re making a small
-                  choice with a big impact. By sharing instead of buying, you
-                  help reduce waste.
-                </p>
-                <p>
-                  Together, we’re building a smarter, more sustainable world –
-                  one that values access over ownership.
-                </p>
-                <p>
-                  When you rent, everyone benefits – you save money, others
-                  earn, and the planet gets a little cleaner.
-                </p>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex-1 w-full"
-            >
-              <img
-                src={sharingImage}
-                alt="People sharing items"
-                className="w-full h-auto object-contain rounded-2xl"
-              />
-            </motion.div>
-          </div>
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24">
+          {/* Text Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex-1 text-center md:text-left"
+          >
+            <h2 className="type-h2 mb-8 leading-tight">
+              Join the Sharing <br className="hidden md:block" /> Revolution
+            </h2>
+
+            <div className="space-y-6 text-gray-300 type-p leading-relaxed">
+              <p>
+                Every time you rent through RentFriend, you’re making a small
+                choice with a big impact. By sharing instead of buying, you help
+                reduce waste, lower overproduction, and give useful items a
+                longer life.
+              </p>
+              <p>
+                Together, we’re building a smarter, more sustainable world — one
+                that values access over ownership and community over
+                consumption.
+              </p>
+              <p>
+                When you rent, everyone benefits — you save money, others earn,
+                and the planet gets a little cleaner.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Image Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex-1 w-full"
+          >
+            <img
+              src={sharingImage}
+              alt="People sharing items"
+              className="w-full h-auto object-contain rounded-2xl shadow-2xl"
+            />
+          </motion.div>
         </div>
       </section>
 
-      {/* ================= Review SECTION ================= */}
-      <section className="py-16 md:py-24 bg-secondary w-full overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-          <div className="text-center mb-16">
-            <h2 className="type-h2 text-txt mb-3">What Our Community Says</h2>
-            <p className="type-p text-paragraph">
-              Join thousands of happy renters and lenders sharing their
-              experiences
-            </p>
-          </div>
+      {/* ================= REVIEW SECTION ================= */}
+      <section className="py-16 md:py-24 bg-secondary w-full overflow-hidden text-center">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8 mb-16">
+          <h2 className="type-h2 text-txt mb-3">What Our Community Says</h2>
+          <p className="type-p text-paragraph">
+            Join thousands of happy renters and lenders
+          </p>
         </div>
-
-        {/* Infinite Marquee */}
         <div className="relative w-full overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-15 z-10 bg-gradient-to-r from-secondary to-transparent pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-15 z-10 bg-gradient-to-l from-secondary to-transparent pointer-events-none" />
           <motion.div
             className="flex gap-6 w-max"
             animate={{ x: "-50%" }}
@@ -717,13 +594,13 @@ const Home = () => {
               (review, index) => (
                 <div
                   key={index}
-                  className="w-[320px] md:w-[400px] flex-shrink-0 bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
+                  className="w-[320px] md:w-[400px] flex-shrink-0 bg-white p-8 rounded-2xl border border-gray-100 text-left shadow-sm"
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <img
                       src={review.image}
                       alt={review.name}
-                      className="w-12 h-12 rounded-full object-cover"
+                      className="w-12 h-12 rounded-full"
                     />
                     <div>
                       <h4 className="type-h6 font-bold text-txt">
@@ -737,68 +614,62 @@ const Home = () => {
                       <FaStar key={i} className="text-[#FFB800] text-sm" />
                     ))}
                   </div>
-                  <p className="type-p text-paragraph text-sm md:text-[15px] leading-relaxed mb-6">
+                  <p className="text-paragraph text-[15px] leading-relaxed mb-6">
                     "{review.text}"
                   </p>
                   <span className="text-xs font-semibold text-[#FFB800] bg-[#FFB800]/10 px-2 py-1 rounded">
                     {review.time}
                   </span>
                 </div>
-              )
+              ),
             )}
           </motion.div>
         </div>
-
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8 mt-20">
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 text-center">
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#FFB800] mb-2 flex justify-center items-center gap-1">
-                <Counter value={4.9} decimals={1} />
-                /5
-              </div>
-              <p className="text-gray-500 font-medium">Average Rating</p>
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8 mt-20 flex flex-wrap justify-center gap-12 md:gap-24">
+          <div>
+            <div className="text-5xl font-bold text-[#FFB800] mb-2">
+              <Counter value={4.9} decimals={1} />
+              /5
             </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#FFB800] mb-2 flex justify-center items-center">
-                <Counter value={90} />+
-              </div>
-              <p className="text-gray-500 font-medium">Reviews</p>
+            <p className="text-gray-500 font-medium">Average Rating</p>
+          </div>
+          <div>
+            <div className="text-5xl font-bold text-[#FFB800] mb-2">
+              <Counter value={90} />+
             </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#FFB800] mb-2 flex justify-center items-center">
-                <Counter value={98} />%
-              </div>
-              <p className="text-gray-500 font-medium">Satisfaction</p>
+            <p className="text-gray-500 font-medium">Reviews</p>
+          </div>
+          <div>
+            <div className="text-5xl font-bold text-[#FFB800] mb-2">
+              <Counter value={98} />%
             </div>
+            <p className="text-gray-500 font-medium">Satisfaction</p>
           </div>
         </div>
       </section>
 
       {/* ================= FAQ SECTION ================= */}
       <section className="py-16 md:py-24 bg-primary w-full">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
-            <div className="w-full lg:w-1/3 text-center lg:text-left">
-              <h2 className="type-h2 text-txt mb-4">
-                Frequently Asked Questions
-              </h2>
-              <p className="type-p text-paragraph mb-6 leading-relaxed">
-                Can't find what you're looking for? Reach out to{" "}
-                <span className="font-bold text-txt">RentFriend Support</span> –
-                we're happy to help!
-              </p>
-            </div>
-            <div className="w-full lg:w-2/3">
-              {faqs.map((faq, index) => (
-                <FAQItem
-                  key={index}
-                  question={faq.question}
-                  answer={faq.answer}
-                  isOpen={openFAQ === index}
-                  onClick={() => setOpenFAQ(openFAQ === index ? -1 : index)}
-                />
-              ))}
-            </div>
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8 flex flex-col lg:flex-row gap-12">
+          <div className="lg:w-1/3 text-center lg:text-left">
+            <h2 className="type-h2 text-txt mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="type-p text-paragraph mb-6">
+              Can't find what you're looking for? Reach out to{" "}
+              <span className="font-bold text-txt">RentFriend Support</span>.
+            </p>
+          </div>
+          <div className="lg:w-2/3">
+            {faqs.map((faq, index) => (
+              <FAQItem
+                key={index}
+                question={faq.question}
+                answer={faq.answer}
+                isOpen={openFAQ === index}
+                onClick={() => setOpenFAQ(openFAQ === index ? -1 : index)}
+              />
+            ))}
           </div>
         </div>
       </section>
