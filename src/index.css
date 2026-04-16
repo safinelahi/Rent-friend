@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* 1. DEFINE YOUR THEME */
 @theme {
   --color-primary: #ffffff;
   --color-secondary: #faf9f4;
@@ -9,7 +8,7 @@
   --color-accent: #ffc300;
   --font-epilogue: "Epilogue", sans-serif;
 }
-/* 2. REUSABLE TYPOGRAPHY CLASSES */
+/* 2. REUSABLE */
 @layer components {
 
   /* Headline 1 (All 600) */

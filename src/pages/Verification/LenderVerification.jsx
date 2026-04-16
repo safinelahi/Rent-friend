@@ -26,7 +26,7 @@ const LenderVerification = () => {
         {/* Front Side Upload */}
         <label className={`
           border-2 border-dashed rounded-3xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer
-          ${nidFront ? 'border-green-500 bg-green-50/30' : 'border-gray-200 hover:border-accent bg-secondary/30'}
+          ${nidFront ? 'border-accent bg-accent/5' : 'border-gray-200 hover:border-accent bg-secondary/30'}
         `}>
           <input 
             type="file" 
@@ -51,7 +51,7 @@ const LenderVerification = () => {
         {/* Back Side Upload */}
         <label className={`
           border-2 border-dashed rounded-3xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer
-          ${nidBack ? 'border-green-500 bg-green-50/30' : 'border-gray-200 hover:border-accent bg-secondary/30'}
+          ${nidBack ? 'border-accent bg-accent/5' : 'border-gray-200 hover:border-accent bg-secondary/30'}
         `}>
           <input 
             type="file" 
