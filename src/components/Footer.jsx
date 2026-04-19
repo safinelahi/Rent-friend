@@ -146,14 +146,14 @@ const Footer = () => {
           {/* Company */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Company</h3>
-            <ul className="space-y-3">
+            <ul className="space-y-3"> 
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/how-it-works"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
                 <Link

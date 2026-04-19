@@ -1,20 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react'; // Added useContext
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { products } from '../../data/products';
 import { FiArrowLeft, FiShield, FiInfo, FiCreditCard, FiCheckCircle, FiEdit2 } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AppContext } from '../../context/AppContext'; // Imported AppContext
+
 
 const Checkout = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  
+  // Access addRental from context
+  const { addRental } = useContext(AppContext);
+
   const product = products.find(p => String(p.id) === String(id));
 
   // --- INTERACTIVE STATES ---
-  const [paymentMethod, setPaymentMethod] = useState('mobile'); // 'mobile' or 'card'
+  const [paymentMethod, setPaymentMethod] = useState('mobile'); 
   const [isEditingTrip, setIsEditingTrip] = useState(false);
   const [dates, setDates] = useState({ start: "Oct 12, 2026", end: "Oct 15, 2026" });
 
   if (!product) return <div className="pt-40 text-center">Product not found.</div>;
+
+  // Logic to handle the final confirmation
+  const handleConfirmAndPay = () => {
+    // 1. Call addRental to save THIS specific product to the dashboard/memory
+    const result = addRental(product);
+
+    // 2. Only navigate if the save was successful
+    if (result.success) {
+      navigate('/booking-success');
+    }
+  };
 
   // Mock numbers for the final breakdown
   const rentalDays = 3;
@@ -41,7 +58,7 @@ const Checkout = () => {
           {/* ================= LEFT SIDE: DETAILS ================= */}
           <div className="space-y-10">
             
-            {/* 1. Trip Summary - Now with working Edit toggle */}
+            {/* 1. Trip Summary */}
             <section className="space-y-6">
               <h3 className="type-h4 text-txt font-bold">Your Rental Trip</h3>
               <div className="p-6 bg-white border border-gray-100 rounded-3xl shadow-sm">
@@ -77,7 +94,7 @@ const Checkout = () => {
               </div>
             </section>
 
-            {/* 2. Professional Protection Text (Your updated version) */}
+            {/* 2. Professional Protection Text */}
             <section className="bg-secondary/30 p-8 rounded-[32px] border border-accent/10">
               <div className="flex gap-5">
                 <div className="p-3 bg-white rounded-2xl shadow-sm self-start">
@@ -97,11 +114,10 @@ const Checkout = () => {
               </div>
             </section>
 
-            {/* 3. Payment Selection - Both now selectable */}
+            {/* 3. Payment Selection */}
             <section className="space-y-4">
               <h3 className="type-h4 text-txt font-bold">Pay with</h3>
               <div className="space-y-3">
-                {/* Mobile Wallet */}
                 <div 
                   onClick={() => setPaymentMethod('mobile')}
                   className={`flex items-center justify-between p-5 border-2 transition-all rounded-2xl cursor-pointer ${paymentMethod === 'mobile' ? 'border-accent bg-white' : 'border-gray-100 bg-transparent opacity-70 hover:opacity-100'}`}
@@ -113,7 +129,6 @@ const Checkout = () => {
                   <div className={`w-5 h-5 rounded-full border-4 ${paymentMethod === 'mobile' ? 'border-accent bg-accent' : 'border-gray-200 bg-white'}`}></div>
                 </div>
                 
-                {/* Card Option */}
                 <div 
                   onClick={() => setPaymentMethod('card')}
                   className={`flex items-center justify-between p-5 border-2 transition-all rounded-2xl cursor-pointer ${paymentMethod === 'card' ? 'border-accent bg-white' : 'border-gray-100 bg-transparent opacity-70 hover:opacity-100'}`}
@@ -150,13 +165,11 @@ const Checkout = () => {
                   <span className="text-txt font-bold">৳{totalRental}</span>
                 </div>
                 
-                {/* TOOLTIP SECTION: Visible on hover */}
                 <div className="flex justify-between items-center text-sm text-paragraph font-medium relative group">
                   <span className="flex items-center gap-1 underline decoration-dotted cursor-help">
                     Refundable Deposit <FiInfo size={14} />
                   </span>
                   
-                  {/* The Hidden Tooltip Box */}
                   <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-txt text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 leading-relaxed shadow-xl">
                     This is a security hold to protect the lender's item. It will be automatically refunded to your {paymentMethod === 'mobile' ? 'mobile wallet' : 'card'} after a successful return.
                   </div>
@@ -176,7 +189,7 @@ const Checkout = () => {
               </div>
 
               <button 
-                onClick={() => navigate('/booking-success')}
+                onClick={handleConfirmAndPay}
                 className="w-full bg-accent text-txt font-bold py-5 rounded-2xl shadow-md hover:opacity-90 transition-all active:scale-[0.98]"
               >
                 Confirm and Pay

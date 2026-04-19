@@ -23,13 +23,32 @@ export const AppProvider = ({ children }) => {
     setUser(null);
     setMyRentals([]);
     localStorage.clear();
-    window.location.href = "/"; // Hard reset to clear state
+    window.location.href = "/"; 
   };
 
+  /* NEW UPDATE: 
+     1. Added a check for existing bookings.
+     2. Returns a response object so the UI knows if it succeeded or failed.
+  */
   const addRental = (item) => {
-    const updated = [...myRentals, { ...item, bookingId: "RF-" + Math.random().toString(36).substr(2, 5).toUpperCase() }];
+    // Check if user already has an active booking
+    if (myRentals.length > 0) {
+      return { success: false, error: "LIMIT_REACHED" };
+    }
+
+    // If no active booking, proceed to add
+    const updated = [
+      ...myRentals, 
+      { 
+        ...item, 
+        bookingId: "RF-" + Math.random().toString(36).substr(2, 5).toUpperCase(),
+        bookedAt: new Date().toISOString()
+      }
+    ];
+
     setMyRentals(updated);
     localStorage.setItem("rf_rentals", JSON.stringify(updated));
+    return { success: true };
   };
 
   return (
