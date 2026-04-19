@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useContext } from "react"; // Added useContext
 import { FaStar } from "react-icons/fa";
 import {
   FiCalendar,
@@ -10,12 +10,17 @@ import {
   FiMapPin,
   FiShield,
 } from "react-icons/fi";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom"; // Added useLocation
 import { products } from "../../data/products";
+import { AppContext } from "../../context/AppContext"; // Imported AppContext
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation(); // To capture the current path
+
+  // Access the user from global context
+  const { user } = useContext(AppContext);
 
   const product = products.find((p) => String(p.id) === String(id));
   const [selectedTier, setSelectedTier] = useState("1");
@@ -37,7 +42,14 @@ const ProductDetails = () => {
   };
 
   const handleBookingClick = () => {
-    navigate(`/checkout/${product.id}`);
+    // AUTH GUARD: Check if user is logged in
+    if (!user) {
+      // Redirect to login and save the current path in 'state'
+      navigate("/login", { state: { from: location.pathname } });
+    } else {
+      // Proceed if logged in
+      navigate(`/checkout/${product.id}`);
+    }
   };
 
   return (
@@ -166,7 +178,7 @@ const ProductDetails = () => {
                     {selectedTier === "1" ? "/ day" : `Total`}
                   </span>
                 </div>
-                <p className="text-[10px] font-bold text-accent uppercase mt-1 tracking-wider flex items-center gap-1">
+                <p className="text-[10px] font-bold text-accent uppercase mt-1 tracking-wider flex  gap-1">
                   <FiShield size={12} /> Secure Transaction
                 </p>
               </div>
@@ -230,7 +242,7 @@ const ProductDetails = () => {
                 onClick={handleBookingClick}
                 className="w-full bg-accent text-txt font-black py-5 rounded-2xl shadow-[0_10px_20px_rgba(255,184,0,0.2)] hover:bg-accent hover:shadow-[0_15px_30px_rgba(255,184,0,0.3)] transition-all mb-6 active:scale-[0.98]"
               >
-                Confirm Booking
+                {user ? "Confirm Booking" : "Login to Rent"}
               </button>
 
               <div className="space-y-3 pt-6 border-t border-gray-100">
@@ -288,4 +300,4 @@ const ProductDetails = () => {
   );
 };
 
-export default ProductDetails;
+export default ProductDetails;  

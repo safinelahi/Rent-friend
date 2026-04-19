@@ -23,7 +23,7 @@ const ForgotPassword = () => {
         <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
           Reset your password
         </h1>
-        <p className="text-gray-500 text-sm mb-8">
+        <p className="text-gray-500 text-sm mb-8 ">
           Enter your email and we'll send you a reset link
         </p>
 

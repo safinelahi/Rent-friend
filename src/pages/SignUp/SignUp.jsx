@@ -1,162 +1,162 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { FiEye, FiEyeOff, FiUser, FiTag, FiUpload, FiCheckCircle, FiCamera } from "react-icons/fi";
+import { useState, useContext } from 'react';
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FiEye, FiEyeOff, FiUpload } from "react-icons/fi";
+import { AppContext } from '../../context/AppContext';
 import logo from '../../assets/logo 2.svg';
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useContext(AppContext);
+
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("renter");
-
-  // State to track if files are selected (for UI feedback)
   const [nidFront, setNidFront] = useState(null);
   const [nidBack, setNidBack] = useState(null);
 
+  // Form Data State
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+  });
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    
+    // Create the user object from form inputs
+    const userData = {
+      name: `${formData.firstName} ${formData.lastName}`,
+      email: formData.email,
+      role: role,
+      avatar: formData.firstName.charAt(0)
+    };
+
+    login(userData); // Save to "Fake Database" (Local Storage)
+    
+    // Redirect logic: Go back to product if they came from one, otherwise go home
+    const origin = location.state?.from || "/";
+    navigate(origin);
+  };
+
   return (
-    <div className="min-h-screen bg-secondary flex items-center justify-center p-4">
-      <div className="bg-primary w-full max-w-[662px] rounded-2xl shadow-sm p-6 md:p-12 my-8">
+    <div className="min-h-screen bg-secondary flex items-center justify-center p-4 py-20 font-epilogue">
+      <div className="bg-primary w-full max-w-[600px] rounded-[40px] shadow-[0_30px_80px_rgba(0,0,0,0.05)] p-8 md:p-14 border border-gray-100">
         
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Link to="/">
-              <img src={logo} alt="Logo" className="cursor-pointer" />
-            </Link>
-          </div>
-          <h1 className="type-h2 text-txt mb-2 leading-tight">Create Account</h1>
-          <p className="type-p text-paragraph text-sm font-medium">
-            {role === "renter" ? "Complete your verification to start renting" : "Turn your items into extra income"}
+        <div className="text-center mb-10">
+          <Link to="/" className="inline-block mb-6 hover:opacity-80 transition-opacity">
+            <img src={logo} alt="Logo" className="h-10 mx-auto" />
+          </Link>
+          {/* Headline 2 from your typography system */}
+          <h1 className="type-h2 text-txt mb-2 tracking-tight">Create Account</h1>
+          <p className="type-small text-paragraph font-bold uppercase tracking-[0.2em]">
+            Join as a <span className="text-accent">{role}</span>
           </p>
         </div>
 
-        {/* ROLE SELECTION TOGGLE */}
-        <div className="flex bg-secondary p-1 rounded-xl mb-8 border border-gray-100">
+        {/* ROLE TOGGLE - Matching the Login Page Pill Design */}
+        <div className="flex bg-secondary p-1.5 rounded-2xl mb-10 border border-gray-100">
           <button
             type="button"
             onClick={() => setRole("renter")}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 rounded-lg transition-all font-bold text-sm ${
-              role === "renter" ? "bg-accent text-txt shadow-sm" : "text-paragraph hover:text-txt"
+            className={`flex-1 py-4 rounded-xl type-small font-bold uppercase tracking-widest transition-all ${
+              role === "renter" ? "bg-accent text-txt shadow-md" : "text-paragraph hover:text-txt"
             }`}
           >
-            <FiUser size={18} className="shrink-0" />
-            <span className="truncate">
-              <span className="hidden sm:inline">Join as </span>Renter
-            </span>
+            Renter
           </button>
           <button
             type="button"
             onClick={() => setRole("lender")}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 rounded-lg transition-all font-bold text-sm ${
-              role === "lender" ? "bg-accent text-txt shadow-sm" : "text-paragraph hover:text-txt"
+            className={`flex-1 py-4 rounded-xl type-small font-bold uppercase tracking-widest transition-all ${
+              role === "lender" ? "bg-accent text-txt shadow-md" : "text-paragraph hover:text-txt"
             }`}
           >
-            <FiTag size={18} className="shrink-0" />
-            <span className="truncate">
-              <span className="hidden sm:inline">Join as </span>Lender
-            </span>
+            Lender
           </button>
         </div>
 
-        <form className="space-y-6">
-          {/* ... (First Name, Last Name, Email, Password - same as before) ... */}
+        <form onSubmit={handleSignUp} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="type-small font-bold text-txt">First Name</label>
-              <input type="text" placeholder="first name" className="w-full bg-secondary text-txt type-small px-4 py-3.5 rounded-lg border-none focus:ring-2 focus:ring-accent outline-none" />
+              <label className="type-small font-bold text-txt uppercase tracking-widest ml-1">First Name</label>
+              <input 
+                required
+                type="text" 
+                placeholder="First Name" 
+                className="w-full bg-secondary text-txt type-p px-6 py-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-accent transition-all"
+                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+              />
             </div>
             <div className="space-y-1.5">
-              <label className="type-small font-bold text-txt">Last Name</label>
-              <input type="text" placeholder="last name" className="w-full bg-secondary text-txt type-small px-4 py-3.5 rounded-lg border-none focus:ring-2 focus:ring-accent outline-none" />
+              <label className="type-small font-bold text-txt uppercase tracking-widest ml-1">Last Name</label>
+              <input 
+                required
+                type="text" 
+                placeholder="Last Name" 
+                className="w-full bg-secondary text-txt type-p px-6 py-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-accent transition-all"
+                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+              />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="type-small font-bold text-txt">Email Address</label>
-            <input type="email" placeholder="your@gmail.com" className="w-full bg-secondary text-txt type-small px-4 py-3.5 rounded-lg border-none focus:ring-2 focus:ring-accent outline-none " />
+            <label className="type-small font-bold text-txt uppercase tracking-widest ml-1">Email Address</label>
+            <input 
+              required
+              type="email" 
+              placeholder="name@email.com" 
+              className="w-full bg-secondary text-txt type-p px-6 py-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-accent transition-all"
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+            />
           </div>
 
           <div className="space-y-1.5">
-            <label className="type-small font-bold text-txt">Password</label>
+            <label className="type-small font-bold text-txt uppercase tracking-widest ml-1">Secure Password</label>
             <div className="relative">
-              <input type={showPassword ? "text" : "password"} placeholder="password" className="w-full bg-secondary text-txt type-small px-4 py-3.5 rounded-lg border-none focus:ring-2 focus:ring-accent outline-none " />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-paragraph hover:text-txt">
-                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+              <input 
+                required
+                type={showPassword ? "text" : "password"} 
+                placeholder="••••••••" 
+                className="w-full bg-secondary text-txt type-p px-6 py-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-accent transition-all"
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+              />
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-6 top-1/2 -translate-y-1/2 text-paragraph hover:text-accent">
+                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
               </button>
             </div>
           </div>
 
-          {/* NID UPLOAD SECTION: Only visible for Renters */}
           {role === "renter" && (
-            <div className="pt-4 space-y-4 animate-in fade-in duration-500">
-              <div className="flex items-center gap-2 mb-2">
-                <FiCheckCircle className="text-accent" />
-                <label className="type-small font-bold text-txt">Identity Verification (NID)</label>
+            <div className="pt-4 space-y-4">
+              <p className="type-small font-bold text-paragraph uppercase tracking-widest ml-1">Identity Verification (NID)</p>
+              <div className="grid grid-cols-2 gap-4">
+                <label className={`border-2 border-dashed p-6 rounded-[24px] cursor-pointer flex flex-col items-center transition-all ${nidFront ? 'border-accent bg-accent/5' : 'border-gray-100 hover:border-accent'}`}>
+                  <FiUpload className={nidFront ? 'text-accent' : 'text-gray-300'} size={24} />
+                  <span className="type-small font-bold mt-2 text-txt uppercase truncate w-full text-center">
+                    {nidFront ? nidFront.name : 'Front Side'}
+                  </span>
+                  <input type="file" className="hidden" accept="image/*" onChange={(e) => setNidFront(e.target.files[0])} />
+                </label>
+                <label className={`border-2 border-dashed p-6 rounded-[24px] cursor-pointer flex flex-col items-center transition-all ${nidBack ? 'border-accent bg-accent/5' : 'border-gray-100 hover:border-accent'}`}>
+                  <FiUpload className={nidBack ? 'text-accent' : 'text-gray-300'} size={24} />
+                  <span className="type-small font-bold mt-2 text-txt uppercase truncate w-full text-center">
+                    {nidBack ? nidBack.name : 'Back Side'}
+                  </span>
+                  <input type="file" className="hidden" accept="image/*" onChange={(e) => setNidBack(e.target.files[0])} />
+                </label>
               </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Front Page Upload */}
-                <div className="space-y-2">
-                  <p className="text-[10px] font-bold text-paragraph uppercase ml-1">Front Page</p>
-                  <label className={`
-                    relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-2xl cursor-pointer transition-all
-                    ${nidFront ? 'border-accent bg-accent/5' : 'border-gray-200 hover:border-accent hover:bg-secondary'}
-                  `}>
-                    <FiUpload className={nidFront ? 'text-accent' : 'text-paragraph'} size={24} />
-                    <span className="text-[11px] font-bold text-txt mt-2 text-center leading-tight">
-                      {nidFront ? nidFront.name : 'Click to upload NID Front'}
-                    </span>
-                    <input 
-                      type="file" 
-                      className="hidden" 
-                      accept="image/*" 
-                      onChange={(e) => setNidFront(e.target.files[0])} 
-                    />
-                  </label>
-                </div>
-
-                {/* Back Page Upload */}
-                <div className="space-y-2">
-                  <p className="text-[10px] font-bold text-paragraph uppercase ml-1">Back Page</p>
-                  <label className={`
-                    relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-2xl cursor-pointer transition-all
-                    ${nidBack ? 'border-accent bg-accent/5' : 'border-gray-200 hover:border-accent hover:bg-secondary'}
-                  `}>
-                    <FiUpload className={nidBack ? 'text-accent' : 'text-paragraph'} size={24} />
-                    <span className="text-[11px] font-bold text-txt mt-2 text-center leading-tight">
-                      {nidBack ? nidBack.name : 'Click to upload NID Back'}
-                    </span>
-                    <input 
-                      type="file" 
-                      className="hidden" 
-                      accept="image/*" 
-                      onChange={(e) => setNidBack(e.target.files[0])} 
-                    />
-                  </label>
-                </div>
-              </div>
-              <p className="text-[10px] text-paragraph italic text-center">Supported formats: JPG, PNG. Max 5MB per file.</p>
             </div>
           )}
 
-          <div className="flex items-start gap-3 pt-2">
-            <div className="relative flex items-center justify-center ">
-              <input type="checkbox" id="terms" className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-gray-300 transition-all checked:border-accent checked:bg-accent hover:border-accent" />
-              <svg className="pointer-events-none absolute text-primary opacity-0 transition-opacity peer-checked:opacity-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" width="12" height="12">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-            <label htmlFor="terms" className="text-xs font-medium text-paragraph select-none leading-relaxed">
-              I agree to the <Link to="/terms-of-service" className="text-accent font-bold hover:underline mx-1">Terms of Service</Link> and <Link to="/privacy-policy" className="text-accent font-bold hover:underline mx-1">Privacy Policy</Link>
-            </label>
-          </div>
-
-          <button className="w-full bg-accent hover:opacity-95 transition-all text-txt type-p font-bold py-4 rounded-lg shadow-md mt-4">
-            Create {role.charAt(0).toUpperCase() + role.slice(1)} Account
+          <button type="submit" className="w-full bg-accent text-txt type-p font-bold py-5 rounded-[20px] shadow-lg shadow-accent/10 hover:-translate-y-1 active:scale-95 transition-all uppercase tracking-widest mt-4">
+            Create Account
           </button>
         </form>
 
-        {/* ... (Footer and Social Login - same as before) ... */}
-        <p className="text-center mt-8 text-xs font-medium text-paragraph">
-          Already have an account?{" "}
-          <Link to="/login" className="text-accent font-bold hover:underline">Sign in</Link>
+        <p className="text-center mt-10 type-small text-paragraph font-bold uppercase tracking-widest">
+          Already have an account? <Link to="/login" className="text-accent hover:underline ml-1">Sign In</Link>
         </p>
       </div>
     </div>
