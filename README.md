@@ -1,18 +1,55 @@
-# React + Vite
+# RentFriend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**RentFriend – A premium, high-impact P2P rental ecosystem for professional gear and community assets.**
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Overview
+RentFriend is a modern peer-to-peer rental platform that allows users to rent high-value items such as professional gear, electronics, and event equipment for short-term use. The platform focuses on security, usability, and a premium user experience, enabling both renters and lenders to interact in a trusted ecosystem.
 
-## React Compiler
+---
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## ✨ Features
 
-Note: This will impact Vite dev & build performances.
+### 🔐 Authentication System
+- Custom Login & Signup UI
+- Role-based registration (Renter / Lender)
+- NID upload interface (UI-based verification)
 
-## Expanding the ESLint configuration
+### 🛍️ Product System
+- Browse products with responsive UI
+- Dynamic pricing (1-day, 2-day, 7-day)
+- Detailed product pages
+- Login required before booking
+- Smart redirect after login
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🧠 Booking System
+- Only one active booking allowed per user
+- Animated warning modal (Framer Motion)
+- Checkout includes:
+  - Rental cost
+  - Refundable deposit (৳1500)
+  - Service fee
+
+### 📊 Dashboard
+- Real-time gear tracking (no hardcoded data)
+- Profile management
+- Logout system
+
+### 💾 State & Persistence
+- Global state using Context API
+- Data persistence using localStorage
+- Ready for backend integration (MongoDB)
+
+---
+
+## 🛠️ Tech Stack
+
+- Frontend: React (Vite)
+- Styling: Tailwind CSS
+- Animations: Framer Motion
+- Icons: React Icons
+- State Management: Context API
+- Storage: LocalStorage
+
+---
