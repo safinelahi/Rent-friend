@@ -7,6 +7,7 @@ import landerImage from "../assets/lander.png"
 export const products = [
   {
     id: 1,
+    identifier: "#RF-RF-4LBZYU", // Unique Asset ID
     image: itemImage1,
     title: "Canon EOS R5 Camera + Lenses",
     rating: 4.9,
@@ -28,6 +29,7 @@ export const products = [
   },
   {
     id: 2,
+    identifier: "#RF-RF-9K2VXP",
     image: itemImage2,
     title: "Professional Power Tools Set",
     rating: 4.7,
@@ -49,6 +51,7 @@ export const products = [
   },
   {
     id: 3,
+    identifier: "#RF-RF-7M1QWE",
     image: itemImage3,
     title: "4-Person Camping Tent",
     rating: 4.5,
@@ -70,6 +73,7 @@ export const products = [
   },
   {
     id: 4,
+    identifier: "#RF-RF-3N5TYR",
     image: itemImage1,
     title: "Sony A7III Mirrorless Camera",
     rating: 4.8,
@@ -91,6 +95,7 @@ export const products = [
   },
   {
     id: 5,
+    identifier: "#RF-RF-8B0XCV",
     image: itemImage2,
     title: "Heavy Duty Drill Machine",
     rating: 4.6,
@@ -112,6 +117,7 @@ export const products = [
   },
   {
     id: 6,
+    identifier: "#RF-RF-2A6GHJ",
     image: itemImage3,
     title: "Portable BBQ Grill Set",
     rating: 4.9,

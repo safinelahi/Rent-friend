@@ -1,67 +1,68 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
-import { FiMapPin, FiArrowRight } from 'react-icons/fi'; 
+import { FiMapPin, FiArrowRight, FiHash } from 'react-icons/fi';
 
 const RentalCard = ({ item }) => {
   return (
-    <Link to={`/product/${item.id}`} className="block group h-full">
-      <div className="bg-white border border-gray-100 rounded-[32px] p-4 hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all duration-500 h-full flex flex-col">
+    <Link to={`/product/${item.id}`} className="group block h-full">
+      <div className="bg-white border border-gray-100 rounded-[45px] p-5 hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-700 h-full flex flex-col">
         
-        {/* IMAGE CONTAINER */}
-        <div className="relative h-[220px] w-full overflow-hidden rounded-[24px] bg-gray-100">
+        {/* IMAGE HUB */}
+        <div className="relative h-[260px] w-full overflow-hidden rounded-[35px] bg-[#F1F1F0]">
           <img 
             src={item.image} 
             alt={item.title} 
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" 
           />
           
-          {/* BADGES */}
-          <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
+          {/* TOP BADGES */}
+          <div className="absolute top-4 left-4 flex gap-2">
             {item.verified && (
-              <span className="bg-accent text-txt text-[10px] font-bold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wider">
+              <span className="bg-accent text-txt text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-xl">
                 Verified
               </span>
             )}
-            <span className="bg-white/90 backdrop-blur-sm text-txt text-[10px] font-bold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wider">
+          </div>
+
+          {/* NEW: CATEGORY OVERLAY BADGE */}
+          <div className="absolute top-4 right-4">
+            <span className="bg-white/90 backdrop-blur-md text-[#111] text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-sm">
               {item.category}
             </span>
           </div>
         </div>
 
-        {/* CONTENT */}
-        <div className="flex flex-col flex-grow pt-6 px-2">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl font-bold text-txt leading-tight group-hover:text-accent transition-colors line-clamp-1">
-              {item.title}
-            </h3>
+        {/* CONTENT HUB */}
+        <div className="flex flex-col flex-grow pt-8 px-2">
+          {/* NEW: IDENTIFIER (SKU) DISPLAY */}
+          <div className="flex items-center gap-1 text-[9px] font-bold text-paragraph/40 uppercase tracking-[0.2em] mb-2">
+            <FiHash size={10} /> {item.identifier}
           </div>
 
-          <div className="flex items-center gap-4 text-sm text-paragraph mb-6">
+          <h3 className="text-2xl font-black text-txt tracking-tighter leading-tight mb-4 group-hover:text-accent transition-colors line-clamp-1">
+            {item.title}
+          </h3>
+
+          <div className="flex items-center gap-4 text-xs font-bold text-paragraph/60 mb-8">
             <div className="flex items-center gap-1.5">
               <FaStar className="text-accent" />
-              <span className="font-bold text-txt">{item.rating}</span>
-              <span className="text-paragraph/60 font-medium">({item.reviews})</span>
+              <span className="text-txt">{item.rating}</span>
             </div>
             <div className="flex items-center gap-1.5 truncate">
-              <FiMapPin className="text-paragraph/40" size={16} />
-              <span className="truncate">{item.location}</span>
+              <FiMapPin className="text-accent" />
+              <span className="truncate uppercase tracking-widest">{item.location}</span>
             </div>
           </div>
 
-          {/* PRICE & BUTTON SECTION */}
-          <div className="mt-auto">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-black text-txt">৳{item.price}</span>
-                <span className="text-paragraph/60 text-xs font-bold uppercase tracking-tighter">/ day</span>
-              </div>
+          {/* PRICE & ACTION */}
+          <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between">
+            <div>
+              <span className="text-2xl font-black text-txt">৳{item.price}</span>
+              <span className="text-[10px] font-black text-paragraph uppercase tracking-tighter ml-1">/ day</span>
             </div>
-
-            {/* THE "BOOK NOW" BUTTON (Styled Div) */}
-            <div className="w-full bg-secondary group-hover:bg-accent py-4 rounded-2xl flex items-center justify-center gap-2 transition-all duration-300">
-              <span className="text-txt font-bold text-sm uppercase tracking-widest">Rent Now</span>
-              <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+            <div className="w-12 h-12 rounded-2xl bg-[#111] text-accent flex items-center justify-center group-hover:bg-accent group-hover:text-txt transition-all duration-500 shadow-lg shadow-black/5">
+              <FiArrowRight size={20} />
             </div>
           </div>
         </div>

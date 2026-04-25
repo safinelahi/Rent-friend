@@ -1,157 +1,127 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiMail, FiPhone, FiMapPin, FiClock, FiSend } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin, FiClock, FiSend, FiZap, FiMessageSquare, FiGlobe } from 'react-icons/fi';
 
 const Contact = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-  };
-
   return (
-    <div className="w-full bg-primary min-h-screen">
-      {/* Header Section */}
-      <section className="py-16 md:py-24 border-b border-gray-100">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8 text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="type-h1 text-txt mb-6"
-          >
-            Get in Touch
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="type-p text-paragraph max-w-2xl mx-auto"
-          >
-            Have questions about renting or lending? Our team is here to help you navigate the RentFriend community.
-          </motion.p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-[#FDFDFC] pt-32 pb-32 font-epilogue text-[#111]">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        
+        {/* --- EDITORIAL HEADER --- */}
+        <header className="mb-24">
+          <div className="bg-accent/10 text-accent px-4 py-1.5 rounded-full border border-accent/10 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+            <FiZap size={12}/> Global Support
+          </div>
+          <h1 className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-10">
+            Direct <br /> Channel.
+          </h1>
+          <p className="text-paragraph text-sm md:text-lg font-medium max-w-2xl leading-relaxed opacity-60 uppercase tracking-widest">
+            HAVE QUESTIONS ABOUT ASSET DEPLOYMENT OR RENTAL LOGISTICS? <br className="hidden md:block"/> OUR CONCIERGE IS READY TO ASSIST.
+          </p>
+        </header>
 
-      {/* Main Content */}
-      <section className="py-16 md:py-24">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+        <div className="grid lg:grid-cols-12 gap-10">
+          
+          {/* --- LEFT: CONTACT HUB (DARK BENTO) --- */}
           <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid lg:grid-cols-2 gap-16"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            className="lg:col-span-5 bg-[#111] rounded-[48px] p-10 md:p-14 text-white relative overflow-hidden shadow-2xl"
           >
-            {/* Contact Info Column */}
-            <motion.div variants={itemVariants} className="space-y-12">
+            <FiMessageSquare className="absolute -right-10 -top-10 text-white/5 pointer-events-none" size={300} />
+            
+            <div className="relative z-10 space-y-16">
               <div>
-                <h2 className="type-h2 text-txt mb-8">Contact Information</h2>
-                <div className="space-y-6">
-                  <div className="flex gap-4 items-start">
-                    <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center text-accent shrink-0 border border-gray-100">
-                      <FiMail size={24} />
+                <p className="text-accent text-[10px] font-black uppercase tracking-[0.4em] mb-10">Information Hub</p>
+                
+                <div className="space-y-10">
+                  <div className="flex gap-6 items-start group">
+                    <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-accent shrink-0 border border-white/5 group-hover:bg-accent group-hover:text-txt transition-all">
+                      <FiMail size={20} />
                     </div>
                     <div>
-                      <h4 className="type-h6 font-bold text-txt">Email Us</h4>
-                      <p className="type-p text-paragraph text-sm">support@rentfriend.com</p>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-1">Electronic Mail</p>
+                      <h4 className="text-lg font-black tracking-tight">hello@rentfriend.com</h4>
                     </div>
                   </div>
 
-                  <div className="flex gap-4 items-start">
-                    <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center text-accent shrink-0 border border-gray-100">
-                      <FiPhone size={24} />
+                  <div className="flex gap-6 items-start group">
+                    <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-accent shrink-0 border border-white/5 group-hover:bg-accent group-hover:text-txt transition-all">
+                      <FiPhone size={20} />
                     </div>
                     <div>
-                      <h4 className="type-h6 font-bold text-txt">Call Us</h4>
-                      <p className="type-p text-paragraph text-sm">+880 1234-567890</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 items-start">
-                    <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center text-accent shrink-0 border border-gray-100">
-                      <FiMapPin size={24} />
-                    </div>
-                    <div>
-                      <h4 className="type-h6 font-bold text-txt">Visit Our Office</h4>
-                      <p className="type-p text-paragraph text-sm">Rajshahi, Bangladesh</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 items-start">
-                    <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center text-accent shrink-0 border border-gray-100">
-                      <FiClock size={24} />
-                    </div>
-                    <div>
-                      <h4 className="type-h6 font-bold text-txt">Working Hours</h4>
-                      <p className="type-p text-paragraph text-sm">Mon - Fri: 9:00 AM - 6:00 PM</p>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-1">Direct Line</p>
+                      <h4 className="text-lg font-black tracking-tight">+880 1234 567 890</h4>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Security Badge (Added for Trust) */}
-              <div className="bg-secondary/50 border border-accent/20 rounded-2xl p-6">
-                <h4 className="type-h6 font-bold text-txt mb-2">Verified Support</h4>
-                <p className="text-sm text-paragraph leading-relaxed">
-                  All inquiries are handled by our locally-based support team to ensure the highest level of trust and security for our community.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Contact Form Column */}
-            <motion.div variants={itemVariants}>
-              <div className="bg-white rounded-[32px] border border-gray-100 p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
-                <form className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-1.5">
-                      <label className="type-small font-bold text-txt">Full Name</label>
-                      <input 
-                        type="text" 
-                        placeholder="John Doe"
-                        className="w-full bg-secondary px-4 py-3 rounded-xl border-none focus:ring-2 focus:ring-accent outline-none"
-                      />
+              <div className="pt-10 border-t border-white/10">
+                 <div className="grid grid-cols-2 gap-8">
+                    <div>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-3 flex items-center gap-2"><FiMapPin className="text-accent"/> Base Office</p>
+                      <p className="text-sm font-bold leading-relaxed">Rajshahi Division,<br /> Bangladesh</p>
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="type-small font-bold text-txt">Email Address</label>
-                      <input 
-                        type="email" 
-                        placeholder="john@example.com"
-                        className="w-full bg-secondary px-4 py-3 rounded-xl border-none focus:ring-2 focus:ring-accent outline-none"
-                      />
+                    <div>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-3 flex items-center gap-2"><FiClock className="text-accent"/> Availability</p>
+                      <p className="text-sm font-bold leading-relaxed">Mon — Fri<br /> 09:00 — 18:00</p>
                     </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="type-small font-bold text-txt">Subject</label>
-                    <input 
-                      type="text" 
-                      placeholder="How can we help?"
-                      className="w-full bg-secondary px-4 py-3 rounded-xl border-none focus:ring-2 focus:ring-accent outline-none"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="type-small font-bold text-txt">Message</label>
-                    <textarea 
-                      rows="5" 
-                      placeholder="Write your message here..."
-                      className="w-full bg-secondary px-4 py-3 rounded-xl border-none focus:ring-2 focus:ring-accent outline-none resize-none"
-                    ></textarea>
-                  </div>
-
-                  <button className="w-full bg-accent hover:opacity-90 transition-all text-txt type-p font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2">
-                    Send Message <FiSend />
-                  </button>
-                </form>
+                 </div>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
+
+          {/* --- RIGHT: MESSAGE STUDIO (LIGHT BENTO) --- */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="lg:col-span-7 bg-white rounded-[48px] border border-gray-100 p-10 md:p-16 shadow-[0_40px_100px_rgba(0,0,0,0.02)]"
+          >
+            <div className="mb-12">
+               <h3 className="text-3xl font-black tracking-tighter mb-2">Message Studio.</h3>
+               <p className="text-[10px] font-bold text-paragraph/40 uppercase tracking-widest">Expected response time: &lt; 2 Hours</p>
+            </div>
+
+            <form className="space-y-10">
+              <div className="grid md:grid-cols-2 gap-10">
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase text-paragraph/40 tracking-widest ml-1">Full Name</label>
+                  <input type="text" placeholder="Safin Elahi" className="w-full bg-transparent border-b border-gray-100 focus:border-accent outline-none pb-4 font-bold text-sm transition-all" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase text-paragraph/40 tracking-widest ml-1">Email Address</label>
+                  <input type="email" placeholder="safin@studio.com" className="w-full bg-transparent border-b border-gray-100 focus:border-accent outline-none pb-4 font-bold text-sm transition-all" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase text-paragraph/40 tracking-widest ml-1">Subject</label>
+                <input type="text" placeholder="Asset Verification Inquiry" className="w-full bg-transparent border-b border-gray-100 focus:border-accent outline-none pb-4 font-bold text-sm transition-all" />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase text-paragraph/40 tracking-widest ml-1">Detailed Message</label>
+                <textarea rows="4" placeholder="How can our concierge team help you today?" className="w-full bg-[#F8F8F7] rounded-3xl p-8 text-sm font-medium outline-none border border-transparent focus:border-accent/20 transition-all resize-none"></textarea>
+              </div>
+
+              <button className="w-full bg-[#111] text-white py-6 rounded-[24px] font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-black/20 hover:bg-black hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
+                Dispatch Message <FiSend />
+              </button>
+            </form>
+          </motion.div>
+
         </div>
-      </section>
+
+        {/* --- FOOTER TRUST ELEMENT --- */}
+        <div className="mt-20 text-center">
+           <div className="inline-flex items-center gap-4 bg-white px-8 py-4 rounded-full border border-gray-100 shadow-sm">
+              <FiGlobe className="text-accent animate-spin-slow" />
+              <p className="text-[10px] font-black uppercase tracking-widest text-paragraph/60">
+                 Secure local support for the entire <span className="text-txt">Bangladesh Creative Community</span>
+              </p>
+           </div>
+        </div>
+
+      </div>
     </div>
   );
 };

@@ -1,163 +1,122 @@
 import { useState, useContext } from 'react';
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FiEye, FiEyeOff, FiUpload } from "react-icons/fi";
+import { Link, useNavigate } from "react-router-dom";
+import { FiEye, FiEyeOff, FiArrowRight, FiShield } from "react-icons/fi";
 import { AppContext } from '../../context/AppContext';
+import { motion } from 'framer-motion';
 import logo from '../../assets/logo 2.svg';
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { login } = useContext(AppContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("renter");
-  const [nidFront, setNidFront] = useState(null);
-  const [nidBack, setNidBack] = useState(null);
+  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', password: '' });
 
-  // Form Data State
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: ''
-  });
-
-  const handleSignUp = (e) => {
+  const handleFinalSubmit = (e) => {
     e.preventDefault();
     
-    // Create the user object from form inputs
-    const userData = {
-      name: `${formData.firstName} ${formData.lastName}`,
-      email: formData.email,
-      role: role,
-      avatar: formData.firstName.charAt(0)
-    };
+    const newUser = { name: `${formData.firstName} ${formData.lastName}`, email: formData.email, role: role };
+    login(newUser);
 
-    login(userData); // Save to "Fake Database" (Local Storage)
-    
-    // Redirect logic: Go back to product if they came from one, otherwise go home
-    const origin = location.state?.from || "/";
-    navigate(origin);
+    // Simple routing: Lender goes to Selfie page, Renter goes to NID page
+    if (role === "lender") {
+      navigate("/lender-verification");
+    } else {
+      navigate("/renter-verification");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-secondary flex items-center justify-center p-4 py-20 font-epilogue">
-      <div className="bg-primary w-full max-w-[600px] rounded-[40px] shadow-[0_30px_80px_rgba(0,0,0,0.05)] p-8 md:p-14 border border-gray-100">
+    <div className="min-h-screen bg-[#F8F8F7] flex flex-col lg:flex-row font-epilogue overflow-hidden">
+      
+      {/* LEFT SIDE: WELCOME SECTION */}
+      <div className="hidden lg:flex lg:w-1/2 bg-[#111] p-20 flex-col justify-between relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-accent/20 via-transparent to-transparent opacity-50" />
         
-        <div className="text-center mb-10">
-          <Link to="/" className="inline-block mb-6 hover:opacity-80 transition-opacity">
-            <img src={logo} alt="Logo" className="h-10 mx-auto" />
-          </Link>
-          {/* Headline 2 from your typography system */}
-          <h1 className="type-h2 text-txt mb-2 tracking-tight">Create Account</h1>
-          <p className="type-small text-paragraph font-bold uppercase tracking-[0.2em]">
-            Join as a <span className="text-accent">{role}</span>
+        <Link to="/">
+          <img src={logo} alt="Logo" className="h-10 relative z-10" />
+        </Link>
+
+        <div className="relative z-10">
+          <p className="text-accent text-[10px] font-black uppercase tracking-[0.4em] mb-6">Welcome to RentFriend</p>
+          <h2 className="text-white text-8xl font-black tracking-tighter leading-[0.85] mb-8">
+            Start <br /> <span className="text-accent">Sharing.</span>
+          </h2>
+          <p className="text-white/40 text-sm max-w-md font-medium leading-relaxed">
+            The easiest way to rent and lend gear. <br /> Safe, fast, and professional for everyone.
           </p>
         </div>
 
-        {/* ROLE TOGGLE - Matching the Login Page Pill Design */}
-        <div className="flex bg-secondary p-1.5 rounded-2xl mb-10 border border-gray-100">
-          <button
-            type="button"
-            onClick={() => setRole("renter")}
-            className={`flex-1 py-4 rounded-xl type-small font-bold uppercase tracking-widest transition-all ${
-              role === "renter" ? "bg-accent text-txt shadow-md" : "text-paragraph hover:text-txt"
-            }`}
-          >
-            Renter
-          </button>
-          <button
-            type="button"
-            onClick={() => setRole("lender")}
-            className={`flex-1 py-4 rounded-xl type-small font-bold uppercase tracking-widest transition-all ${
-              role === "lender" ? "bg-accent text-txt shadow-md" : "text-paragraph hover:text-txt"
-            }`}
-          >
-            Lender
-          </button>
+        <div className="flex gap-8 relative z-10">
+          <div className="text-white/20 text-[10px] font-black uppercase tracking-widest">© 2026 RENTFRIEND</div>
+          <div className="text-white/20 text-[10px] font-black uppercase tracking-widest">SECURE & PRIVATE</div>
         </div>
+      </div>
 
-        <form onSubmit={handleSignUp} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="type-small font-bold text-txt uppercase tracking-widest ml-1">First Name</label>
-              <input 
-                required
-                type="text" 
-                placeholder="First Name" 
-                className="w-full bg-secondary text-txt type-p px-6 py-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-accent transition-all"
-                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="type-small font-bold text-txt uppercase tracking-widest ml-1">Last Name</label>
-              <input 
-                required
-                type="text" 
-                placeholder="Last Name" 
-                className="w-full bg-secondary text-txt type-p px-6 py-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-accent transition-all"
-                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-              />
-            </div>
+      {/* RIGHT SIDE: SIGN UP FORM */}
+      <div className="flex-1 flex items-center justify-center p-6 md:p-20 bg-white">
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="w-full max-w-[500px]">
+          
+          <div className="mb-12">
+            <h1 className="text-4xl font-black tracking-tighter mb-3">Create Account.</h1>
+            <p className="text-xs font-bold text-paragraph uppercase tracking-widest">Choose how you want to join</p>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="type-small font-bold text-txt uppercase tracking-widest ml-1">Email Address</label>
-            <input 
-              required
-              type="email" 
-              placeholder="name@email.com" 
-              className="w-full bg-secondary text-txt type-p px-6 py-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-accent transition-all"
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="type-small font-bold text-txt uppercase tracking-widest ml-1">Secure Password</label>
-            <div className="relative">
-              <input 
-                required
-                type={showPassword ? "text" : "password"} 
-                placeholder="••••••••" 
-                className="w-full bg-secondary text-txt type-p px-6 py-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-accent transition-all"
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
-              />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-6 top-1/2 -translate-y-1/2 text-paragraph hover:text-accent">
-                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+          {/* ROLE SELECTOR */}
+          <div className="flex bg-[#F1F1F0] p-1.5 rounded-[24px] mb-12 border border-gray-100">
+            {["renter", "lender"].map((r) => (
+              <button
+                key={r} type="button" onClick={() => setRole(r)}
+                className={`flex-1 py-5 rounded-[20px] text-[11px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 ${
+                  role === r ? "bg-white text-txt shadow-[0_10px_30px_rgba(0,0,0,0.05)]" : "text-paragraph hover:text-txt"
+                }`}
+              >
+                {role === r && <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />} {r}
               </button>
-            </div>
+            ))}
           </div>
 
-          {role === "renter" && (
-            <div className="pt-4 space-y-4">
-              <p className="type-small font-bold text-paragraph uppercase tracking-widest ml-1">Identity Verification (NID)</p>
-              <div className="grid grid-cols-2 gap-4">
-                <label className={`border-2 border-dashed p-6 rounded-[24px] cursor-pointer flex flex-col items-center transition-all ${nidFront ? 'border-accent bg-accent/5' : 'border-gray-100 hover:border-accent'}`}>
-                  <FiUpload className={nidFront ? 'text-accent' : 'text-gray-300'} size={24} />
-                  <span className="type-small font-bold mt-2 text-txt uppercase truncate w-full text-center">
-                    {nidFront ? nidFront.name : 'Front Side'}
-                  </span>
-                  <input type="file" className="hidden" accept="image/*" onChange={(e) => setNidFront(e.target.files[0])} />
-                </label>
-                <label className={`border-2 border-dashed p-6 rounded-[24px] cursor-pointer flex flex-col items-center transition-all ${nidBack ? 'border-accent bg-accent/5' : 'border-gray-100 hover:border-accent'}`}>
-                  <FiUpload className={nidBack ? 'text-accent' : 'text-gray-300'} size={24} />
-                  <span className="type-small font-bold mt-2 text-txt uppercase truncate w-full text-center">
-                    {nidBack ? nidBack.name : 'Back Side'}
-                  </span>
-                  <input type="file" className="hidden" accept="image/*" onChange={(e) => setNidBack(e.target.files[0])} />
-                </label>
+          <form onSubmit={handleFinalSubmit} className="space-y-8">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.3em] ml-1 text-paragraph">First Name</label>
+                <input required type="text" placeholder="John" className="w-full bg-[#F1F1F0] px-8 py-5 rounded-[24px] text-sm font-bold outline-none focus:ring-2 focus:ring-accent/20 transition-all" onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.3em] ml-1 text-paragraph">Last Name</label>
+                <input required type="text" placeholder="Doe" className="w-full bg-[#F1F1F0] px-8 py-5 rounded-[24px] text-sm font-bold outline-none focus:ring-2 focus:ring-accent/20 transition-all" onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
               </div>
             </div>
-          )}
 
-          <button type="submit" className="w-full bg-accent text-txt type-p font-bold py-5 rounded-[20px] shadow-lg shadow-accent/10 hover:-translate-y-1 active:scale-95 transition-all uppercase tracking-widest mt-4">
-            Create Account
-          </button>
-        </form>
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.3em] ml-1 text-paragraph">Email Address</label>
+              <input required type="email" placeholder="name@email.com" className="w-full bg-[#F1F1F0] px-8 py-5 rounded-[24px] text-sm font-bold outline-none focus:ring-2 focus:ring-accent/20 transition-all" onChange={(e) => setFormData({...formData, email: e.target.value})} />
+            </div>
 
-        <p className="text-center mt-10 type-small text-paragraph font-bold uppercase tracking-widest">
-          Already have an account? <Link to="/login" className="text-accent hover:underline ml-1">Sign In</Link>
-        </p>
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.3em] ml-1 text-paragraph">Password</label>
+              <div className="relative">
+                <input required type={showPassword ? "text" : "password"} placeholder="••••••••" className="w-full bg-[#F1F1F0] px-8 py-5 rounded-[24px] text-sm font-bold outline-none focus:ring-2 focus:ring-accent/20 transition-all" onChange={(e) => setFormData({...formData, password: e.target.value})} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-8 top-1/2 -translate-y-1/2 text-paragraph hover:text-accent">
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              {/* SIMPLE WORD: Create Account */}
+              <button type="submit" className="w-full bg-[#111] text-white py-6 rounded-[28px] font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl hover:bg-black transition-all flex items-center justify-center gap-4 group">
+                Create Account <FiArrowRight className="text-accent group-hover:translate-x-2 transition-transform" />
+              </button>
+            </div>
+          </form>
+
+          {/* SIMPLE WORD: Already have an account? */}
+          <p className="text-center mt-12 text-[10px] font-black uppercase tracking-[0.3em] text-paragraph">
+            Already have an account? <Link to="/login" className="text-accent hover:underline ml-1">Sign In</Link>
+          </p>
+        </motion.div>
       </div>
     </div>
   );
