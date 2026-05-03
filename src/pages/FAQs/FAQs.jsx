@@ -34,85 +34,91 @@ const FAQs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFC] pt-32 pb-32 font-epilogue text-[#111]">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+    <div className="min-h-screen bg-[#FDFDFC] pt-24 pb-20 sm:pt-32 sm:pb-32 font-epilogue text-[#111] overflow-x-hidden">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
         
         {/* --- EDITORIAL HEADER --- */}
-        <header className="mb-24 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
-          <div className="max-w-3xl">
-            <div className="bg-accent/10 text-accent px-4 py-1.5 rounded-full border border-accent/10 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.4em] mb-8">
-              <FiZap size={12}/> Resource Center
-            </div>
-            <h1 className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.85]">
-              Common <br /> Queries.
-            </h1>
+        <header className="mb-12 sm:mb-24">
+          <div className="bg-accent/10 text-accent px-4 py-1.5 rounded-full border border-accent/10 inline-flex items-center gap-2 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] mb-6 sm:mb-8">
+            <FiZap size={12}/> Resource Center
           </div>
-          <div className="lg:max-w-xs text-right hidden lg:block">
-            <p className="text-[10px] font-black text-paragraph/40 uppercase tracking-widest leading-relaxed">
-              CAN'T FIND WHAT YOU'RE LOOKING FOR? REACH OUT TO THE STUDIO SUPPORT TEAM 24/7.
-            </p>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+            <div className="max-w-3xl">
+              <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.9] sm:leading-[0.85]">
+                Common <br className="hidden sm:block" /> Queries.
+              </h1>
+            </div>
+            <div className="max-w-xs hidden lg:block text-right">
+              <p className="text-[10px] font-black text-paragraph/40 uppercase tracking-widest leading-relaxed">
+                CAN'T FIND WHAT YOU'RE LOOKING FOR? REACH OUT TO THE STUDIO SUPPORT TEAM 24/7.
+              </p>
+            </div>
           </div>
         </header>
 
-        <div className="grid lg:grid-cols-12 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-16">
           
-          {/* --- SIDEBAR CATEGORIES --- */}
-          <aside className="lg:col-span-4 space-y-4 sticky top-32 h-fit">
-            <p className="text-[9px] font-black text-paragraph/30 uppercase tracking-[0.4em] mb-8 pl-4">Knowledge Tiers</p>
-            {categories.map((cat) => (
-              <button
-                key={cat.name}
-                onClick={() => { setActiveCategory(cat.name); setOpenIndex(null); }}
-                className={`w-full flex items-center justify-between p-6 rounded-[24px] transition-all border ${
-                  activeCategory === cat.name 
-                  ? 'bg-[#111] border-[#111] text-white shadow-2xl shadow-black/10' 
-                  : 'bg-white border-gray-50 text-paragraph hover:border-accent/30'
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <span className={activeCategory === cat.name ? 'text-accent' : 'text-paragraph/40'}>{cat.icon}</span>
-                  <span className="text-xs font-black uppercase tracking-widest">{cat.name} Hub</span>
-                </div>
-                <FiChevronDown className={`transition-transform ${activeCategory === cat.name ? '-rotate-90' : ''}`} />
-              </button>
-            ))}
+          {/* --- 1. KNOWLEDGE TIERS (Now first on mobile) --- */}
+          <aside className="lg:col-span-4 space-y-4 lg:sticky lg:top-32 h-fit order-1">
+            <p className="text-[9px] font-black text-paragraph/30 uppercase tracking-[0.4em] mb-6 sm:mb-8 pl-4">Knowledge Tiers</p>
+            
+            {/* Grid layout for mobile thumb-friendly selection */}
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4">
+              {categories.map((cat) => (
+                <button
+                  key={cat.name}
+                  onClick={() => { setActiveCategory(cat.name); setOpenIndex(null); }}
+                  className={`flex items-center justify-between p-5 sm:p-6 rounded-[24px] sm:rounded-[32px] transition-all border ${
+                    activeCategory === cat.name 
+                    ? 'bg-[#111] border-[#111] text-white shadow-xl' 
+                    : 'bg-white border-gray-50 text-paragraph hover:border-accent/30 shadow-sm'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <span className={activeCategory === cat.name ? 'text-accent' : 'text-paragraph/40'}>{cat.icon}</span>
+                    <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest">{cat.name}</span>
+                  </div>
+                  <FiChevronDown className={`hidden sm:block transition-transform ${activeCategory === cat.name ? '-rotate-90' : ''}`} />
+                </button>
+              ))}
+            </div>
 
-            {/* Support Bento Box */}
-            <div className="mt-12 bg-accent p-8 rounded-[32px] shadow-xl shadow-accent/20">
+            {/* Support Bento - Responsive Padding */}
+            <div className="mt-8 bg-accent p-6 sm:p-8 rounded-[32px] sm:rounded-[40px] shadow-xl shadow-accent/20 hidden sm:block lg:block">
                <h4 className="font-black text-lg tracking-tight mb-2">Still Lost?</h4>
-               <p className="text-xs font-bold opacity-60 mb-6 uppercase tracking-widest leading-relaxed">Our concierge is ready.</p>
-               <Link to="/contact" className="bg-[#111] text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest inline-block transition-transform hover:-translate-y-1">
+               <p className="text-[10px] font-bold opacity-60 mb-6 uppercase tracking-widest">Our concierge is ready.</p>
+               <Link to="/contact" className="w-full text-center bg-[#111] text-white px-6 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest inline-block transition-all hover:bg-black">
                  Contact Support
                </Link>
             </div>
           </aside>
 
-          {/* --- FAQ ACCORDION CONTENT --- */}
-          <main className="lg:col-span-8">
+          {/* --- 2. FAQ ACCORDIONS (Second on mobile) --- */}
+          <main className="lg:col-span-8 order-2">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeCategory}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.4 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
                 className="space-y-4"
               >
                 {faqData[activeCategory].map((item, idx) => (
                   <div 
                     key={idx}
-                    className={`rounded-[32px] border transition-all overflow-hidden ${
-                      openIndex === idx ? 'bg-white border-gray-100 shadow-xl shadow-black/5' : 'bg-transparent border-gray-50'
+                    className={`rounded-[28px] sm:rounded-[40px] border transition-all overflow-hidden ${
+                      openIndex === idx ? 'bg-white border-gray-100 shadow-lg' : 'bg-transparent border-gray-50'
                     }`}
                   >
                     <button 
                       onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                      className="w-full flex items-center justify-between p-8 md:p-10 text-left"
+                      className="w-full flex items-center justify-between p-6 sm:p-10 text-left"
                     >
-                      <h3 className="text-lg md:text-xl font-black tracking-tight max-w-[85%] uppercase">
+                      <h3 className="text-base sm:text-xl font-black tracking-tight max-w-[85%] uppercase leading-snug">
                         {item.q}
                       </h3>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${openIndex === idx ? 'bg-[#111] text-accent rotate-180' : 'bg-gray-50 text-paragraph'}`}>
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${openIndex === idx ? 'bg-[#111] text-accent rotate-180' : 'bg-gray-50 text-paragraph'}`}>
                          {openIndex === idx ? <FiMinus /> : <FiPlus />}
                       </div>
                     </button>
@@ -123,10 +129,10 @@ const FAQs = () => {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          className="px-8 md:px-10 pb-10"
+                          className="px-6 sm:px-10 pb-8 sm:pb-10"
                         >
-                          <div className="h-[1px] w-12 bg-accent mb-6" />
-                          <p className="text-paragraph text-sm md:text-base font-medium leading-relaxed opacity-70">
+                          <div className="h-[2px] w-10 bg-accent mb-6 rounded-full" />
+                          <p className="text-paragraph text-[13px] sm:text-base font-medium leading-relaxed opacity-70">
                             {item.a}
                           </p>
                         </motion.div>
@@ -136,7 +142,16 @@ const FAQs = () => {
                 ))}
               </motion.div>
             </AnimatePresence>
+
+            {/* Mobile-only Support CTA (Since the sidebar bento might be far down) */}
+            <div className="mt-12 sm:hidden bg-accent p-8 rounded-[32px] text-center">
+               <h4 className="font-black text-xl tracking-tight mb-2">Can't find it?</h4>
+               <Link to="/contact" className="mt-4 bg-[#111] text-white px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest inline-block">
+                 Message Support
+               </Link>
+            </div>
           </main>
+
         </div>
       </div>
     </div>
