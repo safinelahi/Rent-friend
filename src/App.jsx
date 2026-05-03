@@ -12,15 +12,29 @@ import Contact from "./pages/Contact/Contact";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Checkout from "./pages/Checkout/Checkout";
 import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
+import PublicProfile from "./pages/Profile/PublicProfile";
 
 // --- LENDER PAGES ---
-import LenderUpload from './pages/Lender/LenderUpload';
+import LenderUpload from "./pages/Lender/LenderUpload";
 import LenderVerification from "./pages/Verification/LenderVerification";
+import LenderDashboard from "./pages/Lender/LenderDashboard";
+import LenderBookingManager from "./pages/Lender/LenderBookingManager";
+import MyListings from "./pages/Lender/MyListings";
+import LenderEarnings from "./pages/Lender/LenderEarnings";
 
 // --- DASHBOARD & VERIFICATION PAGES ---
-import RenterDashboard from "./pages/Dashboard/RenterDashboard"; 
-import RenterVerification from './pages/Verification/RenterVerification';
-import VerificationPending from './pages/Verification/VerificationPending';
+import RenterDashboard from "./pages/Dashboard/RenterDashboard";
+import RenterVerification from "./pages/Verification/RenterVerification";
+import VerificationPending from "./pages/Verification/VerificationPending";
+
+// --- COMMUNICATION HUB ---
+import SignalHub from "./pages/Messages/SignalHub";
+
+// --- ADMIN PAGES (NEW) ---
+import AdminDashboard from "./pages/Admin/AdminDashboard"; // The Oversight Hub
+import VerificationCenter from "./pages/Admin/VerificationCenter"; // Flowchart: Admin Reviews NID
+import EscrowControl from "./pages/Admin/EscrowControl"; // Flowchart: Payout Management
+import ReturnAudit from "./pages/Admin/ReturnAudit";
 
 // --- AUTH PAGES ---
 import SignUp from "./pages/SignUp/SignUp";
@@ -34,71 +48,257 @@ import Policy from "./pages/Policy/Policy";
 function App() {
   return (
     <>
-      <ScrollToTop /> 
+      <ScrollToTop />
 
       <Routes>
         {/* ============================================================
             1. PUBLIC ROUTES
             ============================================================ */}
-        <Route path="/" element={<Layout><Home /></Layout>} />
-        <Route path="/browse" element={<Layout><Browse /></Layout>} />
-        <Route path="/how-it-works" element={<Layout><HowItWorks /></Layout>} />
-        
-        {/* PROTECTED: Only Lenders can list items. Renters will see the "Upgrade" screen */}
-        <Route 
-          path="/lender/upload" 
+        <Route
+          path="/"
           element={
-            <ProtectedRoute requireLender={true}>
-              <Layout><LenderUpload /></Layout>
-            </ProtectedRoute>
-          } 
+            <Layout>
+              <Home />
+            </Layout>
+          }
         />
-        
-        <Route path="/faqs" element={<Layout><FAQs /></Layout>} />
-        <Route path="/contact" element={<Layout><Contact /></Layout>} />
-        
-        <Route path="/product/:id" element={<Layout><ProductDetails /></Layout>} />
-        <Route path="/checkout/:id" element={<Layout><Checkout /></Layout>} />
-        <Route path="/booking-success" element={<Layout><BookingSuccess /></Layout>} />
-
-        <Route path="/terms-of-service" element={<Layout><Terms /></Layout>} />
-        <Route path="/privacy-policy" element={<Layout><Policy /></Layout>} />
-
+        <Route
+          path="/browse"
+          element={
+            <Layout>
+              <Browse />
+            </Layout>
+          }
+        />
+        <Route
+          path="/how-it-works"
+          element={
+            <Layout>
+              <HowItWorks />
+            </Layout>
+          }
+        />
+        <Route
+          path="/faqs"
+          element={
+            <Layout>
+              <FAQs />
+            </Layout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <Layout>
+              <Contact />
+            </Layout>
+          }
+        />
+        <Route
+          path="/product/:id"
+          element={
+            <Layout>
+              <ProductDetails />
+            </Layout>
+          }
+        />
+        <Route
+          path="/terms-of-service"
+          element={
+            <Layout>
+              <Terms />
+            </Layout>
+          }
+        />
+        <Route
+          path="/privacy-policy"
+          element={
+            <Layout>
+              <Policy />
+            </Layout>
+          }
+        />
+        {/* Public Profile Route */}
+        <Route
+          path="/profile/:id"
+          element={
+            <Layout>
+              <PublicProfile />
+            </Layout>
+          }
+        />
 
         {/* ============================================================
-            2. APP CORE (Login Required)
+            2. APP CORE (Login Required - Common)
             ============================================================ */}
-        {/* Protected Dashboard: User must be logged in */}
-        <Route 
-          path="/dashboard/rentals" 
+        <Route
+          path="/checkout/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Checkout />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/booking-success"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <BookingSuccess />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/rentals"
           element={
             <ProtectedRoute>
               <RenterDashboard />
             </ProtectedRoute>
-          } 
+          }
+        />
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SignalHub />
+              </Layout>
+            </ProtectedRoute>
+          }
         />
 
+        {/* Verification Paths */}
         <Route path="/verification-pending" element={<VerificationPending />} />
         <Route path="/renter-verification" element={<RenterVerification />} />
-        
-        {/* PROTECTED: Lender Verification requires Lender status first */}
-        <Route 
-          path="/lender-verification" 
+        <Route
+          path="/lender-verification"
           element={
             <ProtectedRoute requireLender={true}>
               <LenderVerification />
             </ProtectedRoute>
-          } 
+          }
         />
 
+        {/* ============================================================
+            3. LENDER PROTOCOL (Lender Status Required)
+            ============================================================ */}
+        <Route
+          path="/lender-dashboard"
+          element={
+            <ProtectedRoute requireLender={true}>
+              <Layout>
+                <LenderDashboard />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/lender/upload"
+          element={
+            <ProtectedRoute requireLender={true}>
+              <Layout>
+                <LenderUpload />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/lender/bookings"
+          element={
+            <ProtectedRoute requireLender={true}>
+              <Layout>
+                <LenderBookingManager />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/lender/my-listings"
+          element={
+            <ProtectedRoute requireLender={true}>
+              <Layout>
+                <MyListings />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/lender/earnings"
+          element={
+            <ProtectedRoute requireLender={true}>
+              <Layout>
+                <LenderEarnings />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
         {/* ============================================================
-            3. AUTHENTICATION
+            4. ADMIN PROTOCOL (Restricted Access)
+            ============================================================ */}
+
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <Layout>
+                <AdminDashboard />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/verifications"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <Layout>
+                <VerificationCenter />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/payouts"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <Layout>
+                <EscrowControl />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/returns"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <Layout>
+                <ReturnAudit />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ============================================================
+            5. AUTHENTICATION
             ============================================================ */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        
+
+        <Route
+          path="*"
+          element={
+            <Layout>
+              <div className="min-h-screen flex items-center justify-center font-black uppercase tracking-widest text-paragraph/20">
+                404 | Protocol Not Found
+              </div>
+            </Layout>
+          }
+        />
       </Routes>
     </>
   );
