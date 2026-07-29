@@ -8,19 +8,19 @@ import {
 
 const HowItWorks = () => {
   const renterSteps = [
-    { icon: <FiSearch />, title: "Find Gear", desc: "Browse thousands of items filters for category, price, and location." },
-    { icon: <FiCalendar />, title: "Book Dates", desc: "Select your rental period and send a request to the lender instantly." },
-    { icon: <FiShield />, title: "Secure Pay", desc: "Pay safely through RentFriend. We hold the funds until the rental is done." },
-    { icon: <FiMapPin />, title: "Pick Up", desc: "Coordinate with the lender to meet and collect your item easily." },
-    { icon: <FiStar />, title: "Rate & Return", desc: "Return the item on time and leave a review to build trust." },
+    { icon: <FiSearch />, title: "Find Local Gear", desc: "Browse listings near you and filter by category, price, or location in Dhaka." },
+    { icon: <FiCalendar />, title: "Select Dates", desc: "Pick your rental dates. We block overlapping bookings to prevent double-booking." },
+    { icon: <FiShield />, title: "Escrow Deposit", desc: "Pay securely. Your rental fee and deposit are locked in escrow for safety." },
+    { icon: <FiMapPin />, title: "Meet & Verify", desc: "Meet the lender, verify NID, take quick pickup photos, and collect the gear." },
+    { icon: <FiStar />, title: "Return & Refund", desc: "Enjoy your project, return the item on time, and get your deposit refunded." },
   ];
 
   const lenderSteps = [
-    { icon: <FiPlusCircle />, title: "List Items", desc: "Upload photos, set your price, and describe your item's condition." },
-    { icon: <FiUserCheck />, title: "Get Verified", desc: "Complete our check to earn a 'Verified' badge and attract users." },
-    { icon: <FiMessageSquare />, title: "Accept Requests", desc: "Chat with renters and approve bookings that work for you." },
-    { icon: <FiPackage />, title: "Handover", desc: "Meet the renter, give them a quick demo, and hand over the gear." },
-    { icon: <FiZap />, title: "Earn Money", desc: "Receive your payout directly once the item is safely returned." },
+    { icon: <FiPlusCircle />, title: "List Your Items", desc: "Upload 3 angle photos, set fair daily rates, and write custom rules." },
+    { icon: <FiUserCheck />, title: "Get Verified", desc: "Complete a quick NID and selfie check to earn trust badges." },
+    { icon: <FiMessageSquare />, title: "Approve Rentals", desc: "Chat with renters and accept bookings that match your availability." },
+    { icon: <FiPackage />, title: "Handover Audit", desc: "Meet the renter, double-check NID documents, and hand over the item." },
+    { icon: <FiZap />, title: "Get Paid", desc: "Lender payouts are processed securely once the gear is safely returned." },
   ];
 
   return (
@@ -32,7 +32,7 @@ const HowItWorks = () => {
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
           className="bg-accent/10 text-accent px-4 py-1.5 sm:px-5 sm:py-2 rounded-full border border-accent/10 inline-flex items-center gap-2 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] mb-6 sm:mb-8"
         >
-          <FiZap size={14}/> Operation Manual
+          <FiZap size={14}/> Sharing Manual
         </motion.div>
         
         {/* Dynamic Typography Scaling */}
@@ -40,11 +40,11 @@ const HowItWorks = () => {
           initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
           className="text-4xl sm:text-6xl md:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.9] sm:leading-[0.85] mb-6 sm:mb-10"
         >
-          The Studio <br className="hidden sm:block" /> Blueprint.
+          How Rent Friend <br className="hidden sm:block" /> Works.
         </motion.h1>
         
         <p className="text-paragraph text-xs sm:text-sm md:text-lg font-medium max-w-2xl mx-auto leading-relaxed opacity-60 uppercase tracking-widest px-2">
-          WE'VE BUILT THE SAFEST COMMUNITY IN BANGLADESH.
+          Dhaka's safest peer-to-peer gear sharing community.
         </p>
       </section>
 
@@ -120,8 +120,8 @@ const HowItWorks = () => {
       {/* --- FINAL CTA --- */}
       <section className="pb-20 sm:pb-32 px-4 sm:px-6">
         <div className="max-w-[1440px] mx-auto bg-white border border-gray-100 rounded-[32px] sm:rounded-[60px] p-8 sm:p-16 md:p-24 text-center shadow-sm relative overflow-hidden">
-           <h2 className="text-3xl sm:text-5xl md:text-8xl font-black tracking-tighter leading-none mb-6 sm:mb-8">Ready to <br /> Join the Studio?</h2>
-           <p className="text-paragraph text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-8 sm:mb-12 opacity-40">Join thousands sharing and earning every day.</p>
+           <h2 className="text-3xl sm:text-5xl md:text-8xl font-black tracking-tighter leading-none mb-6 sm:mb-8">Ready to <br /> Start Sharing?</h2>
+           <p className="text-paragraph text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-8 sm:mb-12 opacity-40">Renting saves cash, listing makes money. Join the Dhaka creator community today.</p>
            
            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
               <Link to="/browse" className="bg-[#111] text-white px-8 py-5 sm:px-10 sm:py-6 rounded-2xl sm:rounded-[24px] font-black uppercase tracking-widest text-[10px] sm:text-[11px] hover:bg-black transition-all flex items-center gap-3 w-full sm:w-auto justify-center">

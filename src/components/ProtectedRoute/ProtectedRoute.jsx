@@ -4,7 +4,7 @@ import { AppContext } from '../../context/AppContext';
 import { FiZap, FiArrowRight, FiShield } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 
-const ProtectedRoute = ({ children, requireLender = false }) => {
+const ProtectedRoute = ({ children, requireLender = false, requireAdmin = false }) => {
   const { user, isLoading, isLender } = useContext(AppContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -15,12 +15,17 @@ const ProtectedRoute = ({ children, requireLender = false }) => {
     </div>
   );
 
-  // 1. If not logged in at all, go to signup/login
+  // Redirect to signup if not logged in
   if (!user) {
     return <Navigate to="/signup" state={{ from: location.pathname, role: 'lender' }} replace />;
   }
 
-  // 2. If user is a Renter but the page requires a Lender role
+  // Redirect to home if admin is required but user is not admin
+  if (requireAdmin && user.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+
+  // If page requires lender but user is not lender
   if (requireLender && !isLender) {
     return (
       <div className="min-h-screen bg-[#F8F8F7] flex items-center justify-center p-6 font-epilogue">
@@ -46,7 +51,7 @@ const ProtectedRoute = ({ children, requireLender = false }) => {
              </div>
           </div>
 
-          {/* ACTION: Go to Signup to complete Lender Profile */}
+          {/* Redirect to signup to complete lender registration */}
           <button 
             onClick={() => {
               // We navigate to signup and tell it to come back to Lender Upload afterward

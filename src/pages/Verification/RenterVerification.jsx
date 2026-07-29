@@ -2,11 +2,43 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiUploadCloud, FiCheckCircle, FiShield, FiArrowLeft, FiZap, FiLock } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import api from '../../api/axios';
 
 const RenterVerification = () => {
   const navigate = useNavigate();
   const [nidFront, setNidFront] = useState(null);
   const [nidBack, setNidBack] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!nidFront || !nidBack) return;
+    setError(null);
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append('nidFront', nidFront);
+    formData.append('nidBack', nidBack);
+
+    try {
+      const res = await api.post('/users/upload-verification', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (res.data.success) {
+        navigate('/verification-pending');
+      } else {
+        setError(res.data.error || "Upload failed");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.error || "Error uploading verification documents. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#FDFDFC] pt-24 pb-20 sm:pt-32 sm:pb-32 font-epilogue text-[#111] overflow-x-hidden">
@@ -21,16 +53,16 @@ const RenterVerification = () => {
         </button>
 
         <div className="max-w-4xl mx-auto lg:mx-0">
-          {/* --- EDITORIAL HEADER --- */}
+          {/* Header */}
           <header className="mb-12 sm:mb-20">
             <div className="bg-accent/10 text-accent px-4 py-1.5 rounded-full border border-accent/10 inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest mb-6">
-              <FiZap size={12}/> Secure Protocol
+              <FiZap size={12}/> Verify Identity
             </div>
             <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.9] sm:leading-[0.85] mb-4">
               ID Setup.
             </h1>
             <p className="text-paragraph text-xs sm:text-sm font-medium opacity-60 uppercase tracking-widest max-w-xl">
-              To initialize your session as a renter, we require authentic identity verification.
+              To start using Rent Friend as a renter, please upload your NID.
             </p>
           </header>
 
@@ -41,7 +73,7 @@ const RenterVerification = () => {
               {nidFront ? (
                 <div className="flex flex-col items-center gap-4">
                   <FiCheckCircle size={50} className="text-accent" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-accent">Front Verified</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-accent">Front Side Uploaded</span>
                 </div>
               ) : (
                 <>
@@ -56,7 +88,7 @@ const RenterVerification = () => {
               {nidBack ? (
                 <div className="flex flex-col items-center gap-4">
                   <FiCheckCircle size={50} className="text-accent" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-accent">Back Verified</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-accent">Back Side Uploaded</span>
                 </div>
               ) : (
                 <>
@@ -67,6 +99,12 @@ const RenterVerification = () => {
             </label>
           </div>
 
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-500 rounded-3xl p-6 text-xs font-bold uppercase tracking-widest text-center mb-8">
+              {error}
+            </div>
+          )}
+
           {/* --- SECURITY FOOTER BOX --- */}
           <div className="p-8 sm:p-12 bg-[#111] text-white rounded-[40px] sm:rounded-[56px] flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl">
             {/* Subtle BG Icon */}
@@ -76,26 +114,26 @@ const RenterVerification = () => {
                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5 shrink-0">
                 <FiShield size={32} className="text-accent" />
                </div>
-               <div>
-                  <h4 className="text-[11px] font-black uppercase tracking-widest mb-1 text-accent">Safe Data Encryption</h4>
-                  <p className="text-[10px] font-bold opacity-40 uppercase tracking-widest max-w-[220px] leading-relaxed">
-                    Your documents are stored in an AES-256 secure vault.
-                  </p>
-               </div>
-            </div>
+                <div>
+                   <h4 className="text-[11px] font-black uppercase tracking-widest mb-1 text-accent">Secure Verification</h4>
+                   <p className="text-[10px] font-bold opacity-40 uppercase tracking-widest max-w-[220px] leading-relaxed">
+                     Your documents are stored securely and kept private.
+                   </p>
+                </div>
+             </div>
 
-            <button 
-              onClick={() => navigate('/verification-pending')}
-              disabled={!nidFront || !nidBack}
-              className={`w-full md:w-auto px-12 py-6 rounded-[24px] sm:rounded-[32px] font-black uppercase tracking-[0.3em] text-[11px] transition-all relative z-10 active:scale-95 ${nidFront && nidBack ? 'bg-accent text-txt shadow-2xl shadow-accent/20 hover:-translate-y-1' : 'bg-white/5 text-white/10 cursor-not-allowed border border-white/5'}`}
-            >
-              Initialize Profile
-            </button>
+             <button 
+               onClick={handleSubmit}
+               disabled={!nidFront || !nidBack || loading}
+               className={`w-full md:w-auto px-12 py-6 rounded-[24px] sm:rounded-[32px] font-black uppercase tracking-[0.3em] text-[11px] transition-all relative z-10 active:scale-95 ${nidFront && nidBack && !loading ? 'bg-accent text-txt shadow-2xl shadow-accent/20 hover:-translate-y-1' : 'bg-white/5 text-white/10 cursor-not-allowed border border-white/5'}`}
+             >
+               {loading ? "Uploading..." : "Submit"}
+             </button>
           </div>
 
           {/* Additional Help Text */}
           <p className="mt-10 text-center lg:text-left text-[9px] font-black text-paragraph/30 uppercase tracking-[0.3em]">
-             Verification Audit usually takes &lt; 6 Hours for Renter status.
+             Review process usually takes less than 6 hours.
           </p>
         </div>
       </div>

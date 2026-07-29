@@ -1,9 +1,9 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Layout from "./components/Layout";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"; // IMPORTED GATEKEEPER
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
-// --- PUBLIC PAGES ---
+// Import page components
 import Home from "./pages/Home/Home";
 import Browse from "./pages/Browse/Browse";
 import HowItWorks from "./pages/HowItWorks/HowItWorks";
@@ -14,7 +14,6 @@ import Checkout from "./pages/Checkout/Checkout";
 import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
 import PublicProfile from "./pages/Profile/PublicProfile";
 
-// --- LENDER PAGES ---
 import LenderUpload from "./pages/Lender/LenderUpload";
 import LenderVerification from "./pages/Verification/LenderVerification";
 import LenderDashboard from "./pages/Lender/LenderDashboard";
@@ -22,26 +21,22 @@ import LenderBookingManager from "./pages/Lender/LenderBookingManager";
 import MyListings from "./pages/Lender/MyListings";
 import LenderEarnings from "./pages/Lender/LenderEarnings";
 
-// --- DASHBOARD & VERIFICATION PAGES ---
 import RenterDashboard from "./pages/Dashboard/RenterDashboard";
 import RenterVerification from "./pages/Verification/RenterVerification";
 import VerificationPending from "./pages/Verification/VerificationPending";
 
-// --- COMMUNICATION HUB ---
 import SignalHub from "./pages/Messages/SignalHub";
 
-// --- ADMIN PAGES (NEW) ---
-import AdminDashboard from "./pages/Admin/AdminDashboard"; // The Oversight Hub
-import VerificationCenter from "./pages/Admin/VerificationCenter"; // Flowchart: Admin Reviews NID
-import EscrowControl from "./pages/Admin/EscrowControl"; // Flowchart: Payout Management
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import VerificationCenter from "./pages/Admin/VerificationCenter";
+import EscrowControl from "./pages/Admin/EscrowControl";
 import ReturnAudit from "./pages/Admin/ReturnAudit";
+import AdminLogin from "./pages/Admin/AdminLogin";
 
-// --- AUTH PAGES ---
 import SignUp from "./pages/SignUp/SignUp";
 import Login from "./pages/Login/Login";
 import ForgotPassword from "./pages/Forgetpassword/ForgotPassword";
 
-// --- LEGAL ---
 import Terms from "./pages/Terms/Terms";
 import Policy from "./pages/Policy/Policy";
 
@@ -51,9 +46,7 @@ function App() {
       <ScrollToTop />
 
       <Routes>
-        {/* ============================================================
-            1. PUBLIC ROUTES
-            ============================================================ */}
+        {/* Public Routes */}
         <Route
           path="/"
           element={
@@ -128,9 +121,7 @@ function App() {
           }
         />
 
-        {/* ============================================================
-            2. APP CORE (Login Required - Common)
-            ============================================================ */}
+        {/* Core App Routes (Logged in) */}
         <Route
           path="/checkout/:id"
           element={
@@ -182,9 +173,7 @@ function App() {
           }
         />
 
-        {/* ============================================================
-            3. LENDER PROTOCOL (Lender Status Required)
-            ============================================================ */}
+        {/* Lender Routes */}
         <Route
           path="/lender-dashboard"
           element={
@@ -207,39 +196,23 @@ function App() {
         />
         <Route
           path="/lender/bookings"
-          element={
-            <ProtectedRoute requireLender={true}>
-              <Layout>
-                <LenderBookingManager />
-              </Layout>
-            </ProtectedRoute>
-          }
+          element={<Navigate to="/lender-dashboard" replace />}
         />
         <Route
           path="/lender/my-listings"
-          element={
-            <ProtectedRoute requireLender={true}>
-              <Layout>
-                <MyListings />
-              </Layout>
-            </ProtectedRoute>
-          }
+          element={<Navigate to="/lender-dashboard" replace />}
         />
         <Route
           path="/lender/earnings"
-          element={
-            <ProtectedRoute requireLender={true}>
-              <Layout>
-                <LenderEarnings />
-              </Layout>
-            </ProtectedRoute>
-          }
+          element={<Navigate to="/lender-dashboard" replace />}
         />
 
-        {/* ============================================================
-            4. ADMIN PROTOCOL (Restricted Access)
-            ============================================================ */}
+        {/* Admin Routes */}
 
+        <Route
+          path="/admin"
+          element={<Navigate to="/admin/dashboard" replace />}
+        />
         <Route
           path="/admin/dashboard"
           element={
@@ -282,19 +255,18 @@ function App() {
           }
         />
 
-        {/* ============================================================
-            5. AUTHENTICATION
-            ============================================================ */}
+        {/* Authentication Routes */}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/system-admin-portal" element={<AdminLogin />} />
 
         <Route
           path="*"
           element={
             <Layout>
               <div className="min-h-screen flex items-center justify-center font-black uppercase tracking-widest text-paragraph/20">
-                404 | Protocol Not Found
+                404 | Page Not Found
               </div>
             </Layout>
           }

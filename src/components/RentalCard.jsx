@@ -4,14 +4,20 @@ import { FaStar } from 'react-icons/fa';
 import { FiMapPin, FiArrowRight, FiHash } from 'react-icons/fi';
 
 const RentalCard = ({ item }) => {
+  const getImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `http://localhost:5000${url}`;
+  };
+
   return (
-    <Link to={`/product/${item.id}`} className="group block h-full">
+    <Link to={`/product/${item._id || item.id}`} className="group block h-full">
       <div className="bg-white border border-gray-100 rounded-[45px] p-5 hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-700 h-full flex flex-col">
         
         {/* IMAGE HUB */}
         <div className="relative h-[260px] w-full overflow-hidden rounded-[35px] bg-[#F1F1F0]">
           <img 
-            src={item.image} 
+            src={getImageUrl(item.image)} 
             alt={item.title} 
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out" 
           />

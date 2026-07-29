@@ -83,7 +83,7 @@ const SignalHub = () => {
             {/* Outgoing Message Example */}
             <div className="flex flex-col items-end ml-auto max-w-[80%]">
               <div className="p-6 bg-[#111] text-white rounded-t-[24px] rounded-bl-[24px] text-xs font-medium leading-relaxed">
-                Yes, it's ready. Please bring your NID for verification protocol.
+                Yes, it's ready. Please bring your NID for verification.
               </div>
               <span className="text-[8px] font-black uppercase tracking-widest text-paragraph/20 mt-2 mr-2">10:45 AM</span>
             </div>

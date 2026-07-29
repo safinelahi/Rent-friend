@@ -73,7 +73,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/lender/dashboard" className="text-[11px] font-black uppercase tracking-widest text-gray-500 hover:text-white transition-all">
+                <Link to="/lender-dashboard" className="text-[11px] font-black uppercase tracking-widest text-gray-500 hover:text-white transition-all">
                   Lender Hub
                 </Link>
               </li>
@@ -106,7 +106,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/privacy-policy" className="text-[11px] font-black uppercase tracking-widest text-gray-500 hover:text-white transition-all">
-                  Privacy Protocol
+                  Privacy Policy
                 </Link>
               </li>
               <li>
@@ -141,7 +141,7 @@ const Footer = () => {
               © 2026 RENTFRIEND STUDIO
             </p>
             <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-gray-700 bg-white/5 px-4 py-2 rounded-full border border-white/5">
-               <FiShield className="text-accent" /> AES-256 SECURED PROTOCOL
+               <FiShield className="text-accent" /> SECURE PAYMENT
             </div>
           </div>
           

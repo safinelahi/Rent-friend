@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import api from '../api/axios';
 
 export const AppContext = createContext();
 
@@ -9,39 +10,77 @@ export const AppProvider = ({ children }) => {
   const [myRentals, setMyRentals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 1. PERSISTENCE & VERIFICATION CHECK
+  // Helper function to fetch rentals
+  const fetchRentals = async () => {
+    try {
+      const res = await api.get('/bookings/my-rentals');
+      if (res.data.success) {
+        setMyRentals(res.data.bookings);
+        localStorage.setItem("rf_rentals", JSON.stringify(res.data.bookings));
+      }
+    } catch (err) {
+      console.error("Failed to fetch rentals:", err);
+    }
+  };
+
+  // Check auth state when the app loads
   useEffect(() => {
     const initAuth = async () => {
       const savedToken = localStorage.getItem("rf_token");
-      const savedRentals = localStorage.getItem("rf_rentals");
       
       if (savedToken) {
         setToken(savedToken);
-        const savedUser = localStorage.getItem("rf_user");
-        if (savedUser) setUser(JSON.parse(savedUser));
+        api.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
+        try {
+          const res = await api.get('/auth/me');
+          if (res.data.success) {
+            setUser(res.data.user);
+            localStorage.setItem("rf_user", JSON.stringify(res.data.user));
+            // Fetch bookings from backend
+            await fetchRentals();
+          } else {
+            localStorage.removeItem("rf_token");
+            localStorage.removeItem("rf_user");
+            localStorage.removeItem("rf_rentals");
+            setToken(null);
+            setUser(null);
+          }
+        } catch (err) {
+          console.error("Auth verification failed:", err);
+          if (err.response && err.response.status === 401) {
+            localStorage.removeItem("rf_token");
+            localStorage.removeItem("rf_user");
+            localStorage.removeItem("rf_rentals");
+            setToken(null);
+            setUser(null);
+          } else {
+            const savedUser = localStorage.getItem("rf_user");
+            if (savedUser) setUser(JSON.parse(savedUser));
+            const savedRentals = localStorage.getItem("rf_rentals");
+            if (savedRentals) setMyRentals(JSON.parse(savedRentals));
+          }
+        }
       }
-
-      if (savedRentals) setMyRentals(JSON.parse(savedRentals));
       setIsLoading(false);
     };
 
     initAuth();
   }, []);
 
-  // 2. LOGIN LOGIC
+  // Login function
   const login = async (userData, userToken) => {
-    // Ensure user has a default role if none exists
-    const userWithRole = { ...userData, role: userData.role || 'renter' };
-    
-    setUser(userWithRole);
+    setUser(userData);
     setToken(userToken);
     localStorage.setItem("rf_token", userToken);
-    localStorage.setItem("rf_user", JSON.stringify(userWithRole));
+    localStorage.setItem("rf_user", JSON.stringify(userData));
     
-    axios.defaults.headers.common['Authorization'] = `Bearer ${userToken}`;
+    api.defaults.headers.common['Authorization'] = `Bearer ${userToken}`;
+    
+    // Fetch bookings from backend after login
+    await fetchRentals();
   };
 
-  // 3. LOGOUT
+  // Logout function
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -49,49 +88,45 @@ export const AppProvider = ({ children }) => {
     localStorage.removeItem("rf_token");
     localStorage.removeItem("rf_user");
     localStorage.removeItem("rf_rentals");
-    delete axios.defaults.headers.common['Authorization'];
+    delete api.defaults.headers.common['Authorization'];
     window.location.href = "/";
   };
 
-  // 4. NEW: AUTOMATIC ROLE UPGRADE LOGIC
-  // This function turns a Renter into a Lender instantly
-  const upgradeToLender = () => {
+  // Upgrade renter to lender
+  const upgradeToLender = async () => {
     if (!user) return { success: false, error: "NO_USER" };
 
-    const updatedUser = { 
-      ...user, 
-      role: 'lender',
-      upgradedAt: new Date().toISOString() 
-    };
-
-    setUser(updatedUser);
-    localStorage.setItem("rf_user", JSON.stringify(updatedUser));
-    
-    // Future Backend Note: 
-    // axios.patch('/api/v1/users/upgrade', { role: 'lender' })
-    
-    return { success: true };
+    try {
+      const res = await api.patch('/users/upgrade');
+      if (res.data.success) {
+        setUser(res.data.user);
+        localStorage.setItem("rf_user", JSON.stringify(res.data.user));
+        return { success: true };
+      }
+      return { success: false, error: res.data.error || "Upgrade failed" };
+    } catch (err) {
+      console.error("Upgrade failed:", err);
+      return { success: false, error: err.response?.data?.error || "Upgrade failed" };
+    }
   };
 
-  // 5. RENTAL LOGIC
-  const addRental = (item) => {
-    if (myRentals.length > 0) {
-      return { success: false, error: "LIMIT_REACHED" };
-    }
-
-    const updated = [
-      ...myRentals, 
-      { 
-        ...item, 
-        bookingId: "RF-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
-        status: "ACTIVE",
-        bookedAt: new Date().toISOString()
+  // Rental helper function to POST new booking to backend
+  const addRental = async (bookingData) => {
+    try {
+      const res = await api.post('/bookings', bookingData);
+      if (res.data.success) {
+        // Refresh local bookings list
+        await fetchRentals();
+        return { success: true, booking: res.data.booking };
       }
-    ];
-
-    setMyRentals(updated);
-    localStorage.setItem("rf_rentals", JSON.stringify(updated));
-    return { success: true };
+      return { success: false, error: res.data.error || "Booking failed" };
+    } catch (err) {
+      console.error("Booking creation failed:", err);
+      return { 
+        success: false, 
+        error: err.response?.data?.error || "Booking failed. Please try again." 
+      };
+    }
   };
 
   return (
@@ -102,10 +137,11 @@ export const AppProvider = ({ children }) => {
       logout, 
       myRentals, 
       addRental, 
-      upgradeToLender, // Now available for Dashboard & List Item pages
+      upgradeToLender,
+      refreshRentals: fetchRentals,
       isLoading,
       isVerified: user?.isVerified || false,
-      isLender: user?.role === 'lender' // Quick check for UI permissions
+      isLender: user?.role === 'lender'
     }}>
       {children}
     </AppContext.Provider>

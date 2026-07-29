@@ -36,15 +36,15 @@ const ForgotPassword = () => {
           <div className="relative z-10">
             {/* Page Badge */}
             <div className="bg-accent/10 text-accent px-4 py-1.5 rounded-full border border-accent/10 inline-flex items-center gap-2 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-6 sm:mb-8">
-               <FiZap size={12}/> Security Protocol
+               <FiZap size={12}/> Password Reset
             </div>
 
             {/* Headings */}
             <h1 className="text-4xl sm:text-5xl font-black tracking-tighter leading-[1.1] mb-4">
-              Access <br /> Recovery.
+              Reset <br /> Password.
             </h1>
             <p className="text-paragraph text-[13px] sm:text-sm font-medium leading-relaxed mb-10 opacity-60 uppercase tracking-widest">
-              ENTER YOUR REGISTERED EMAIL TO DISPATCH A RESET KEY.
+              Enter your registered email to receive a password reset link.
             </p>
 
             {/* Form */}
@@ -54,7 +54,7 @@ const ForgotPassword = () => {
                   htmlFor="email"
                   className="block text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-paragraph/50 ml-1"
                 >
-                  Electronic Mail Address
+                  Email Address
                 </label>
                 <div className="relative group">
                   <FiMail className="absolute left-5 top-1/2 -translate-y-1/2 text-paragraph/30 group-focus-within:text-accent transition-colors" size={18} />
@@ -76,22 +76,20 @@ const ForgotPassword = () => {
               </button>
             </form>
 
-            {/* Back Link */}
             <div className="mt-12 pt-8 border-t border-gray-50 text-center">
               <Link
                 to="/login"
                 className="inline-flex items-center gap-2 text-paragraph/40 hover:text-txt font-black uppercase tracking-[0.2em] text-[10px] transition-all group"
               >
                 <FiArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                <span>Return to Session</span>
+                <span>Back to Login</span>
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Footer Hint */}
         <p className="mt-10 text-center text-[9px] font-black text-paragraph/30 uppercase tracking-[0.3em]">
-           Protected by RentFriend Studio AES-256 Protocol
+           Rent Friend
         </p>
       </motion.div>
     </div>

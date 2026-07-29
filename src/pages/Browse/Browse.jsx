@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react"; // useEffect যোগ করা হয়েছে
 import { useSearchParams } from "react-router-dom"; // useSearchParams ইমপোর্ট করা হয়েছে
 import { FiSearch, FiMapPin, FiFilter, FiX, FiChevronRight, FiZap } from "react-icons/fi";
-import { products } from "../../data/products";
+import api from "../../api/axios";
 import RentalCard from "../../components/RentalCard";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,6 +12,25 @@ const Browse = () => {
   const [selectedLocation, setSelectedLocation] = useState("All");
   const [priceRange, setPriceRange] = useState(10000);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [productsList, setProductsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get('/products');
+        if (res.data.success) {
+          setProductsList(res.data.products);
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   // --- Logic to read the category from the URL ---
   useEffect(() => {
@@ -25,14 +44,14 @@ const Browse = () => {
   const locations = ["All", "Dhaka", "Rajshahi", "Sylhet", "Chittagong", "Khulna"];
 
   const filteredProducts = useMemo(() => {
-    return products.filter((item) => {
+    return productsList.filter((item) => {
       const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
       const matchesLocation = selectedLocation === "All" || item.city === selectedLocation;
       const matchesPrice = item.price <= priceRange;
       return matchesSearch && matchesCategory && matchesLocation && matchesPrice;
     });
-  }, [searchQuery, selectedCategory, selectedLocation, priceRange]);
+  }, [productsList, searchQuery, selectedCategory, selectedLocation, priceRange]);
 
   // --- Function to update the URL when the category changes ---
   const handleCategoryChange = (cat) => {
@@ -49,7 +68,7 @@ const Browse = () => {
     <div className="space-y-8 sm:space-y-10">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-accent font-black uppercase tracking-[0.3em] text-[10px]">
-          <FiFilter /> <span>Refine Search</span>
+          <FiFilter /> <span>Filter Gear</span>
         </div>
         <button onClick={() => setShowMobileFilters(false)} className="lg:hidden p-2 text-paragraph/40 hover:text-txt transition-colors">
           <FiX size={20} />
@@ -57,7 +76,7 @@ const Browse = () => {
       </div>
 
       <div>
-        <p className="text-[9px] font-black text-paragraph/30 uppercase tracking-[0.4em] mb-4 sm:mb-6">Asset Category</p>
+        <p className="text-[9px] font-black text-paragraph/30 uppercase tracking-[0.4em] mb-4 sm:mb-6">Browse Categories</p>
         <div className="space-y-3">
           {categories.map((cat) => (
             <button
@@ -120,10 +139,18 @@ const Browse = () => {
         }}
         className="w-full py-4 sm:py-5 bg-white border border-gray-100 text-txt font-black text-[9px] uppercase tracking-[0.3em] rounded-xl sm:rounded-2xl hover:bg-secondary transition-all flex items-center justify-center gap-2"
       >
-        Clear Parameters
+        Reset Filters
       </button>
     </div>
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FDFDFC]">
+        <div className="w-10 h-10 border-4 border-accent border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FDFDFC] pt-24 pb-16 sm:pt-32 sm:pb-32 font-epilogue text-[#111] overflow-x-hidden">
@@ -133,18 +160,18 @@ const Browse = () => {
         <div className="mb-12 sm:mb-20">
           <div className="flex items-center gap-3 text-accent mb-4 sm:mb-6">
              <FiZap size={14} />
-             <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.5em]">Inventory Access</span>
+             <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.5em]">Dhaka Rental Catalog</span>
           </div>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 sm:gap-10">
             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.9] sm:leading-[0.85]">
-              The <br className="hidden sm:block" /> Collection.
+              Find <br className="hidden sm:block" /> Gear.
             </h1>
             
             <div className="relative w-full lg:max-w-md">
-              <FiSearch className="absolute left-5 sm:left-6 top-1/2 -translate-y-1/2 text-paragraph opacity-30" size={18} sm:size={20} />
+               <FiSearch className="absolute left-5 sm:left-6 top-1/2 -translate-y-1/2 text-paragraph opacity-30" size={18} sm:size={20} />
               <input
                 type="text"
-                placeholder="Search by keyword..."
+                placeholder="What do you need today? DSLR, Camping Tent..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full h-14 sm:h-16 bg-white border border-gray-100 rounded-xl sm:rounded-[20px] pl-14 sm:pl-16 pr-6 outline-none focus:border-accent shadow-sm transition-all text-xs sm:text-sm font-bold"

@@ -16,20 +16,20 @@ const FAQs = () => {
 
   const faqData = {
     General: [
-      { q: "What is the Studio Blueprint?", a: "It's our operational standard ensuring that every rental in Bangladesh is backed by verification and professional escrow." },
-      { q: "How do I create an account?", a: "Simply join the Studio via the 'Join' button. You can start as a renter and upgrade to a lender profile anytime." }
+      { q: "How does Rent Friend work?", a: "We connect gear owners with renters in Bangladesh, securing transactions with verified profiles and safe payments." },
+      { q: "How do I create an account?", a: "Simply click the 'Join' button, fill in your details, and upload your NID for verification. You can rent or lend gear anytime." }
     ],
     Renting: [
-      { q: "How do security deposits work?", a: "Deposits are held safely in our insurance-backed vault and are automatically refunded within 6 hours of a successful return." },
-      { q: "Can I cancel a booking?", a: "Yes. Cancellations made 24 hours before the pickup date are eligible for a full refund of the rental fee." }
+      { q: "How do security deposits work?", a: "Security deposits are held safely during the rental period and are refunded to you after the item is returned in good condition." },
+      { q: "Can I cancel a booking?", a: "Yes, cancellations made 24 hours before pickup are eligible for a full refund." }
     ],
     Lending: [
-      { q: "How do I receive my payouts?", a: "Once the renter confirms the return and our audit is clear, funds are transferred to your linked account instantly." },
-      { q: "What are the platform fees?", a: "We take a flat 10% service fee on successful rentals to maintain the insurance and verification systems." }
+      { q: "How do I receive my payouts?", a: "After the renter returns the item, the payment will be released to your linked bank account." },
+      { q: "What are the platform fees?", a: "We charge a 10% service fee on rentals to support platform operations and payment processing." }
     ],
     Security: [
-      { q: "What if my gear is damaged?", a: "Our 3-angle audit system documents condition before and after. If damage is confirmed, our protection protocol covers the repair costs." },
-      { q: "Is user verification mandatory?", a: "Absolutely. Every user in the Studio must pass our identity verification to ensure community safety." }
+      { q: "What if my gear is damaged?", a: "We verify item conditions before and after rentals. If damage occurs, our protection policy helps cover the repair costs." },
+      { q: "Is user verification mandatory?", a: "Yes, every user must verify their account with an NID to ensure safety for everyone." }
     ]
   };
 
@@ -60,7 +60,7 @@ const FAQs = () => {
           
           {/* --- 1. KNOWLEDGE TIERS (Now first on mobile) --- */}
           <aside className="lg:col-span-4 space-y-4 lg:sticky lg:top-32 h-fit order-1">
-            <p className="text-[9px] font-black text-paragraph/30 uppercase tracking-[0.4em] mb-6 sm:mb-8 pl-4">Knowledge Tiers</p>
+            <p className="text-[9px] font-black text-paragraph/30 uppercase tracking-[0.4em] mb-6 sm:mb-8 pl-4">Categories</p>
             
             {/* Grid layout for mobile thumb-friendly selection */}
             <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4">
@@ -86,7 +86,7 @@ const FAQs = () => {
             {/* Support Bento - Responsive Padding */}
             <div className="mt-8 bg-accent p-6 sm:p-8 rounded-[32px] sm:rounded-[40px] shadow-xl shadow-accent/20 hidden sm:block lg:block">
                <h4 className="font-black text-lg tracking-tight mb-2">Still Lost?</h4>
-               <p className="text-[10px] font-bold opacity-60 mb-6 uppercase tracking-widest">Our concierge is ready.</p>
+               <p className="text-[10px] font-bold opacity-60 mb-6 uppercase tracking-widest">Our team is ready to help.</p>
                <Link to="/contact" className="w-full text-center bg-[#111] text-white px-6 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest inline-block transition-all hover:bg-black">
                  Contact Support
                </Link>

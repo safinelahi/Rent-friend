@@ -21,12 +21,11 @@ const Policy = () => {
             <FiShield size={12} /> Security Standard
           </div>
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.9] sm:leading-[0.85] mb-6 sm:mb-10">
-            Privacy <br className="hidden sm:block" /> Protocol.
+            Privacy <br className="hidden sm:block" /> Policy.
           </h1>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-t border-gray-100 pt-8 sm:pt-10">
             <p className="text-paragraph text-xs sm:text-sm md:text-lg font-medium max-w-xl leading-relaxed opacity-60 uppercase tracking-widest px-1">
-              WE ARE COMMITTED TO PROTECTING YOUR PERSONAL ASSETS AND DIGITAL
-              IDENTITY WITHIN THE STUDIO.
+              We are committed to protecting your personal information and digital identity.
             </p>
             <div className="bg-[#111] text-white px-5 py-3 rounded-xl text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] inline-block self-start md:self-center">
               Last Revision: April 2026
@@ -85,7 +84,7 @@ const Policy = () => {
                 to="/contact"
                 className="w-full text-center bg-white text-txt px-6 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest inline-block transition-transform hover:-translate-y-1"
               >
-                Contact Protocol
+                Contact Us
               </Link>
             </div>
           </aside>
@@ -118,7 +117,7 @@ const Policy = () => {
             >
               <h2 className="text-[9px] sm:text-[10px] font-black text-accent uppercase tracking-[0.4em] mb-6 sm:mb-8 flex items-center gap-3">
                 <span className="w-6 sm:w-8 h-[1px] bg-accent" /> 02. Data
-                Acquisition
+                Collection
               </h2>
               <div className="bg-white rounded-[28px] sm:rounded-[32px] border border-gray-100 p-6 sm:p-10 md:p-12 space-y-8 sm:space-y-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
@@ -137,17 +136,17 @@ const Policy = () => {
                     </h4>
                     <p className="text-[11px] sm:text-sm font-medium text-paragraph/60 leading-relaxed">
                       Bank account and payment card details processed via
-                      AES-256 secure partners.
+                      secure partners.
                     </p>
                   </div>
                 </div>
                 <div className="pt-8 sm:pt-10 border-t border-gray-50">
                   <h4 className="text-[10px] sm:text-xs font-black uppercase tracking-widest mb-3">
-                    Technical Infrastructure
+                    Technical Data
                   </h4>
                   <p className="text-[11px] sm:text-sm font-medium text-paragraph/60 leading-relaxed">
                     IP address, login metrics, browser version, and regional
-                    location data for session security.
+                    location data for account security.
                   </p>
                 </div>
               </div>
@@ -160,14 +159,14 @@ const Policy = () => {
               viewport={{ once: true }}
             >
               <h2 className="text-[9px] sm:text-[10px] font-black text-accent uppercase tracking-[0.4em] mb-6 sm:mb-8 flex items-center gap-3">
-                <span className="w-6 sm:w-8 h-[1px] bg-accent" /> 03. Tactical
+                <span className="w-6 sm:w-8 h-[1px] bg-accent" /> 03. Data
                 Usage
               </h2>
               <ul className="space-y-4 sm:space-y-6">
                 {[
                   "Facilitating secure rental transactions between users.",
-                  "Identity authentication and fraud prevention protocols.",
-                  "Managing relationship status and session updates.",
+                  "Identity authentication and fraud prevention.",
+                  "Managing relationship status and account updates.",
                   "Improving platform infrastructure and user experience.",
                 ].map((text, i) => (
                   <li
@@ -188,7 +187,7 @@ const Policy = () => {
               className="bg-[#111] p-8 sm:p-12 rounded-[32px] sm:rounded-[48px] text-white relative overflow-hidden shadow-xl"
             >
               <h2 className="text-[9px] sm:text-[10px] font-black text-accent uppercase tracking-[0.4em] mb-6 sm:mb-8">
-                04. Security Protocol
+                04. Security Policy
               </h2>
               <p className="text-lg sm:text-xl font-bold leading-relaxed mb-6 sm:mb-8 px-1">
                 We have implemented appropriate security measures to prevent
@@ -198,7 +197,7 @@ const Policy = () => {
               <div className="bg-white/5 border border-white/10 p-5 sm:p-6 rounded-2xl flex items-center gap-4">
                 <FiShield className="text-accent shrink-0" size={24} />
                 <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-white/60 leading-relaxed">
-                  Data access is strictly limited to authorized session
+                  Data access is strictly limited to authorized
                   personnel only.
                 </p>
               </div>
@@ -215,7 +214,7 @@ const Policy = () => {
                 {[
                   {
                     title: "Data Access",
-                    desc: "Request a copy of all personal data we hold about your studio session.",
+                    desc: "Request a copy of all personal data we hold about your account.",
                   },
                   {
                     title: "Rectification",
@@ -223,11 +222,11 @@ const Policy = () => {
                   },
                   {
                     title: "Erasure",
-                    desc: "Request the permanent deletion of your account and session history from our servers.",
+                    desc: "Request the permanent deletion of your account and rental history from our servers.",
                   },
                   {
                     title: "Object to Processing",
-                    desc: "Restrict how we use your data for marketing or third-party logistics.",
+                    desc: "Restrict how we use your data for marketing.",
                   },
                 ].map((right, idx) => (
                   <motion.div
@@ -260,7 +259,7 @@ const Policy = () => {
 
               <p className="mt-8 text-[9px] font-bold text-paragraph/30 uppercase tracking-widest text-center">
                 To exercise any of these rights, please contact our privacy
-                concierge.
+                office.
               </p>
             </section>
           </main>

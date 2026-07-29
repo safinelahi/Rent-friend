@@ -4,6 +4,7 @@ import { FiEye, FiEyeOff, FiArrowRight, FiShield, FiZap, FiLock } from "react-ic
 import { AppContext } from '../../context/AppContext';
 import { motion } from 'framer-motion';
 import logo from '../../assets/logo 2.svg';
+import api from '../../api/axios';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -12,24 +13,44 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("renter");
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', password: '' });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleFinalSubmit = (e) => {
+  const handleFinalSubmit = async (e) => {
     e.preventDefault();
-    
-    const newUser = { name: `${formData.firstName} ${formData.lastName}`, email: formData.email, role: role };
-    login(newUser);
+    setError(null);
+    setLoading(true);
 
-    if (role === "lender") {
-      navigate("/lender-verification");
-    } else {
-      navigate("/renter-verification");
+    try {
+      const res = await api.post('/auth/register', {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        password: formData.password,
+        role: role
+      });
+
+      if (res.data.success) {
+        login(res.data.user, res.data.token);
+        if (role === "lender") {
+          navigate("/lender-verification");
+        } else {
+          navigate("/renter-verification");
+        }
+      } else {
+        setError(res.data.error || "Registration failed");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.error || "Registration failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-[#FDFDFC] flex flex-col lg:flex-row font-epilogue overflow-x-hidden text-[#111]">
       
-      {/* --- LEFT SIDE: BRAND IMMERSION (Desktop Only) --- */}
+      {/* Left side info panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-[#111] p-16 xl:p-20 flex-col justify-between relative overflow-hidden">
         <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-accent/15 via-transparent to-transparent opacity-60" />
         
@@ -43,21 +64,21 @@ const SignUp = () => {
             Start <br /> <span className="text-accent">Sharing.</span>
           </h2>
           <p className="text-white/40 text-sm max-w-md font-medium leading-relaxed uppercase tracking-widest">
-            The easiest way to rent and lend gear. <br /> Safe, fast, and professional for everyone.
+            The easiest way to rent and lend gear. <br /> Safe, fast, and easy for everyone.
           </p>
         </div>
 
         <div className="flex gap-8 relative z-10">
           <div className="text-white/20 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-            <FiShield /> SECURE PROTOCOL
+            <FiShield /> SECURE
           </div>
           <div className="text-white/20 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-            <FiLock /> AES-256
+            <FiLock /> SAFE
           </div>
         </div>
       </div>
 
-      {/* --- RIGHT SIDE: SIGN UP HUB --- */}
+      {/* Right side form */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 sm:p-10 md:p-20 bg-white">
         
         {/* Mobile Logo (Visible only on mobile) */}
@@ -74,7 +95,12 @@ const SignUp = () => {
         >
           <div className="mb-10 sm:mb-12 text-center lg:text-left">
             <h1 className="text-3xl sm:text-4xl font-black tracking-tighter mb-3">Create Account.</h1>
-            <p className="text-[10px] sm:text-xs font-bold text-paragraph uppercase tracking-widest">Choose how you want to join</p>
+            <p className="text-[10px] sm:text-xs font-bold text-paragraph uppercase tracking-widest mb-4">Choose how you want to join</p>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-500 rounded-2xl p-4 text-xs font-bold uppercase tracking-widest text-center mt-4">
+                {error}
+              </div>
+            )}
           </div>
 
           {/* ROLE SELECTOR - Soft Radius */}
@@ -123,8 +149,8 @@ const SignUp = () => {
 
             {/* SUBMIT BUTTON */}
             <div className="pt-4 sm:pt-6">
-              <button type="submit" className="w-full bg-[#111] text-white py-5 sm:py-6 rounded-[32px] font-black uppercase tracking-[0.3em] text-[10px] sm:text-[11px] shadow-2xl hover:bg-black transition-all flex items-center justify-center gap-4 group active:scale-95">
-                Create Account <FiArrowRight className="text-accent group-hover:translate-x-2 transition-transform" />
+              <button type="submit" disabled={loading} className="w-full bg-[#111] text-white py-5 sm:py-6 rounded-[32px] font-black uppercase tracking-[0.3em] text-[10px] sm:text-[11px] shadow-2xl hover:bg-black transition-all flex items-center justify-center gap-4 group active:scale-95 disabled:opacity-50">
+                {loading ? "Creating..." : <>Create Account <FiArrowRight className="text-accent group-hover:translate-x-2 transition-transform" /></>}
               </button>
             </div>
           </form>

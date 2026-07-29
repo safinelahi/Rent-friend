@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaStar } from 'react-icons/fa';
@@ -6,18 +6,44 @@ import {
   FiMapPin, FiChevronLeft, FiShield, FiZap, FiInfo, 
   FiStar, FiCalendar, FiCheckCircle, FiClock, FiHash, FiMap, FiArrowRight, FiUser
 } from 'react-icons/fi';
-import { products } from '../../data/products';
+import api from '../../api/axios';
 import { AppContext } from '../../context/AppContext';
+import LimitModal from '../../components/modals/LimitModal';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useContext(AppContext);
+  const { user, myRentals } = useContext(AppContext);
 
-  const product = products.find((p) => String(p.id) === String(id));
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   const [selectedTier, setSelectedTier] = useState("1");
   const [pickupDate, setPickupDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
+
+  const getImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `http://localhost:5000${url}`;
+  };
+
+  // Fetch product from backend
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await api.get(`/products/${id}`);
+        if (res.data.success) {
+          setProduct(res.data.product);
+        }
+      } catch (err) {
+        console.error("Error fetching product details:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
 
   // --- ১. DYNAMIC TOTAL CALCULATION (Added logic, removed nothing) ---
   const calculateTotal = useMemo(() => {
@@ -35,6 +61,13 @@ const ProductDetails = () => {
     return product.price;
   }, [pickupDate, returnDate, selectedTier, product]);
 
+  if (loading) return (
+    <div className="h-screen bg-[#FDFDFC] flex flex-col items-center justify-center font-epilogue px-6 text-center">
+      <div className="w-10 h-10 border-4 border-accent border-t-transparent rounded-full animate-spin mb-4" />
+      <p className="text-[10px] font-black uppercase tracking-widest text-paragraph/40">Loading Gear Details...</p>
+    </div>
+  );
+
   if (!product) return (
     <div className="h-screen bg-[#FDFDFC] flex flex-col items-center justify-center font-epilogue px-6 text-center">
       <h2 className="text-4xl font-black tracking-tighter mb-6 text-txt">Asset Missing.</h2>
@@ -43,6 +76,21 @@ const ProductDetails = () => {
   );
 
   const handleBooking = () => {
+    if (!user) {
+      navigate('/login', { state: { from: `/product/${id}` } });
+      return;
+    }
+
+    // Check if user has active rental
+    const hasActiveRental = myRentals.some(rental => 
+      ['Pending Approval', 'Approved', 'Active', 'Returned'].includes(rental.status)
+    );
+
+    if (hasActiveRental) {
+      setShowLimitModal(true);
+      return;
+    }
+
     const bookingData = {
       tier: selectedTier,
       totalPrice: calculateTotal,
@@ -53,8 +101,7 @@ const ProductDetails = () => {
         : (selectedTier === "1" ? 1 : selectedTier === "2" ? 2 : 7)
     };
 
-    if (!user) navigate('/login', { state: { from: `/product/${id}` } });
-    else navigate(`/checkout/${product.id}`, { state: bookingData });
+    navigate(`/checkout/${product._id || product.id}`, { state: bookingData });
   };
 
   return (
@@ -103,7 +150,7 @@ const ProductDetails = () => {
           <div className="lg:col-span-8 space-y-12">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-3 rounded-[32px] border border-gray-100 shadow-sm relative overflow-hidden">
                <div className="aspect-video rounded-[24px] overflow-hidden bg-secondary/20">
-                  <img src={product.image} className="w-full h-full object-cover" alt="" />
+                  <img src={getImageUrl(product.image)} className="w-full h-full object-cover" alt="" />
                </div>
             </motion.div>
 
@@ -187,13 +234,19 @@ const ProductDetails = () => {
             <div className="bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm group">
                <p className="text-[9px] font-black text-paragraph uppercase tracking-[0.3em] mb-6">Professional Owner</p>
                <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-[20px] overflow-hidden border-2 border-accent p-1">
-                     <img src={product.owner.image} className="w-full h-full object-cover rounded-[14px]" alt="" />
+                  <div className="w-16 h-16 rounded-[20px] overflow-hidden border-2 border-accent p-1 flex items-center justify-center bg-[#F8F8F7]">
+                     {product.owner.image ? (
+                       <img src={getImageUrl(product.owner.image)} className="w-full h-full object-cover rounded-[14px]" alt="" />
+                     ) : (
+                       <div className="w-full h-full rounded-[14px] bg-[#111] text-accent flex items-center justify-center font-black uppercase text-xl">
+                          {product.owner.name?.charAt(0)}
+                       </div>
+                     )}
                   </div>
                   <div>
                     <h4 className="font-black text-lg tracking-tight leading-none mb-2">{product.owner.name}</h4>
                     <div className="flex items-center gap-3 text-[10px] font-black text-accent uppercase tracking-widest">
-                       <FaStar size={10}/> {product.owner.rating} <span className="text-paragraph/40">({product.owner.reviews})</span>
+                       <FaStar size={10}/> {product.owner.rating} <span className="text-paragraph/40">({product.owner.reviews || 0})</span>
                     </div>
                   </div>
                </div>
@@ -202,6 +255,7 @@ const ProductDetails = () => {
           </aside>
         </div>
       </div>
+      <LimitModal isOpen={showLimitModal} onClose={() => setShowLimitModal(false)} />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import api from "../../api/axios";
 import {
   FiSearch,
   FiMapPin,
@@ -98,9 +99,26 @@ const Home = () => {
   const [openFAQ, setOpenFAQ] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
-  const [visibleCount, setVisibleCount] = useState(8);
+  const [featuredItems, setFeaturedItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const featuredItems = products.slice(0, 6);
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const res = await api.get('/products');
+        if (res.data.success) {
+          // Keep only live products
+          const live = res.data.products.filter(p => p.status === 'Live');
+          setFeaturedItems(live.slice(0, 6));
+        }
+      } catch (err) {
+        console.error("Error loading products on Home:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeatured();
+  }, []);
   const bangladeshCities = [
     "Dhaka",
     "Chittagong",
@@ -120,13 +138,10 @@ const Home = () => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width >= 1024) {
-        setVisibleCount(8);
         setItemsPerPage(3);
       } else if (width >= 768) {
-        setVisibleCount(6);
         setItemsPerPage(2);
       } else {
-        setVisibleCount(4);
         setItemsPerPage(1);
       }
     };
@@ -165,68 +180,58 @@ const Home = () => {
     {
       id: 1,
       name: "Sarah Ahmed",
-      location: "Dhaka",
+      location: "Dhanmondi, Dhaka",
       image: personSarah,
       rating: 5,
-      text: "Rented a DSLR camera for my cousin's wedding. The owner was super helpful and the camera was in perfect condition.",
+      text: "Needed a Sony A7III for a wedding shoot. Found one 10 minutes away from my house! Smooth pickup and excellent condition.",
       time: "2 weeks ago",
     },
     {
       id: 2,
       name: "Karim Hassan",
-      location: "Chittagong",
+      location: "Halishahar, Chittagong",
       image: personKarim,
       rating: 5,
-      text: "I've been listing my power tools on RentFriend for 3 months now. Great extra income and the platform makes everything so easy and secure.",
+      text: "I've been renting out my projector and camping tents. Rent Friend secures the deposit in escrow, so I never worry about damage.",
       time: "1 month ago",
     },
     {
       id: 3,
       name: "Nusrat Rahman",
-      location: "Sylhet",
+      location: "Zindabazar, Sylhet",
       image: personNusrat,
       rating: 5,
-      text: "Needed camping gear for a weekend trip. Found everything I needed nearby at a fraction of the buying cost.",
+      text: "Rented a 4-person tent and sleeping bags for our Sreemangal trip. Saved me so much money compared to buying new gear.",
       time: "3 weeks ago",
     },
   ];
 
   const faqs = [
     {
-      question: "How does RentFriend work?",
+      question: "How does Rent Friend work?",
       answer:
-        "RentFriend connects people who own items with people who need to rent them. Simply search for what you need, book it for your desired dates, and meet the owner for pickup.",
+        "Search for the gear you need, pick your pickup/return dates, and submit booking. Once the lender approves, pay the rental fee + security deposit. Meet at the agreed Dhaka spot, take pickup audit photos, and start creating!",
     },
     {
-      question: "Is it safe to rent from or lend to someone?",
+      question: "Is it safe to rent or list items?",
       answer:
-        "Yes! We verify all users through ID checks and phone verification. We also offer insurance coverage for items during the rental period.",
+        "Absolutely. Every user must verify their identity with a Government NID card and selfie. Furthermore, we keep the security deposit locked in escrow, which is only returned after the lender verifies the item condition.",
     },
     {
-      question: "What happens if something gets damaged or lost?",
+      question: "What happens if an item is damaged?",
       answer:
-        "In the rare event of damage, our RentFriend Guarantee covers repairs or replacement up to a certain limit. We handle the dispute resolution process.",
+        "Lenders and renters perform quick pickup and return audit photos. In case of disputes, our support reviews the audit photos. If damage is confirmed, repairs are deducted directly from the security deposit held in escrow.",
     },
     {
-      question: "What kind of items can I rent?",
+      question: "How do payouts and deposits work?",
       answer:
-        "You can rent almost anything! Cameras, drones, power tools, camping gear, party supplies, musical instruments, and even bicycles.",
-    },
-    {
-      question: "How do payments and deposits work?",
-      answer:
-        "Payments are secure and cashless. You pay through the app when you book. Deposits are held temporarily and released once the item is returned safely.",
-    },
-    {
-      question: "Why should I rent instead of buy?",
-      answer:
-        "Renting saves you money, reduces household clutter, and is better for the environment. It allows you to access high-quality items without the full cost of ownership.",
+        "Renters pay securely using Bkash, Nagad, or Cards. The rental amount and security deposit are held. When the return is completed, the deposit is refunded instantly and the lender can request their payout.",
     },
   ];
 
   return (
     <div className="w-full bg-[#FDFDFC] font-epilogue overflow-x-hidden text-[#111]">
-      {/* ================= HERO SECTION ================= */}
+      {/* Hero section */}
       <section
         className="relative w-full max-w-[1440px] mx-auto min-h-screen bg-no-repeat bg-bottom bg-[length:100%_auto] flex items-start pt-32 md:pt-48"
         style={{ backgroundImage: `url('${heroImage}')` }}
@@ -237,14 +242,13 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
           >
             <p className="text-accent text-[10px] font-black uppercase tracking-[0.4em] mb-8">
-              Access Any Asset. Anytime.
+              Why Buy? Just Rent from Your Neighbors.
             </p>
             <h1 className="text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] mb-10">
-              Rent Anything. Anytime. <br /> From Trusted Locals.
+              Rent DSLR Cameras, Camping Gear, <br /> and More in Dhaka.
             </h1>
             <p className="text-paragraph/60 text-xs sm:text-sm max-w-xl mx-auto uppercase tracking-widest font-medium leading-relaxed mb-16">
-              Access high-quality items when you need them – and earn money from
-              the things you own. Simple, secure, and sustainable.
+              Unlock premium gear near you at a fraction of the cost—or list your own items to start making easy passive income today.
             </p>
           </motion.div>
 
@@ -254,7 +258,7 @@ const Home = () => {
               <FiSearch className="text-paragraph/40 text-xl mr-4 group-focus-within:text-accent" />
               <input
                 type="text"
-                placeholder="What are you looking for..."
+                placeholder="What do you need today? DSLR, Camping Tent, Projector..."
                 className="w-full bg-transparent outline-none text-sm font-black uppercase tracking-widest placeholder-paragraph/30"
               />
             </div>
@@ -308,112 +312,19 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= BROWSE BY CATEGORY  ================= */}
-      <section className="py-24 sm:py-36 px-6 md:px-12 bg-white relative overflow-hidden">
-        {/* Decorative BG Text */}
-        <div className="absolute left-0 top-0 text-[15vw] font-black text-gray-50 leading-none select-none pointer-events-none -translate-x-10 -translate-y-10 uppercase opacity-40">
-          Catalog
-        </div>
-
-        <div className="max-w-[1440px] mx-auto relative z-10">
-          {/* Section Header */}
-          <div className="mb-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
-            <div className="max-w-2xl">
-              <div className="flex items-center gap-3 text-accent mb-6">
-                <span className="w-8 h-[2px] bg-accent"></span>
-                <p className="text-[10px] font-black uppercase tracking-[0.5em]">
-                  Asset Discovery Hub
-                </p>
-              </div>
-              <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-[0.85]">
-                Browse by <br /> <span className="text-[#111]">Category.</span>
-              </h2>
-            </div>
-            <p className="text-paragraph/60 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] max-w-xs leading-relaxed border-l-2 border-gray-100 pl-6">
-              Explore professional assets verified by our compliance team.
-              Secure sessions guaranteed across all categories.
-            </p>
-          </div>
-
-          {/* Interactive Bento-ish Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10">
-            {categories.slice(0, visibleCount).map((category, idx) => (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                whileHover={{ y: -15 }}
-                onClick={() => handleCategoryClick(category.name)} // ৩. ক্লিক লজিক যুক্ত করা হলো
-                className="group relative bg-[#FDFDFC] border border-gray-100 rounded-[40px] sm:rounded-[56px] p-10 flex flex-col items-center justify-center text-center transition-all hover:bg-white hover:shadow-[0_40px_100px_rgba(0,0,0,0.06)] overflow-hidden cursor-pointer min-h-[320px]"
-              >
-                {/* Subtle Hover Reveal Background Icon */}
-                <div className="absolute -right-6 -bottom-6 opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500 transform group-hover:scale-150 group-hover:-rotate-12">
-                  <img
-                    src={category.icon}
-                    alt=""
-                    className="w-40 h-40 object-contain"
-                  />
-                </div>
-
-                {/* Icon Container */}
-                <div className="relative mb-10 w-24 h-24 bg-white rounded-[32px] shadow-[0_15px_40px_rgba(0,0,0,0.03)] p-6 flex items-center justify-center group-hover:bg-accent transition-all duration-500 group-hover:rotate-6">
-                  <img
-                    src={category.icon}
-                    alt=""
-                    className="w-full h-full object-contain grayscale group-hover:grayscale-0 group-hover:brightness-0 transition-all"
-                  />
-                </div>
-
-                {/* Text Content */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <h3 className="text-sm sm:text-base font-black uppercase tracking-[0.2em] text-txt mb-3 group-hover:text-accent transition-colors">
-                    {category.name}
-                  </h3>
-                  <p className="text-[10px] font-bold text-paragraph/30 uppercase tracking-[0.2em]">
-                    <Counter value={category.count} /> Assets Listed
-                  </p>
-
-                  {/* ৪. Explore Hub with a clean gap (mt-8) */}
-                  <div className="mt-8 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-                    <div className="flex items-center gap-2 text-accent text-[9px] font-black uppercase tracking-widest border-b border-accent/20 pb-1">
-                      Explore Hub <FiArrowRight />
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* See All Button */}
-          {visibleCount < categories.length && (
-            <div className="mt-24 flex flex-col items-center">
-              <button
-                onClick={() => setVisibleCount(categories.length)}
-                className="group flex items-center gap-6 bg-[#111] text-white px-12 py-6 rounded-full font-black uppercase tracking-[0.3em] text-[10px] transition-all hover:bg-accent hover:text-[#111] active:scale-95 shadow-2xl"
-              >
-                Expand Full Catalog
-                <FiPlus className="group-hover:rotate-180 transition-transform duration-500" />
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ================= FEATURED RENTALS ================= */}
+      {/* Featured rentals */}
       <section className="py-24 sm:py-32 bg-[#F8F8F7] px-6 md:px-12 relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto relative z-10">
           <div className="flex flex-col md:flex-row justify-between md:items-end mb-16 gap-6 text-center md:text-left">
             <div>
               <p className="text-accent text-[9px] font-black uppercase tracking-[0.4em] mb-4">
-                Top Rated Assets
+                Locals' Choice
               </p>
               <h2 className="text-4xl sm:text-6xl font-black tracking-tighter uppercase leading-none">
-                Featured <br /> Rentals.
+                Trending <br /> Gear Nearby.
               </h2>
               <p className="text-paragraph/40 text-[10px] font-bold uppercase tracking-widest mt-4">
-                Top-rated items from verified owners.
+                Top picks with transparent rules, flexible pickups, and fair daily rates.
               </p>
             </div>
             <div className="flex gap-4 justify-center md:justify-start">
@@ -457,18 +368,18 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= HOW IT WORKS ================= */}
+      {/* How it works */}
       <section className="py-24 sm:py-32 px-6 md:px-12 bg-white text-center">
         <div className="max-w-[1440px] mx-auto">
           <div className="mb-20">
             <p className="text-accent text-[10px] font-black uppercase tracking-[0.4em] mb-4">
-              Simple Process
+              Three Easy Steps
             </p>
             <h2 className="text-4xl sm:text-7xl font-black tracking-tighter uppercase leading-none">
-              How It Works.
+              How Sharing Works.
             </h2>
-            <p className="text-paragraph/40 text-xs font-bold uppercase tracking-widest mt-4">
-              Renting is simple, safe, and sustainable. Get started in minutes.
+            <p className="text-paragraph/40 text-[10px] font-bold uppercase tracking-widest mt-4">
+              Zero hassle. We secure your money in escrow until you verify the gear is in your hands.
             </p>
           </div>
 
@@ -478,10 +389,10 @@ const Home = () => {
                 <img src={workStep1} alt="" className="h-full object-contain" />
               </div>
               <h3 className="text-xl font-black uppercase tracking-tight mb-4">
-                Browse & Search
+                1. Find Your Gear
               </h3>
               <p className="text-[10px] font-bold text-paragraph/40 uppercase tracking-widest leading-relaxed">
-                Find exactly what you need from thousands of verified listings.
+                Search for nearby cameras, tools, or event gear with clear rules.
               </p>
             </div>
 
@@ -505,10 +416,10 @@ const Home = () => {
                 />
               </div>
               <h3 className="text-xl font-black uppercase tracking-tight mb-4">
-                Book Instantly
+                2. Secure Escrow Booking
               </h3>
               <p className="text-[10px] font-bold text-paragraph/40 uppercase tracking-widest leading-relaxed">
-                Select dates, confirm booking, and chat with the owner.
+                Lock in your rental dates. Your deposit is kept safe in our secure vault.
               </p>
             </div>
 
@@ -528,59 +439,17 @@ const Home = () => {
                 <img src={workStep3} alt="" className="h-full object-contain" />
               </div>
               <h3 className="text-xl font-black uppercase tracking-tight mb-4">
-                Pick Up & Return
+                3. Meet Up & Create
               </h3>
               <p className="text-[10px] font-bold text-paragraph/40 uppercase tracking-widest leading-relaxed">
-                Meet the owner, enjoy your rental, and return it on time.
+                Quick NID validation at pickup. Create your project, and return the item to unlock your deposit.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ================= SHARING REVOLUTION ================= */}
-      <section className="py-24 sm:py-32 bg-[#111] text-white px-6 md:px-12 relative overflow-hidden">
-        <FiZap
-          className="absolute -right-20 -top-20 text-white/5 pointer-events-none"
-          size={400}
-        />
-        <div className="max-w-[1440px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-32">
-          <div className="flex-1">
-            <p className="text-accent text-[10px] font-black uppercase tracking-[0.4em] mb-8">
-              Green Mission
-            </p>
-            <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.85] mb-12 uppercase">
-              Join the Sharing <br /> Revolution.
-            </h2>
-            <div className="space-y-8 text-white/40 text-[11px] font-black uppercase tracking-[0.2em] leading-loose max-w-lg">
-              <p>
-                Every time you rent through RentFriend, you are making a small
-                choice with a big impact. By sharing instead of buying, you help
-                reduce waste, lower overproduction, and give useful items a
-                longer life.
-              </p>
-              <p>
-                Together, we are building a smarter, more sustainable world —
-                one that values access over ownership and community over
-                consumption.
-              </p>
-              <p>
-                When you rent, everyone benefits — you save money, others earn,
-                and the planet gets a little cleaner.
-              </p>
-            </div>
-          </div>
-          <div className="flex-1 w-full">
-            <img
-              src={sharingImage}
-              alt=""
-              className="w-full h-auto rounded-[48px] shadow-[0_40px_100px_rgba(0,0,0,0.5)] border border-white/5"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ================= REVIEWS SECTION ================= */}
+      {/* Reviews */}
       <section className="py-24 sm:py-32 bg-[#F8F8F7] px-4 text-center">
         <div className="max-w-[1440px] mx-auto mb-16">
           <p className="text-accent text-[9px] font-black uppercase tracking-[0.4em] mb-4">
@@ -657,12 +526,12 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= FAQ SECTION ================= */}
+      {/* FAQ section */}
       <section className="py-24 sm:py-32 px-6 md:px-12 bg-white">
         <div className="max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-20">
           <div className="lg:w-1/3 text-center lg:text-left">
             <p className="text-accent text-[10px] font-black uppercase tracking-[0.4em] mb-4">
-              Support Hub
+              Help Center
             </p>
             <h2 className="text-4xl sm:text-6xl font-black tracking-tighter uppercase leading-[0.9] mb-8">
               Frequently <br /> Asked Questions.

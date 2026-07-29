@@ -6,15 +6,18 @@ import {
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { AppContext } from '../../context/AppContext';
+import api from '../../api/axios';
 
 const LenderUpload = () => {
   const navigate = useNavigate();
   const { user } = useContext(AppContext);
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const [gearData, setGearData] = useState({
     title: '',
-    category: 'Camera',
+    category: 'Photography', // Changed to match Browse page defaults
     description: '',
     prices: { day1: '', day2: '', day7: '' },
     location: '',
@@ -34,32 +37,61 @@ const LenderUpload = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-  const handleFinalSubmit = (e) => {
+  const handleFinalSubmit = async (e) => {
     e.preventDefault();
     if (images.length < 3) {
-      alert("Please upload 3 photos from different angles.");
+      alert("Please upload exactly 3 photos from different angles.");
       return;
     }
-    console.log("Ready for Backend:", gearData);
-    navigate('/dashboard/rentals'); 
+
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData();
+    images.forEach(img => formData.append('images', img));
+    formData.append('title', gearData.title);
+    formData.append('category', gearData.category);
+    formData.append('description', gearData.description);
+    formData.append('price', gearData.prices.day1); // Base daily rate
+    formData.append('location', gearData.location);
+    formData.append('rules', gearData.rules);
+
+    try {
+      const res = await api.post('/products', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (res.data.success) {
+        navigate('/lender/my-listings');
+      } else {
+        setError(res.data.error || "Failed to list gear");
+      }
+    } catch (err) {
+      console.error("Listing submission failed:", err);
+      setError(err.response?.data?.error || "Error listing your gear. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-[#FDFDFC] pt-24 pb-20 sm:pt-32 sm:pb-32 font-epilogue text-[#111] overflow-x-hidden">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12">
         
-        {/* --- BREADCRUMBS --- */}
+        {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 sm:gap-3 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-paragraph/40 mb-8 sm:mb-10">
           <Link to="/" className="hover:text-accent transition-colors">Home</Link>
           <span className="text-gray-200">/</span>
-          <span className="text-txt">Lender Studio</span>
+          <span className="text-txt">Lender Area</span>
         </nav>
 
-        {/* --- HEADER --- */}
+        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-6 sm:gap-8">
            <div className="max-w-2xl">
               <div className="bg-accent/10 text-accent px-4 py-1.5 rounded-full border border-accent/10 inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest mb-4 sm:mb-6">
-                 <FiZap size={12}/> Asset Onboarding
+                 <FiZap size={12}/> List New Item
               </div>
               <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] sm:leading-[0.85]">List My Gear.</h1>
            </div>
@@ -68,8 +100,8 @@ const LenderUpload = () => {
                 {user?.name?.charAt(0) || 'L'}
               </div>
               <div className="hidden md:block">
-                <p className="text-[10px] font-black text-paragraph/40 uppercase tracking-widest mb-1">Verified Owner</p>
-                <span className="text-sm font-black">{user?.name || "Professional Lender"}</span>
+                <p className="text-[10px] font-black text-paragraph/40 uppercase tracking-widest mb-1">Lender Profile</p>
+                <span className="text-sm font-black">{user?.name || "Lender"}</span>
               </div>
               <div className="hidden md:flex w-10 h-10 bg-[#111] text-accent rounded-xl items-center justify-center text-sm font-black shadow-lg">
                 {user?.name?.charAt(0) || 'L'}
@@ -79,7 +111,7 @@ const LenderUpload = () => {
 
         <form onSubmit={handleFinalSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10">
           
-          {/* ================= LEFT: PHOTOS & SPECS ================= */}
+          {/* Left side: Photos and details */}
           <div className="lg:col-span-7 space-y-8 sm:space-y-10">
             
             {/* 1. PHOTO GRID */}
@@ -108,7 +140,7 @@ const LenderUpload = () => {
                     </div>
                   ))}
                </div>
-               <p className="mt-6 text-[9px] font-bold text-paragraph/30 uppercase tracking-widest text-center">3 mandatory angles required for escrow protection.</p>
+                <p className="mt-6 text-[9px] font-bold text-paragraph/30 uppercase tracking-widest text-center">3 mandatory angles required for protection.</p>
             </div>
 
             {/* 2. SPECIFICATIONS */}
@@ -131,13 +163,13 @@ const LenderUpload = () => {
             </div>
           </div>
 
-          {/* ================= RIGHT: TIERED PRICING & LOGISTICS ================= */}
+          {/* Right side: Pricing and rules */}
           <div className="lg:col-span-5 space-y-6 sm:space-y-8 lg:sticky lg:top-32 h-fit">
             
-            {/* 3. TIERED PRICING BENTO */}
+            {/* 3. Pricing */}
             <div className="bg-[#111] text-white rounded-[28px] sm:rounded-[32px] p-8 sm:p-10 shadow-xl relative overflow-hidden">
                <div className="relative z-10">
-                  <h3 className="text-accent text-[10px] font-black uppercase tracking-[0.4em] mb-8 sm:mb-10">Economic Strategy</h3>
+                  <h3 className="text-accent text-[10px] font-black uppercase tracking-[0.4em] mb-8 sm:mb-10">Pricing Plans</h3>
                   
                   <div className="space-y-4 sm:space-y-6">
                      {[
@@ -185,8 +217,18 @@ const LenderUpload = () => {
                </div>
             </div>
 
-            <button type="submit" className="w-full bg-accent text-txt py-5 sm:py-6 rounded-2xl sm:rounded-[24px] font-black uppercase tracking-[0.3em] text-[10px] sm:text-[11px] shadow-2xl shadow-accent/20 hover:-translate-y-1 active:scale-95 transition-all">
-               List My Gear Now
+            {error && (
+               <div className="bg-red-50 border border-red-200 text-red-500 rounded-2xl p-4 text-xs font-bold uppercase tracking-widest text-center mt-4">
+                 {error}
+               </div>
+            )}
+
+            <button 
+               type="submit" 
+               disabled={loading}
+               className="w-full bg-accent text-txt py-5 sm:py-6 rounded-2xl sm:rounded-[24px] font-black uppercase tracking-[0.3em] text-[10px] sm:text-[11px] shadow-2xl shadow-accent/20 hover:-translate-y-1 active:scale-95 transition-all disabled:opacity-50 mt-4"
+            >
+               {loading ? "Listing Gear..." : "List My Gear Now"}
             </button>
           </div>
         </form>

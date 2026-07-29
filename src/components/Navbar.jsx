@@ -114,20 +114,23 @@ const Navbar = () => {
                     <div className="px-6 py-3 border-b border-gray-50 mb-1">
                       <p className="text-[11px] font-black text-txt truncate">{user.name}</p>
                     </div>
-                    <Link to="/dashboard/rentals" className="flex items-center gap-3 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-paragraph hover:bg-[#F8F8F7]">
-                      <FiActivity size={14} className="text-accent" /> Renter Hub
-                    </Link>
-                    {isLender && (
-                      <Link to="/lender-dashboard" className="flex items-center gap-3 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-paragraph hover:bg-[#F8F8F7]">
-                        <FiLayout size={14} className="text-accent" /> Lender Hub
+                    {user.role === 'admin' && (
+                      <Link to="/admin/dashboard" className="flex items-center gap-3 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-paragraph hover:bg-[#F8F8F7]">
+                        <FiLayout size={14} className="text-accent" /> Admin Dashboard
                       </Link>
                     )}
-                    {/* Updated Link to Contact */}
-                    <Link to="/contact" className="flex items-center gap-3 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-paragraph hover:bg-[#F8F8F7]">
-                      <FiPhoneCall size={14} className="text-accent" /> Contact Us
-                    </Link>
+                    {user.role === 'lender' && (
+                      <Link to="/lender-dashboard" className="flex items-center gap-3 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-paragraph hover:bg-[#F8F8F7]">
+                        <FiLayout size={14} className="text-accent" /> Lender Dashboard
+                      </Link>
+                    )}
+                    {user.role !== 'admin' && user.role !== 'lender' && (
+                      <Link to="/dashboard/rentals" className="flex items-center gap-3 px-6 py-3 text-[10px] font-black uppercase tracking-widest text-paragraph hover:bg-[#F8F8F7]">
+                        <FiActivity size={14} className="text-accent" /> Renter Dashboard
+                      </Link>
+                    )}
                     <button onClick={logout} className="w-full flex items-center gap-3 px-6 py-4 text-[10px] font-black uppercase text-red-500 hover:bg-red-50 border-t border-gray-50 mt-1">
-                      <FiLogOut size={14} /> End Session
+                      <FiLogOut size={14} /> Logout
                     </button>
                   </motion.div>
                 )}
@@ -186,36 +189,39 @@ const Navbar = () => {
                 {user && (
                   <div className="mt-8 pt-8 border-t border-gray-50 space-y-2">
                     <p className="px-1 text-[9px] font-black uppercase tracking-widest text-paragraph/40 mb-4">User Controls</p>
-                    <li>
-                      <Link 
-                        to="/dashboard/rentals" 
-                        className="flex items-center gap-3 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-txt"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <FiActivity className="text-accent" /> Renter Hub
-                      </Link>
-                    </li>
-                    {isLender && (
+                    {user.role === 'admin' && (
+                      <li>
+                        <Link 
+                          to="/admin/dashboard" 
+                          className="flex items-center gap-3 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-txt"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <FiLayout className="text-accent" /> Admin Dashboard
+                        </Link>
+                      </li>
+                    )}
+                    {user.role === 'lender' && (
                       <li>
                         <Link 
                           to="/lender-dashboard" 
                           className="flex items-center gap-3 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-txt"
                           onClick={() => setIsMenuOpen(false)}
                         >
-                          <FiLayout className="text-accent" /> Lender Hub
+                          <FiLayout className="text-accent" /> Lender Dashboard
                         </Link>
                       </li>
                     )}
-                    {/* Added Mobile Contact Link */}
-                    <li>
-                      <Link 
-                        to="/contact" 
-                        className="flex items-center gap-3 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-txt"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <FiPhoneCall className="text-accent" /> Contact Us
-                      </Link>
-                    </li>
+                    {user.role !== 'admin' && user.role !== 'lender' && (
+                      <li>
+                        <Link 
+                          to="/dashboard/rentals" 
+                          className="flex items-center gap-3 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-txt"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <FiActivity className="text-accent" /> Renter Dashboard
+                        </Link>
+                      </li>
+                    )}
                     <li>
                       <button 
                         onClick={() => { logout(); setIsMenuOpen(false); }}

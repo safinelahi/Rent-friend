@@ -11,11 +11,11 @@ const Sidebar = ({ isOpen, setIsOpen, activeTab, setActiveTab }) => {
   const { logout } = useContext(AppContext);
   const navigate = useNavigate();
 
-  // 1. Updated Menu Items with Studio Icons
+  // Menu items for the sidebar
   const menuItems = [
-    { id: 'profile', name: 'Identity Hub', icon: <FiUser size={18} /> },
-    { id: 'rentals', name: 'Active Session', icon: <FiBox size={18} /> },
-    { id: 'history', name: 'Protocol Logs', icon: <FiClock size={18} /> },
+    { id: 'profile', name: 'My Profile', icon: <FiUser size={18} /> },
+    { id: 'rentals', name: 'Active Rentals', icon: <FiBox size={18} /> },
+    { id: 'history', name: 'History', icon: <FiClock size={18} /> },
   ];
 
   const handleLogout = () => {
@@ -62,7 +62,7 @@ const Sidebar = ({ isOpen, setIsOpen, activeTab, setActiveTab }) => {
             </Link>
 
             <div className="space-y-3">
-              <p className="text-[9px] font-black text-paragraph/20 uppercase tracking-[0.4em] mb-6 pl-4">Command Center</p>
+              <p className="text-[9px] font-black text-paragraph/20 uppercase tracking-[0.4em] mb-6 pl-4">Dashboard Menu</p>
               
               {menuItems.map((item) => (
                 <button
@@ -83,23 +83,23 @@ const Sidebar = ({ isOpen, setIsOpen, activeTab, setActiveTab }) => {
               ))}
             </div>
 
-            {/* --- SECURITY BADGE (STUDIO STYLE) --- */}
+            {/* Security Status */}
             <div className="mt-10 p-6 bg-[#F8F8F7] rounded-[24px] border border-gray-50 relative overflow-hidden hidden sm:block">
                <FiShield className="absolute -right-4 -bottom-4 text-accent/5" size={80} />
                <p className="text-[8px] font-black text-accent uppercase tracking-widest mb-1">Status</p>
                <p className="text-[10px] font-black text-[#111] uppercase tracking-tighter flex items-center gap-2">
-                 <FiZap size={10} className="text-accent animate-pulse" /> Encrypted Session
+                 <FiZap size={10} className="text-accent animate-pulse" /> Verified User
                </p>
             </div>
           </nav>
 
-          {/* --- TERMINATION (LOGOUT) --- */}
+          {/* Logout Button */}
           <button 
             onClick={handleLogout}
             className="flex items-center gap-4 px-6 py-5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-[20px] transition-all font-black uppercase text-[10px] tracking-[0.3em] mt-auto group border border-transparent hover:border-red-100"
           >
             <FiLogOut size={18} className="group-hover:-translate-x-1 transition-transform" /> 
-            Termination
+            Logout
           </button>
         </div>
       </aside>
